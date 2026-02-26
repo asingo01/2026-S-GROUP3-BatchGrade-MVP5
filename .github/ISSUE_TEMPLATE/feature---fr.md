@@ -1,0 +1,23 @@
+---
+name: Feature / FR
+about: Suggest an implementation for an MVP feature or functional requirement
+title: "[<MVP-1 or FR-1>] <Description in present tense>"
+labels: enhancement
+assignees: ''
+
+---
+
+**Parent issue:** <N/A or [#1](link to parent issue)>
+**Sub-issue(s):** <N/A or [#1](link to sub-issue 1), ...>
+
+**Describe the feature/FR:**
+<A clear and concise description of the enhancement. What should it do?>
+
+**Describe your proposed solution:**
+<A clear and concise description of the proposed code implementation for the enhancement>
+
+**Describe alternatives you've considered:**
+<N/A or a clear and concise description of any alternative solutions that may be implemented instead>
+
+**Additional context:**
+<N/A or add any other context or screenshots about the enhancement here>
