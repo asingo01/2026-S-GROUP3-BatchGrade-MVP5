@@ -1,16 +1,16 @@
 ---
-name: Feature / FR
-about: Suggest an implementation for an MVP feature or functional requirement
-title: "[<MVP-1 or FR-1>] <Description in present tense>"
+name: Feature
+about: Suggest an implementation for an MVP feature
+title: "[<MVP-1>] <Description in present tense>"
 labels: enhancement
 assignees: ''
 
 ---
 
-**Parent issue:** <N/A or [#1](link to parent issue)>
-**Sub-issue(s):** <N/A or [#1](link to sub-issue 1), ...>
+**Sub-issue(s):** <TBA or [#1](link to sub-issue 1), ...>
+**Related issue(s):** <N/A, TBA, or [#1](link to related issue 1), ...>
 
-**Describe the feature/FR:**
+**Describe the feature:**
 <A clear and concise description of the enhancement. What should it do?>
 
 **Describe your proposed solution:**
