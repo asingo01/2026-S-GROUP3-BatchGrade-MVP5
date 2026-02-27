@@ -1,7 +1,7 @@
 ---
 name: Bug
 about: Report a bug that needs to be fixed
-title: "[BUG] <Description>"
+title: "[<CRITICAL or MINOR> BUG] <Description>"
 labels: bug
 assignees: ''
 
