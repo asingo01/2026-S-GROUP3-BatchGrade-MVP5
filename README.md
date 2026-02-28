@@ -19,7 +19,7 @@ BatchGrade is a solution to grading that can be hosted on infrastructure already
 - [Recommended IDE Setup](#recommended-ide-setup)
 - [Project Setup](#project-setup)
 - [Scripts & Commands](#scripts--commands)
-- [Tech Stack Documentation](#techstack-library)
+- [Tech Stack Documentation](#tech-stack-documentation)
 
 ---
 
@@ -66,6 +66,31 @@ npm run build:linux
 
 ---
 
+### Requirements
+
+- Recommended Node.js: >= 22
+- Tested with Node.js: 24.14.0 (maintainer environment)
+
+If you encounter native build issues (for example with `better-sqlite3` or other native modules), switch to a Node.js version compatible with the Electron binary in `devDependencies` or rebuild native modules after switching versions.
+
+### Where build files and executables are placed
+
+- `dist/` — Top-level folder where `electron-builder` writes packaged artifacts.
+- `dist/<platform>-unpacked/` — Platform-specific unpacked build folder (examples below):
+ 	- `dist/linux-unpacked/` — contains unpacked Linux app files and the executable for Linux.
+ 	- `dist/win-unpacked/` — contains unpacked Windows app files and the `.exe`.
+ 	- `dist/mac` or `dist/mac-unpacked/` — contains the macOS `.app` bundle.
+- Packaged installers and distributables (for example `.AppImage`, `.deb`, `.dmg`, `.exe`) are placed in `dist/` after a packaging build.
+
+Examples:
+
+- After `npm run build:linux` you will commonly see an unpacked app at `dist/linux-unpacked/`, and one or more packaged artifacts (for example `BatchGrade-1.0.0.AppImage`) in `dist/`.
+- The executable inside the unpacked folder is named after the application (package name: `batchgrade`).
+
+Use `npm run clean` to remove `dist/`, `out/`, and `node_modules/`.
+
+---
+
 ## Scripts & Commands
 
 ### Drizzle
@@ -90,7 +115,7 @@ npm run generate
 npm run migrate
 ```
 
-### Tech Stack Documentation
+## Tech Stack Documentation
 
 This document lists the project's primary technologies with links to their official documentation.
 
