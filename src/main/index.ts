@@ -2,6 +2,10 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { initDb } from './database/index'
+import type { NewUser, UpdateUser } from './database/schema'
+import { getAllUsers, createUser, updateUser, deleteUser } from './database/queries'
+
 
 function createWindow(): void {
   // Create the browser window.
@@ -51,6 +55,15 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  // Users CRUD
+  ipcMain.handle('users:getAll', () => getAllUsers())
+  ipcMain.handle('users:create', (_e, data: NewUser) => createUser(data))
+  ipcMain.handle('users:update', (_e, data: UpdateUser) => updateUser(data))
+  ipcMain.handle('users:delete', (_e, uuid: string) => deleteUser(uuid))
+
+  // Initialize the database
+  initDb()
 
   createWindow()
 

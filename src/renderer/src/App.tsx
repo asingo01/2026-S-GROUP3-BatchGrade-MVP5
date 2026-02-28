@@ -1,9 +1,11 @@
 import Versions from './components/Versions'
+import { IpcPing } from './components/IpcPing'
+import { UserPanel } from './components/UserPanel'
 import electronLogo from './assets/electron.svg'
 
-function App(): React.JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+// ─── App ──────────────────────────────────────────────────────────────────────
 
+function App(): React.JSX.Element {
   return (
     <>
       <img alt="logo" className="logo" src={electronLogo} />
@@ -22,12 +24,15 @@ function App(): React.JSX.Element {
           </a>
         </div>
         <div className="action">
-          <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-            Send IPC
-          </a>
+          <IpcPing />
         </div>
       </div>
-      <Versions></Versions>
+
+      <div className="p-6">
+        <UserPanel />
+      </div>
+
+      <Versions />
     </>
   )
 }

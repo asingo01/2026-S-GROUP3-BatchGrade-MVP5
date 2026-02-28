@@ -151,6 +151,24 @@ code {
   }
 }
 
+.panel-input {
+  @apply flex-1 min-w-[120px] px-2.5 py-1.5 text-xs rounded-md outline-none
+         bg-white/[0.06] border border-white/[0.12] text-inherit
+         transition-colors focus:border-sky-400/50;
+}
+
+.btn-primary {
+  @apply px-3.5 py-1.5 rounded-md border font-medium transition-colors
+         bg-sky-400/15 border-sky-400/30 text-sky-300
+         hover:bg-sky-400/25;
+}
+
+.btn-ghost {
+  @apply px-2.5 py-1 rounded-md border font-medium transition-colors opacity-60
+         bg-transparent border-white/[0.12] text-inherit
+         hover:opacity-100;
+}
+
 @media (max-width: 720px) {
   .text {
     font-size: 20px;

@@ -1,8 +1,18 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import type { UsersAPI } from './types'
+
+const usersApi: UsersAPI = {
+  getAll: () => ipcRenderer.invoke('users:getAll'),
+  create: (data) => ipcRenderer.invoke('users:create', data),
+  update: (data) => ipcRenderer.invoke('users:update', data),
+  delete: (uuid) => ipcRenderer.invoke('users:delete', uuid),
+}
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  users: usersApi
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
