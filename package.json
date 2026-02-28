@@ -19,8 +19,23 @@
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:linux": "electron-vite build && electron-builder --linux",
-    "studio": "electron ./node_modules/drizzle-kit/bin.cjs studio"
+    "studio": "electron ./node_modules/drizzle-kit/bin.cjs studio",
+    "clean": "rimraf dist out node_modules"
   },
+  "build": {
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**"
+    ],
+    "extraResources": [
+      {
+        "from": "src/main/database/migrations",
+        "to": "migrations"
+      }
+    ],
+    "extraMetadata": {
+      "main": "./out/main/index.js"
+    }
+},
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
