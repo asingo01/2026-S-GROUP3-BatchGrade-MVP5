@@ -6,7 +6,6 @@ import { initDb } from './database/index'
 import type { NewUser, UpdateUser } from './database/schema'
 import { getAllUsers, createUser, updateUser, deleteUser } from './database/queries'
 
-
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -44,7 +43,7 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('com.batchgrade.app')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -52,6 +51,9 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
+
+  // Initialize the database
+  initDb()
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
@@ -61,9 +63,6 @@ app.whenReady().then(() => {
   ipcMain.handle('users:create', (_e, data: NewUser) => createUser(data))
   ipcMain.handle('users:update', (_e, data: UpdateUser) => updateUser(data))
   ipcMain.handle('users:delete', (_e, uuid: string) => deleteUser(uuid))
-
-  // Initialize the database
-  initDb()
 
   createWindow()
 

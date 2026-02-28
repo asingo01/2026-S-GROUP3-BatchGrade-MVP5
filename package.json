@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "batchgrade.com",
+  "homepage": "https://www.batchgrade.com",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
@@ -17,15 +17,12 @@
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
-    "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux",
     "studio": "electron ./node_modules/drizzle-kit/bin.cjs studio",
     "clean": "rimraf dist out node_modules"
   },
   "build": {
-    "asarUnpack": [
-      "node_modules/better-sqlite3/**"
-    ],
     "extraResources": [
       {
         "from": "src/main/database/migrations",
@@ -35,7 +32,7 @@
     "extraMetadata": {
       "main": "./out/main/index.js"
     }
-},
+  },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
@@ -64,6 +61,7 @@
     "prettier": "^3.7.4",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
+    "rimraf": "^6.1.0",
     "typescript": "^5.9.3",
     "vite": "^7.2.6"
   }

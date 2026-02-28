@@ -72,7 +72,7 @@ npm run build:linux
 
 BatchGrade uses [Drizzle ORM](https://orm.drizzle.team/) with a local SQLite database.
 
-**Studio:**  Opens Drizzle Studio, a visual browser for your local database.
+**Studio:** Opens Drizzle Studio, a visual browser for your local database.
 
 ```bash
 npm run studio

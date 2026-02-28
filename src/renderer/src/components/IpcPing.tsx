@@ -12,8 +12,7 @@ export function IpcPing(): React.JSX.Element {
     setTimeout(() => setPing('idle'), 2500)
   }
 
-  const label =
-    ping === 'idle' ? 'Send IPC' : ping === 'waiting' ? 'Sending…' : 'Pong ✓'
+  const label = ping === 'idle' ? 'Send IPC' : ping === 'waiting' ? 'Sending…' : 'Pong ✓'
 
   return (
     <a

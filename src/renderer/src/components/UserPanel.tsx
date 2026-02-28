@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import type { User } from '../../main/database/schema'
+import type { User } from '../../../shared/types'
 
 type FormState = {
   email: string
   password: string
 }
+
 const emptyForm: FormState = { email: '', password: '' }
 
 export function UserPanel(): React.JSX.Element {
@@ -14,39 +15,55 @@ export function UserPanel(): React.JSX.Element {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    loadUsers()
-  }, [])
-
-  async function loadUsers() {
+  const loadUsers = async (): Promise<void> => {
     const result = await window.api.users.getAll()
     setUsers(result)
   }
 
-  function startEdit(user: User) {
+  // Load users when the component is called
+  useEffect(() => {
+    loadUsers()
+  }, [])
+
+  function startEdit(user: User): void {
     setEditingUuid(user.uuid)
-    setForm({ email: user.email, password: user.password })
+    setForm({ email: user.email, password: '' })
     setError(null)
   }
 
-  function cancelEdit() {
+  function cancelEdit(): void {
     setEditingUuid(null)
     setForm(emptyForm)
     setError(null)
   }
 
-  async function handleSubmit() {
-    if (!form.email.trim() || !form.password.trim()) {
-      setError('Both fields are required.')
+  async function handleSubmit(): Promise<void> {
+    const trimmedEmail = form.email.trim()
+    const trimmedPassword = form.password.trim()
+
+    if (!trimmedEmail) {
+      setError('Email is required.')
       return
     }
+
+    if (!editingUuid && !trimmedPassword) {
+      setError('Password is required.')
+      return
+    }
+
     setError(null)
+
     try {
       if (editingUuid) {
-        await window.api.users.update({ uuid: editingUuid, ...form })
+        await window.api.users.update({
+          uuid: editingUuid,
+          email: trimmedEmail,
+          ...(trimmedPassword ? { password: trimmedPassword } : {})
+        })
       } else {
-        await window.api.users.create(form)
+        await window.api.users.create({ email: trimmedEmail, password: trimmedPassword })
       }
+
       setForm(emptyForm)
       setEditingUuid(null)
       await loadUsers()
@@ -55,7 +72,7 @@ export function UserPanel(): React.JSX.Element {
     }
   }
 
-  async function handleDelete(uuid: string) {
+  async function handleDelete(uuid: string): Promise<void> {
     await window.api.users.delete(uuid)
     setDeleteConfirm(null)
     await loadUsers()
@@ -63,7 +80,6 @@ export function UserPanel(): React.JSX.Element {
 
   return (
     <div className="w-full max-w-xl mt-6 rounded-lg overflow-hidden border border-white/10 bg-white/[0.04] text-sm">
-
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10">
         <span className="text-xs uppercase tracking-widest opacity-50">
           users · {users.length} row{users.length !== 1 ? 's' : ''}
@@ -97,16 +113,10 @@ export function UserPanel(): React.JSX.Element {
         </button>
       </div>
 
-      {error && (
-        <div className="px-4 py-1.5 text-xs text-red-400 bg-red-400/10">
-          ⚠ {error}
-        </div>
-      )}
+      {error && <div className="px-4 py-1.5 text-xs text-red-400 bg-red-400/10">⚠ {error}</div>}
 
       {users.length === 0 ? (
-        <div className="px-4 py-6 text-center text-xs opacity-30">
-          no users yet — add one above
-        </div>
+        <div className="px-4 py-6 text-center text-xs opacity-30">no users yet — add one above</div>
       ) : (
         <ul>
           {users.map((user, i) => (
@@ -136,10 +146,7 @@ export function UserPanel(): React.JSX.Element {
                     confirm?
                   </button>
                 ) : (
-                  <button
-                    onClick={() => setDeleteConfirm(user.uuid)}
-                    className="btn-ghost text-xs"
-                  >
+                  <button onClick={() => setDeleteConfirm(user.uuid)} className="btn-ghost text-xs">
                     delete
                   </button>
                 )}

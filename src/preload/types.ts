@@ -1,6 +1,6 @@
-import type { User, NewUser, UpdateUser } from '../main/database/schema'
+import type { User, NewUser, UpdateUser } from '../shared/types'
 
-export interface UsersAPI {
+export type UsersAPI = {
   getAll: () => Promise<User[]>
   create: (data: NewUser) => Promise<User>
   update: (data: UpdateUser) => Promise<User>

@@ -6,7 +6,7 @@ const usersApi: UsersAPI = {
   getAll: () => ipcRenderer.invoke('users:getAll'),
   create: (data) => ipcRenderer.invoke('users:create', data),
   update: (data) => ipcRenderer.invoke('users:update', data),
-  delete: (uuid) => ipcRenderer.invoke('users:delete', uuid),
+  delete: (uuid) => ipcRenderer.invoke('users:delete', uuid)
 }
 
 // Custom APIs for renderer

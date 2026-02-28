@@ -1,29 +1,43 @@
 import { eq } from 'drizzle-orm'
 import { getDb } from '../index'
 import { users } from '../schema'
-import type { NewUser, UpdateUser } from '../schema'
+import type { NewUser, UpdateUser, User as DbUser } from '../schema'
+import type { User } from '../../../shared/types'
 
-export function getAllUsers() {
-  return getDb().select().from(users).all()
+function toIpcUser(user: DbUser): User {
+  return {
+    uuid: user.uuid,
+    email: user.email,
+    password: user.password,
+    createdAt: user.createdAt
+  }
 }
 
-export function createUser(data: NewUser) {
-  return getDb().insert(users).values(data).returning().get()
+export function getAllUsers(): User[] {
+  return getDb().select().from(users).all().map(toIpcUser)
 }
 
-export function updateUser(data: UpdateUser) {
-  return getDb()
+export function createUser(data: NewUser): User {
+  const created = getDb().insert(users).values(data).returning().get()
+  if (!created) throw new Error('Failed to create user')
+  return toIpcUser(created)
+}
+
+export function updateUser(data: UpdateUser): User {
+  const updated = getDb()
     .update(users)
     .set({ email: data.email, password: data.password })
     .where(eq(users.uuid, data.uuid))
     .returning()
     .get()
+
+  if (!updated) throw new Error(`User not found: ${data.uuid}`)
+  return toIpcUser(updated)
 }
 
-export function deleteUser(uuid: string) {
-  return getDb()
-    .delete(users)
-    .where(eq(users.uuid, uuid))
-    .returning()
-    .get()
+export function deleteUser(uuid: string): User {
+  const deleted = getDb().delete(users).where(eq(users.uuid, uuid)).returning().get()
+
+  if (!deleted) throw new Error(`User not found: ${uuid}`)
+  return toIpcUser(deleted)
 }
