@@ -8,9 +8,7 @@ export default defineConfig({
     setupFiles: ['./tests/setup.ts'],
     include: ['tests/**/*.test.ts'],
 
-    // Coverage totals show up in terminal via the "text" reporter
     coverage: {
-      enabled: true,
       provider: 'v8',
       reporter: ['text', 'html', 'json-summary'],
       exclude: [
@@ -19,14 +17,7 @@ export default defineConfig({
         '**/dist/**',
         '**/out/**',
         '**/coverage/**'
-      ],
-      // Optional: make CI fail if coverage drops below these numbers
-      // thresholds: {
-      //   statements: 80,
-      //   branches: 70,
-      //   functions: 75,
-      //   lines: 80
-      // }
+      ]
     },
 
     pool: 'forks',
@@ -38,5 +29,9 @@ export default defineConfig({
     alias: {
       electron: new URL('./tests/__mocks__/electron.ts', import.meta.url).pathname
     }
+  },
+
+  server: {
+    open: false
   }
 })

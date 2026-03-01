@@ -21,9 +21,9 @@
     "build:linux": "npm run build && electron-builder --linux",
     "studio": "electron ./node_modules/drizzle-kit/bin.cjs studio",
     "clean": "rimraf dist out node_modules",
-    "test": "electron ./node_modules/vitest/vitest.mjs run --coverage",
-    "test:watch": "electron ./node_modules/vitest/vitest.mjs",
-    "test:ui": "electron ./node_modules/vitest/vitest.mjs --ui"
+    "test": "cross-env ELECTRON_RUN_AS_NODE=1 electron ./node_modules/vitest/vitest.mjs run --coverage",
+    "test:watch": "cross-env ELECTRON_RUN_AS_NODE=1 electron ./node_modules/vitest/vitest.mjs --w --coverage",
+    "test:ui": "cross-env ELECTRON_RUN_AS_NODE=1 electron ./node_modules/vitest/vitest.mjs --ui --watch --coverage=false"
   },
   "build": {
     "extraResources": [
@@ -55,6 +55,7 @@
     "@vitejs/plugin-react": "^5.1.1",
     "@vitest/coverage-v8": "^4.0.18",
     "@vitest/ui": "^4.0.18",
+    "cross-env": "^10.1.0",
     "drizzle-kit": "^0.31.9",
     "electron": "^39.2.6",
     "electron-builder": "^26.0.12",
