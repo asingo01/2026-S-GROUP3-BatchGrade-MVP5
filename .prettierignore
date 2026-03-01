@@ -10,3 +10,5 @@ drizzle.config.json
 designs
 tests
 ISSUE_TEMPLATE
+coverage
+vitest.config.ts

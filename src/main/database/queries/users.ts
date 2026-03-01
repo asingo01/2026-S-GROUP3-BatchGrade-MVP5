@@ -24,9 +24,26 @@ export function createUser(data: NewUser): User {
 }
 
 export function updateUser(data: UpdateUser): User {
+  const changes: Partial<Pick<DbUser, 'email' | 'password'>> = {}
+
+  // If email is changed, update it. Otherwise, keep existing email.
+  if (data.email !== undefined) {
+    changes.email = data.email
+  }
+
+  // If password is changed, update it. Otherwise, keep existing password.
+  if (data.password !== undefined) {
+    changes.password = data.password
+  }
+
+  // If no fields are provided to update, throw an error. Should not allow empty updates.
+  if (Object.keys(changes).length === 0) {
+    throw new Error('No fields provided to update')
+  }
+
   const updated = getDb()
     .update(users)
-    .set({ email: data.email, password: data.password })
+    .set(changes)
     .where(eq(users.uuid, data.uuid))
     .returning()
     .get()

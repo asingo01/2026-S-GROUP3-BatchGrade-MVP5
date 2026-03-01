@@ -7,3 +7,4 @@ out
 dev.db
 dev.db-wal
 dev.db-shm
+coverage
