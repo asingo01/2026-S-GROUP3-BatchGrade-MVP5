@@ -1,4 +1,7 @@
 import path from 'path'
+import { createRequire } from 'node:module'
+
+const nodeRequire = createRequire(import.meta.url)
 
 /**
  * Resolves the absolute path to the application database file.
@@ -13,7 +16,11 @@ import path from 'path'
  */
 export function getDbPath(): string {
   try {
-    const { app } = require('electron')
+    if (!process.versions.electron) {
+      return path.resolve('./dev.db')
+    }
+
+    const { app } = nodeRequire('electron') as typeof import('electron')
     if (app.isPackaged) {
       return path.join(app.getPath('userData'), 'batchgrade.db')
     }

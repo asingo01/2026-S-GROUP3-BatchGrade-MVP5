@@ -8,7 +8,7 @@ import { app } from 'electron'
 
 let db: ReturnType<typeof drizzle<typeof schema>>
 
-export function initDb() {
+export function initDb(): ReturnType<typeof drizzle<typeof schema>> {
   const sqlite = new Database(getDbPath())
 
   sqlite.pragma('journal_mode = WAL')
@@ -29,7 +29,7 @@ export function initDb() {
   return db
 }
 
-export function getDb() {
+export function getDb(): ReturnType<typeof drizzle<typeof schema>> {
   if (!db) {
     throw new Error('Database not initialized. Call initDb() first.')
   }

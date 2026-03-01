@@ -1,3 +1,3 @@
-export function teardown() {
+export function teardown(): void {
   process.exit(0)
 }

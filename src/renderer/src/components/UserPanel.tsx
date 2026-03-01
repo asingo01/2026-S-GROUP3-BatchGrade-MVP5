@@ -20,9 +20,26 @@ export function UserPanel(): React.JSX.Element {
     setUsers(result)
   }
 
-  // Load users when the component is called
+  // Load users on mount.
   useEffect(() => {
-    loadUsers()
+    let isMounted = true
+
+    window.api.users
+      .getAll()
+      .then((result) => {
+        if (isMounted) {
+          setUsers(result)
+        }
+      })
+      .catch((e: unknown) => {
+        if (isMounted) {
+          setError(e instanceof Error ? e.message : 'Something went wrong.')
+        }
+      })
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   function startEdit(user: User): void {
