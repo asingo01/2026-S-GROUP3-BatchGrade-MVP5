@@ -13,7 +13,8 @@
 
 ---
 
-BatchGrade is a solution to grading that can be hosted on infrastructure already owned by the university (such as the Bellagio server for CSN) or run locally on the instructor or student's computer.
+BatchGrade is a locally hosted automated grading platform designed to streamline the evaluation of source code in academia. The system enables educators to batch test submissions, manage grades through an integrated database, and provide structured feedback, while students can receive immediate results to improve their work. Built with a web-based frontend, backend services, and database support, BatchGrade prioritizes affordability and institutional flexibility by allowing deployment on existing infrastructure or local machines. By reducing grading time and improving feedback quality, the project aims to increase instructional efficiency and student confidence without reliance on costly third-party software as a service (SaaS) solutions.
+
 
 ## Table of Contents
 
@@ -50,7 +51,16 @@ If you do install the VSCode extension add the following lines to your settings.
 
 ## Project Setup
 
+### Requirements
+
+- Required Node.js: >= 22
+- Tested with Node.js: 22.22.0
+
+If you encounter native build issues (for example with `better-sqlite3` or other native modules), switch to a Node.js version compatible with the Electron binary in `devDependencies` or rebuild native modules after switching versions.
+
 ### Install
+
+If needed, install Node.js for your approrpiate Operating System from here: <https://nodejs.org/en/download>
 
 ```bash
 npm install
@@ -64,9 +74,11 @@ Starts the app in development mode with hot-reloading.
 npm run dev
 ```
 
+Simply close the electron window or use `ctrl + c` or `cmd + c` to end the dev app. 
+
 ### Build
 
-Compiles and packages the app for your target platform.
+Compiles and packages the app for your target platform. It will be built to the `/dist` folder. There will be an unpacked folder for the OS you built to, you can run the application using the executable there. You must be using the OS you build to for it to work properly. Window can build to Windows, Linux to Linux, Mac to Mac.
 
 ```bash
 # For Windows
@@ -81,12 +93,7 @@ npm run build:linux
 
 ---
 
-### Requirements
 
-- Recommended Node.js: >= 22
-- Tested with Node.js: 22.22.0
-
-If you encounter native build issues (for example with `better-sqlite3` or other native modules), switch to a Node.js version compatible with the Electron binary in `devDependencies` or rebuild native modules after switching versions.
 
 ### Where build files and executables are placed
 
