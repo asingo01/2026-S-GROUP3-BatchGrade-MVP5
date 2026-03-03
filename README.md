@@ -38,7 +38,7 @@ BatchGrade is a locally hosted automated grading platform designed to streamline
 
 > **Recommended:** Install the [Vitest VSCode extension](https://marketplace.visualstudio.com/items?itemName=vitest.explorer) for an integrated test explorer, inline test results, and one-click test runs directly inside the editor.
 
-If you do install the VSCode extension add the following lines to your settings.json
+If you do install the VSCode extension, add the following lines to your settings.json
 
 ```json
   "vitest.nodeExecutable": "node_modules/.bin/electron",
@@ -60,7 +60,7 @@ If you encounter native build issues (for example with `better-sqlite3` or other
 
 ### Install
 
-If needed, install Node.js for your approrpiate Operating System from here: <https://nodejs.org/en/download>
+If needed, install Node.js for your appropriate Operating System from here: <https://nodejs.org/en/download>
 
 ```bash
 npm install
@@ -78,7 +78,7 @@ Simply close the electron window or use `ctrl + c` or `cmd + c` to end the dev a
 
 ### Build
 
-Compiles and packages the app for your target platform. It will be built to the `/dist` folder. There will be an unpacked folder for the OS you built to, you can run the application using the executable there. You must be using the OS you build to for it to work properly. Window can build to Windows, Linux to Linux, Mac to Mac.
+Compiles and packages the app for your target platform. It will be built to the `/dist` folder. There will be an unpacked folder for the OS you built to, you can run the application using the executable there. You must be using the OS you build to for it to work properly. Windows can build to Windows, Linux to Linux, Mac to Mac.
 
 ```bash
 # For Windows
@@ -97,7 +97,6 @@ npm run build:linux
 
 ### Where build files and executables are placed
 
-- `dist/` — Top-level folder where `electron-builder` writes packaged artifacts.
 - `dist/` - Top-level folder where `electron-builder` writes packaged artifacts.
 - `dist/<platform>-unpacked/` - Platform-specific unpacked build folder (examples below):
 - `dist/linux-unpacked/` - contains unpacked Linux app files and the executable for Linux.
