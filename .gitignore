@@ -1,0 +1,10 @@
+node_modules
+dist
+out
+.DS_Store
+.eslintcache
+*.log*
+dev.db
+dev.db-wal
+dev.db-shm
+coverage
