@@ -1,4 +1,8 @@
-# FR7
-Submission Database
+# FR-7 Submission Database
 
-This database is not intended to be viewed by users. It contains information about assignments and submissions, provided by FR2 and FR9. Depending on the type, this information includes assignment ID and name, submission ID and name, submitter/creator ID and name, assignment solution output, and assignment score.
+## Description
+The database logs every assignment and submission that has been made in the application. It is not intended to be accessible by users.
+
+## Diagrams
+> Schema Diagram: `/designs/MVP-4/FR-7/FR-7-v00-SCHEMA-SubmissionDatabaseModel.jpg`
+> Sequence Diagram: `/designs/MVP-4/FR-7/FR-7-v00-SEQ-StoreSubmissionAfterGrading.xml`

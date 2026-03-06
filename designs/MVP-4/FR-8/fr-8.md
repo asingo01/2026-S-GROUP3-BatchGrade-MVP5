@@ -1,4 +1,8 @@
-# FR8
-Assignment-Based Gradebook View
+# FR-8 Assignment-Based Gradebook View
 
-This view is intended for instructors only. Based on the assignment selected from the dropdown, it shows a table containing student names alongside their highest score earned for that assignment. Rows appear in the order of student names alphabetized, and the score information is taken from FR7.
+## Description
+The gradebook view is intended for instructors to see the highest score each student has accomplished for a particular assignment. It includes a dropdown that allows the instructor to select the assignment to view.
+
+## Diagrams
+> Component Diagram: `/designs/MVP-4/FR-8/FR-8-v00-COMP-GradebookViewComponents.xml`
+> Sequence Diagram: `/designs/MVP-4/FR-8/FR-8-v00-SEQ-InstructorViewsGradebook.xml`
