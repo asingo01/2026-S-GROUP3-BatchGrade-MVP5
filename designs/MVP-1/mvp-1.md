@@ -1,2 +1,4 @@
-# MVP-1: Student Assignment Upload Interface
+# MVP-1
+Student Assignment Upload Interface
+
 Provides a localized interface for students to submit source code files.
