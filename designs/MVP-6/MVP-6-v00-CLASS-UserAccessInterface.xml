@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0" version="29.5.6">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0" version="29.6.0">
   <diagram name="Page-1" id="5AfZvzuZQPSmUPUlV4i7">
-    <mxGraphModel dx="1623" dy="797" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1384" dy="797" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -23,7 +23,7 @@
         <mxCell id="7" parent="1" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fillColor=#dae8fc;strokeColor=#1E3A5F;fontStyle=1;fontSize=13;" value="AuthService" vertex="1">
           <mxGeometry height="152" width="240" x="30" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="8" parent="7" style="shape=tableRow;html=1;startSize=0;fillColor=none;collapsible=0;strokeColor=#1E3A5F;align=left;spacingLeft=8;fontSize=11;" value="- db: PrismaClient" vertex="1">
+        <mxCell id="8" parent="7" style="shape=tableRow;html=1;startSize=0;fillColor=none;collapsible=0;strokeColor=#1E3A5F;align=left;spacingLeft=8;fontSize=11;" value="- db: Drizzle(SQLite)" vertex="1">
           <mxGeometry height="24" width="240" y="30" as="geometry" />
         </mxCell>
         <mxCell id="9" parent="7" style="shape=tableRow;html=1;startSize=0;fillColor=#f5f5f5;collapsible=0;strokeColor=#1E3A5F;align=left;spacingLeft=8;fontSize=11;" value="+ loginAsStudent(name, password): User" vertex="1">
