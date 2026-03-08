@@ -12,21 +12,23 @@ function App(): React.JSX.Element {
   /* TEST ONLY DELETE WHEN DONE */
   const [filePath, setFilePath] = useState<string | undefined>(undefined)
   const handleFileSelect = (): void => {
-    window.api.file.select().then((filePath) => {
-      if (filePath) {
-        setFilePath(filePath)
-        console.log('Selected file:', filePath)
-      } else {
-        console.log('File selection was canceled.')
-        setFilePath("Cancelled")
-      }
-    }).catch((error) => {
-      console.error('Error selecting file:', error)
-      setFilePath("Error")
-    })
+    window.api.file
+      .select()
+      .then((filePath) => {
+        if (filePath) {
+          setFilePath(filePath)
+          console.log('Selected file:', filePath)
+        } else {
+          console.log('File selection was canceled.')
+          setFilePath('Cancelled')
+        }
+      })
+      .catch((error) => {
+        console.error('Error selecting file:', error)
+        setFilePath('Error')
+      })
   }
   /* TEST ONLY DELETE WHEN DONE */
-
 
   return (
     <>
@@ -55,13 +57,15 @@ function App(): React.JSX.Element {
       </div>
 
       {/* TEST ONLY DELETE WHEN DONE */}
-      <button onClick={handleFileSelect} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200">
+      <button
+        onClick={handleFileSelect}
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+      >
         Select File
       </button>
 
       {filePath && <p className="mt-2 text-sm text-gray-600">Selected File: {filePath}</p>}
       {/* TEST ONLY DELETE WHEN DONE */}
-
 
       <Versions />
     </>
