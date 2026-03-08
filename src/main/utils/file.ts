@@ -4,11 +4,14 @@
 // Fitted to our project needs
 import { dialog } from 'electron'
 
-void async function selectFile() {
-  const { canceled, filePaths } = await dialog.showOpenDialog()
+async function selectFile(): Promise<string | undefined> {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    properties: ['openFile']
+  })
   if (!canceled) {
     return filePaths[0]
   }
+  return undefined
 }
 
 export { selectFile }
