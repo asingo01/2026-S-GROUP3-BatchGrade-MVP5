@@ -8,10 +8,17 @@ const usersApi: UsersAPI = {
   update: (data) => ipcRenderer.invoke('users:update', data),
   delete: (uuid) => ipcRenderer.invoke('users:delete', uuid)
 }
-
+/* TEST ONLY DELETE WHEN DONE */
+const fileApi = {
+  select: () => ipcRenderer.invoke('file:select')
+}
+/* TEST ONLY DELETE WHEN DONE */
 // Custom APIs for renderer
 const api = {
-  users: usersApi
+  users: usersApi,
+  /* TEST ONLY DELETE WHEN DONE */
+  file: fileApi
+  /* TEST ONLY DELETE WHEN DONE */
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

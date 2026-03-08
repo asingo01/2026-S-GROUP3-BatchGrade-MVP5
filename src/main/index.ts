@@ -5,6 +5,9 @@ import icon from '../../resources/icon.png?asset'
 import { initDb } from './database/index'
 import type { NewUser, UpdateUser } from './database/schema'
 import { getAllUsers, createUser, updateUser, deleteUser } from './database/queries'
+/* TEST ONLY DELETE WHEN DONE */
+import { selectFile } from './utils/file'
+/* TEST ONLY DELETE WHEN DONE */
 
 function createWindow(): void {
   // Create the browser window.
@@ -63,6 +66,11 @@ app.whenReady().then(() => {
   ipcMain.handle('users:create', (_e, data: NewUser) => createUser(data))
   ipcMain.handle('users:update', (_e, data: UpdateUser) => updateUser(data))
   ipcMain.handle('users:delete', (_e, uuid: string) => deleteUser(uuid))
+
+  /* TEST ONLY DELETE WHEN DONE */
+  // File selection
+  ipcMain.handle('file:select', () => selectFile())
+  /* TEST ONLY DELETE WHEN DONE */
 
   createWindow()
 

@@ -6,6 +6,11 @@ declare global {
     electron: ElectronAPI
     api: {
       users: UsersAPI
+      /* TEST ONLY DELETE WHEN DONE */
+      file: {
+        select: () => Promise<string | undefined>
+      }
+      /* TEST ONLY DELETE WHEN DONE */
     }
   }
 }
