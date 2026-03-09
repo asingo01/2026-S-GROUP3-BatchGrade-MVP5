@@ -10,7 +10,8 @@ const usersApi: UsersAPI = {
 }
 /* TEST ONLY DELETE WHEN DONE */
 const fileApi = {
-  select: () => ipcRenderer.invoke('file:select')
+  select: () => ipcRenderer.invoke('file:select'),
+  stringify: (filePath: string) => ipcRenderer.invoke('file:stringify', filePath)
 }
 /* TEST ONLY DELETE WHEN DONE */
 // Custom APIs for renderer

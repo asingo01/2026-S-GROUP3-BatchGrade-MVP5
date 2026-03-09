@@ -6,7 +6,7 @@ import { initDb } from './database/index'
 import type { NewUser, UpdateUser } from './database/schema'
 import { getAllUsers, createUser, updateUser, deleteUser } from './database/queries'
 /* TEST ONLY DELETE WHEN DONE */
-import { selectFile } from './utils/file'
+import { selectFile, stringifyFile } from './utils/file'
 /* TEST ONLY DELETE WHEN DONE */
 
 function createWindow(): void {
@@ -70,6 +70,7 @@ app.whenReady().then(() => {
   /* TEST ONLY DELETE WHEN DONE */
   // File selection
   ipcMain.handle('file:select', () => selectFile())
+  ipcMain.handle('file:stringify', (_e, filePath: string) => stringifyFile(filePath))
   /* TEST ONLY DELETE WHEN DONE */
 
   createWindow()

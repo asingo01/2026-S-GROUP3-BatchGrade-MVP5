@@ -14,5 +14,11 @@ async function selectFile(): Promise<string | undefined> {
   return undefined
 }
 
-export { selectFile }
+async function stringifyFile(filePath: string): Promise<string> {
+  const fs = await import('fs/promises')
+  const fileContent = await fs.readFile(filePath, 'utf-8')
+  return fileContent
+}
+
+export { selectFile, stringifyFile }
 /* TEST ONLY DELETE WHEN DONE */

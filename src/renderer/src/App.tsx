@@ -11,6 +11,7 @@ import { useState } from 'react'
 function App(): React.JSX.Element {
   /* TEST ONLY DELETE WHEN DONE */
   const [filePath, setFilePath] = useState<string | undefined>(undefined)
+  const [fileContent, setFileContent] = useState<string | undefined>(undefined)
   const handleFileSelect = (): void => {
     window.api.file
       .select()
@@ -28,6 +29,24 @@ function App(): React.JSX.Element {
         setFilePath('Error')
       })
   }
+
+  const handleFileStringify = (): void => {
+    if (!filePath) {
+      console.warn('No file selected to stringify.')
+      return
+    }
+    window.api.file
+      .stringify(filePath)
+      .then((content) => {
+        setFileContent(content)
+        console.log('File content:', content)
+      })
+      .catch((error) => {
+        console.error('Error reading file:', error)
+        setFileContent('Error')
+      })
+  }
+
   /* TEST ONLY DELETE WHEN DONE */
 
   return (
@@ -65,6 +84,19 @@ function App(): React.JSX.Element {
       </button>
 
       {filePath && <p className="mt-2 text-sm text-gray-600">Selected File: {filePath}</p>}
+      {fileContent && (
+        <div className="mt-4 p-4 bg-gray-100 rounded">
+          <h3 className="text-lg font-semibold mb-2">File Content:</h3>
+          <pre className="text-sm text-gray-700 overflow-auto">{fileContent}</pre>
+        </div>
+      )}
+      {/* TEST ONLY DELETE WHEN DONE */}
+      <button
+        onClick={handleFileStringify}
+        className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200"
+      >
+        Stringify File
+      </button>
       {/* TEST ONLY DELETE WHEN DONE */}
 
       <Versions />
