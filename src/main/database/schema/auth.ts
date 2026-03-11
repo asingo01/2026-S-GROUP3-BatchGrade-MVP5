@@ -15,8 +15,13 @@ export const users = sqliteTable('users', {
   uuid: text('uuid')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  email: text('email').notNull().unique(),
-  password: text('password').notNull(),
+  email: text('email')
+    .notNull()
+    .unique(),
+  password: text('password')
+    .notNull(),
+  role: text('role')
+    .notNull(),
   createdAt: integer('created_at', { mode: 'number' })
     .notNull()
     .default(sql`(unixepoch())`)
