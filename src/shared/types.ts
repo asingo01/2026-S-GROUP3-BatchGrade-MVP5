@@ -1,1 +1,8 @@
-export type { User, NewUser, UpdateUser } from '../main/database/schema'
+export type {
+  User,
+  NewUser,
+  UpdateUser,
+  Assignment,
+  NewAssignment,
+  UpdateAssignment
+} from '../main/database/schema'
