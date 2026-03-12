@@ -12,12 +12,16 @@ import { useState } from 'react' // Import React hook used to manage component s
 // =============================================================================
 const gradebookData = {
   'Assignment 1': [
-    { id: '1001', name: 'John Smith', score: '92%' },
-    { id: '1002', name: 'Maria Lee', score: '88%' }
+    { id: '1001', name: 'Garen Crownguard', score: '92%' },
+    { id: '1002', name: 'Wu Kong', score: '88%' },
+    { id: '1003', name: 'Quinn Valor', score: '95%' },
+    { id: '1004', name: 'Govos Usan', score: '84%' }
   ],
   'Assignment 2': [
-    { id: '1001', name: 'John Smith', score: '95%' },
-    { id: '1002', name: 'Maria Lee', score: '90%' }
+    { id: '1001', name: 'Garen Crownguard', score: '95%' },
+    { id: '1002', name: 'Wu Kong', score: '90%' },
+    { id: '1003', name: 'Quinn Valor', score: '91%' },
+    { id: '1004', name: 'Govos Usan', score: '89%' }
   ]
 }
 
@@ -29,8 +33,18 @@ function Gradebook(): React.JSX.Element {
   // State variable that tracks which assignment is currently selected
   const [selectedAssignment, setSelectedAssignment] = useState('Assignment 1')
 
+  // Tracks text entered in the search box
+  const [searchTerm, setSearchTerm] = useState('')
+
   // Retrieve the student list corresponding to the selected assignment
   const students = gradebookData[selectedAssignment as keyof typeof gradebookData]
+
+  // Filter students by name or ID based on search input
+  const filteredStudents = students.filter(
+    (student) =>
+      student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      student.id.includes(searchTerm)
+  )
 
   return (
     // Main page container
@@ -53,6 +67,19 @@ function Gradebook(): React.JSX.Element {
         </select>
       </div>
 
+      {/* Student search input */}
+      <div style={{ margin: '16px 0' }}>
+        <label htmlFor="student-search">Search Student: </label>
+        <input
+          id="student-search"
+          type="text"
+          placeholder="Enter student name or ID"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ marginLeft: '8px', padding: '6px', width: '260px' }}
+        />
+      </div>
+
       {/* Table displaying students and their highest scores */}
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         {/* Table header */}
@@ -66,7 +93,8 @@ function Gradebook(): React.JSX.Element {
 
         {/* Table body generated dynamically from student data */}
         <tbody>
-          {students.map((student) => (
+          {/* render filtered students instead of all students */}
+          {filteredStudents.map((student) => (
             <tr key={student.id}>
               <td style={cellStyle}>{student.id}</td>
               <td style={cellStyle}>{student.name}</td>
