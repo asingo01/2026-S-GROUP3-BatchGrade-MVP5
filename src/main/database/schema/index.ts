@@ -1,4 +1,4 @@
 export * from './academic'
-export * from './auth'
+export * from './user'
 export * from './log'
 export * from './gradebook'

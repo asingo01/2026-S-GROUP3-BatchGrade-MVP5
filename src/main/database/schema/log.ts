@@ -1,6 +1,6 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { sql } from 'drizzle-orm'
-import { users } from './auth'
+import { users } from './user'
 import { assignments } from './gradebook'
 
 // Action Logs table: Tracking "Who did what"

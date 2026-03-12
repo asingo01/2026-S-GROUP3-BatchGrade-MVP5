@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { users } from './auth'
+import { users } from './user'
 
 /**
  * Base Profiles

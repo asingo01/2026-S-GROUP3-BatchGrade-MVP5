@@ -1,7 +1,7 @@
 import { sqliteTable, text, integer, blob } from 'drizzle-orm/sqlite-core'
 import { sql } from 'drizzle-orm'
 import { sections } from './academic'
-import { users } from './auth'
+import { users } from './user'
 
 export const assignments = sqliteTable('assignments', {
   uuid: text('uuid')
