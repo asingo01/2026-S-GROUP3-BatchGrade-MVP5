@@ -1,39 +1,19 @@
-import Versions from './components/Versions'
-import { IpcPing } from './components/IpcPing'
-import { UserPanel } from './components/UserPanel'
-import electronLogo from './assets/electron.svg'
-
-// ─── App ──────────────────────────────────────────────────────────────────────
+import { HashRouter, Routes, Route } from "react-router-dom"
+import Home from "./pages/Home"
+import Login from "./pages/Login"
+import Dashboard from "./pages/Dashboard"
+import Grading from "./pages/Grading"
 
 function App(): React.JSX.Element {
   return (
-    <>
-      <img alt="logo" className="logo" src={electronLogo} />
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-        &nbsp;and <span className="ts">TypeScript</span>
-      </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className="actions">
-        <div className="action">
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="action">
-          <IpcPing />
-        </div>
-      </div>
-
-      <div className="p-6">
-        <UserPanel />
-      </div>
-
-      <Versions />
-    </>
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/grading" element={<Grading />} />
+      </Routes>
+    </HashRouter>
   )
 }
 
