@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import type { UsersAPI } from './types'
+import type { UsersAPI, AssignmentsAPI } from './types'
 
 const usersApi: UsersAPI = {
   getAll: () => ipcRenderer.invoke('users:getAll'),
@@ -9,9 +9,21 @@ const usersApi: UsersAPI = {
   delete: (uuid) => ipcRenderer.invoke('users:delete', uuid)
 }
 
+/**
+ * @brief Preload API for assignment CRUD operations.
+ */
+const assignmentsApi: AssignmentsAPI = {
+  getAll: () => ipcRenderer.invoke('assignments:getAll'),
+  create: (data) => ipcRenderer.invoke('assignments:create', data),
+  update: (data) => ipcRenderer.invoke('assignments:update', data),
+  delete: (uuid) => ipcRenderer.invoke('assignments:delete', uuid)
+}
+
+
 // Custom APIs for renderer
 const api = {
-  users: usersApi
+  users: usersApi,
+  assignments: assignmentsApi
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
