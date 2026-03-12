@@ -4,6 +4,8 @@ import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
 import Grading from "./pages/Grading"
 
+import Gradebook from "./pages/Gradebook"
+
 function App(): React.JSX.Element {
   return (
     <HashRouter>
@@ -12,6 +14,7 @@ function App(): React.JSX.Element {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/grading" element={<Grading />} />
+        <Route path="/gradebook" element={<Gradebook />} />
       </Routes>
     </HashRouter>
   )

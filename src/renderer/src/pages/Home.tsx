@@ -33,6 +33,11 @@ function Home(): React.JSX.Element {
         <button onClick={() => navigate("/grading")} style={{ marginLeft: "1rem" }}>
           Go to Grading
         </button>
+
+        {/* Gradebook Button */}
+        <button onClick={() => navigate('/gradebook')} style={{ marginLeft: '1rem' }}>
+          Go to Gradebook
+        </button>
       </div>
 
       <div className="actions">
