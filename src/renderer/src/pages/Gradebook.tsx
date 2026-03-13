@@ -36,6 +36,9 @@ function Gradebook(): React.JSX.Element {
   // Tracks text entered in the search box
   const [searchTerm, setSearchTerm] = useState('')
 
+  // Tracks which sorting option is selected
+  const [sortOption, setSortOption] = useState('name-asc')
+
   // Retrieve the student list corresponding to the selected assignment
   const students = gradebookData[selectedAssignment as keyof typeof gradebookData]
 
@@ -45,6 +48,31 @@ function Gradebook(): React.JSX.Element {
       student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.id.includes(searchTerm)
   )
+
+  // Sort filtered students based on selected sort option
+  const sortedStudents = [...filteredStudents].sort((a, b) => {
+    // name ascending
+    if (sortOption === 'name-asc') {
+      return a.name.localeCompare(b.name)
+    }
+
+    // name descending
+    if (sortOption === 'name-desc') {
+      return b.name.localeCompare(a.name)
+    }
+
+    // score ascending
+    if (sortOption === 'score-asc') {
+      return parseInt(a.score) - parseInt(b.score)
+    }
+
+    // score descending
+    if (sortOption === 'score-desc') {
+      return parseInt(b.score) - parseInt(a.score)
+    }
+
+    return 0
+  })
 
   return (
     // Main page container
@@ -80,6 +108,22 @@ function Gradebook(): React.JSX.Element {
         />
       </div>
 
+      {/* Sort dropdown */}
+      <div style={{ margin: '16px 0' }}>
+        <label htmlFor="sort-select">Sort By: </label>
+        <select
+          id="sort-select"
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+          style={{ marginLeft: '8px', padding: '6px' }}
+        >
+          <option value="name-asc">Student Name (A-Z)</option>
+          <option value="name-desc">Student Name (Z-A)</option>
+          <option value="score-asc">Highest Score (Low to High)</option>
+          <option value="score-desc">Highest Score (High to Low)</option>
+        </select>
+      </div>
+
       {/* Table displaying students and their highest scores */}
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         {/* Table header */}
@@ -93,8 +137,7 @@ function Gradebook(): React.JSX.Element {
 
         {/* Table body generated dynamically from student data */}
         <tbody>
-          {/* render filtered students instead of all students */}
-          {filteredStudents.map((student) => (
+          {sortedStudents.map((student) => (
             <tr key={student.id}>
               <td style={cellStyle}>{student.id}</td>
               <td style={cellStyle}>{student.name}</td>
