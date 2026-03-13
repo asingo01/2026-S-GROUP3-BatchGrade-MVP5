@@ -9,6 +9,7 @@ function toIpcUser(user: DbUser): User {
     uuid: user.uuid,
     email: user.email,
     password: user.password,
+    role: user.role,
     createdAt: user.createdAt
   }
 }
