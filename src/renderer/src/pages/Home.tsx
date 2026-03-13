@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom'
 import Versions from '../components/Versions'
 import { IpcPing } from '../components/IpcPing'
 import { UserPanel } from '../components/UserPanel'
@@ -21,16 +21,14 @@ function Home(): React.JSX.Element {
       </p>
 
       {/* ── Navigation Buttons ── */}
-      <div style={{ marginTop: "2rem" }}>
-        <button onClick={() => navigate("/login")}>
-          Go to Login
-        </button>
+      <div style={{ marginTop: '2rem' }}>
+        <button onClick={() => navigate('/login')}>Go to Login</button>
 
-        <button onClick={() => navigate("/dashboard")} style={{ marginLeft: "1rem" }}>
+        <button onClick={() => navigate('/dashboard')} style={{ marginLeft: '1rem' }}>
           Go to Dashboard
         </button>
 
-        <button onClick={() => navigate("/grading")} style={{ marginLeft: "1rem" }}>
+        <button onClick={() => navigate('/grading')} style={{ marginLeft: '1rem' }}>
           Go to Grading
         </button>
       </div>

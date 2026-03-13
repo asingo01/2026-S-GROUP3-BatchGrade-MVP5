@@ -1,16 +1,22 @@
-import Versions from './components/Versions'
-import { IpcPing } from './components/IpcPing'
-import { UserPanel } from './components/UserPanel'
-import electronLogo from './assets/electron.svg'
 /* TEST ONLY DELETE WHEN DONE */
 import { useState } from 'react'
 /* TEST ONLY DELETE WHEN DONE */
-import { HashRouter, Routes, Route } from "react-router-dom"
-import Home from "./pages/Home"
-import Login from "./pages/Login"
-import Dashboard from "./pages/Dashboard"
-import Grading from "./pages/Grading"
+import { HashRouter, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
+import Grading from './pages/Grading'
 
+// Routes work functionally by importing the page to the top, and then creating the route below. What this will do is give you the ability to create
+// a new .tsx inside of pages, and then you can create buttons/navigation that point from whatever page you're on to this route the route will then
+// go to the appropriate page/.tsx file.
+
+// note some things such as "/" is always home/root this is a design paradigm
+
+// As far as the routes go individually, these point to the mvps that we have currently.
+// login -> login/landing
+// dashboard -> is the student/teacher ui (these should definitely be different routes/pages)
+// grading -> is the grade book, and should also probably be separated into grading.teacher / grading.student.
 
 function App(): React.JSX.Element {
   /* TEST ONLY DELETE WHEN DONE */
@@ -52,39 +58,14 @@ function App(): React.JSX.Element {
   }
 
   /* TEST ONLY DELETE WHEN DONE */
-
   return (
-    <>
-      <img alt="logo" className="logo" src={electronLogo} />
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-        &nbsp;and <span className="ts">TypeScript</span>
-      </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className="actions">
-        <div className="action">
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="action">
-          <IpcPing />
-        </div>
-      </div>
-// Routes work functionally by iumnporting the page to the top, and then creating the route below. What this will do is give you the ability to create
-// a new .tsx inside of pages, and then you can create buttons/navigation that point from whatever page you're on to this route the route will then 
-// go to the appropriate page/.tsx file. 
-
-// note some things such as "/" is always home/root this is a design paradigm
-
-// As far as the routes go individually, these point to the mvps that we have currently.
-// login -> login/landing
-// dashboard -> is the student/teacher ui (these should definitely be different routes/pages)
-// grading -> is the grade book, and should also probably be separated into grading.teacher / grading.student.
-
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/grading" element={<Grading />} />
+      </Routes>
       {/* TEST ONLY DELETE WHEN DONE */}
       <button
         onClick={handleFileSelect}
@@ -100,7 +81,7 @@ function App(): React.JSX.Element {
           <pre className="text-sm text-gray-700 overflow-auto">{fileContent}</pre>
         </div>
       )}
-      {/* TEST ONLY DELETE WHEN DONE */}
+
       <button
         onClick={handleFileStringify}
         className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200"
@@ -108,18 +89,6 @@ function App(): React.JSX.Element {
         Stringify File
       </button>
       {/* TEST ONLY DELETE WHEN DONE */}
-
-      <Versions />
-    </>
-function App(): React.JSX.Element {
-  return (
-    <HashRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/grading" element={<Grading />} />
-      </Routes>
     </HashRouter>
   )
 }
