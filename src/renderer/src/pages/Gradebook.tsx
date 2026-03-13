@@ -74,6 +74,18 @@ function Gradebook(): React.JSX.Element {
     return 0
   })
 
+  // Calculate class statistics from the sorted student list
+  const numericScores = sortedStudents.map((student) => parseInt(student.score))
+
+  const averageScore =
+    numericScores.length > 0
+      ? Math.round(numericScores.reduce((sum, score) => sum + score, 0) / numericScores.length)
+      : 0
+
+  const highestScore = numericScores.length > 0 ? Math.max(...numericScores) : 0
+  const lowestScore = numericScores.length > 0 ? Math.min(...numericScores) : 0
+  // end class statistics calculation
+
   return (
     // Main page container
     <div style={{ padding: '32px', color: 'white' }}>
@@ -125,6 +137,14 @@ function Gradebook(): React.JSX.Element {
       </div>
 
       {/* Table displaying students and their highest scores */}
+
+      {/* Class statistics summary */}
+      <div style={{ display: 'flex', gap: '24px', margin: '20px 0', fontWeight: 'bold' }}>
+        <div>Class Average: {averageScore}%</div>
+        <div>Highest Score: {highestScore}%</div>
+        <div>Lowest Score: {lowestScore}%</div>
+      </div>
+
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         {/* Table header */}
         <thead>
