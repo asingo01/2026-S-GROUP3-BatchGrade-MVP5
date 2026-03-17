@@ -144,6 +144,46 @@ function Gradebook(): React.JSX.Element {
   const lowestScore = validScores.length > 0 ? Math.min(...validScores) : '--'
   // end class statistics calculation
 
+  // ai-gen start (ChatGPT-5.3, 1)
+  // Export currently displayed gradebook rows to a CSV file
+  const handleExportCSV = () => {
+    // CSV column headers
+    const headers = ['Student ID', 'Student Name', 'Highest Score', 'Submission Count']
+
+    // Convert displayed students into CSV rows
+    const rows = sortedStudents.map((student) => [
+      student.id,
+      student.name,
+      student.score,
+      student.submissions
+    ])
+
+    // Combine headers and rows
+    // ['Student ID', ...],
+    // ['1001', ...],
+    const csvContent = [headers, ...rows].map((row) => row.join(',')).join('\n')
+
+    // Create downloadable file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+
+    // Creates a hidden link
+    // Sets file name like:
+    // Assignment 1-gradebook.csv
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `${selectedAssignment}-gradebook.csv`)
+    document.body.appendChild(link)
+
+    // Simulates user clicking download
+    link.click()
+
+    // Removes the temporary link and frees memory
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+  // ai-gen end
+
   return (
     // Main page container
     <div style={{ padding: '32px', color: 'white' }}>
@@ -194,8 +234,6 @@ function Gradebook(): React.JSX.Element {
         </select>
       </div>
 
-      {/* Table displaying students and their highest scores */}
-
       {/* Class statistics summary */}
       <div style={{ display: 'flex', gap: '24px', margin: '20px 0', fontWeight: 'bold' }}>
         <div>
@@ -209,6 +247,7 @@ function Gradebook(): React.JSX.Element {
         </div>
       </div>
 
+      {/* Table displaying students and their highest scores */}
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         {/* Table header */}
         <thead>
@@ -236,6 +275,21 @@ function Gradebook(): React.JSX.Element {
           ))}
         </tbody>
       </table>
+
+      {/* Export CSV Button at the bottom-right corner of the table */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
+        <button
+          onClick={handleExportCSV}
+          style={{
+            fontSize: '12px', // smaller text
+            padding: '4px 8px', // smaller button
+            opacity: 0.8, // slightly subtle
+            cursor: 'pointer'
+          }}
+        >
+          Export CSV
+        </button>
+      </div>
     </div>
   )
 }
