@@ -95,22 +95,15 @@ function Gradebook(): React.JSX.Element {
   // Tracks which sorting option is selected
   const [sortOption, setSortOption] = useState('name-asc')
 
-  // Tracks whether only missing submissions should be shown
-  const [showMissingOnly, setShowMissingOnly] = useState(false)
-
   // Retrieve the student list corresponding to the selected assignment
   const students = gradebookData[selectedAssignment as keyof typeof gradebookData]
 
   // Filter students by name or ID based on search input
-  const filteredStudents = students.filter((student) => {
-    const matchesSearch =
+  const filteredStudents = students.filter(
+    (student) =>
       student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.id.includes(searchTerm)
-
-    const matchesMissingFilter = showMissingOnly ? student.status === 'Missing' : true
-
-    return matchesSearch && matchesMissingFilter
-  })
+  )
 
   // Sort filtered students based on selected sort option
   const sortedStudents = [...filteredStudents].sort((a, b) => {
