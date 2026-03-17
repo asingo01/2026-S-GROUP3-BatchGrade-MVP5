@@ -1,11 +1,11 @@
 /**
  * InstructorDashboard.tsx
- * 
+ *
  * Description:
  * This component represents the instructor-facing dashboard within
  * the BatchGrade platform. The dashboard serves as the primary
  * interface for instructors once they have successfully logged in.
- * 
+ *
  * In its current state, the component functions as a placeholder
  * view that demonstrates navigation flow and page structure.
  * Future development will include instructor-specific tools sush as:
@@ -20,11 +20,11 @@ import Footer from '../components/Footer'
 
 /**
  * InstructorDashboard component
- * 
+ *
  * Provides the instructor interface after authentication.
  * This page will eventually contain tools for managing
  * assignments, grading submissions, and viewing student results
- * 
+ *
  * @returns InstructorDashboard(); React.JSX.Element
  */
 function InstructorDashboard(): React.JSX.Element {
@@ -44,7 +44,7 @@ function InstructorDashboard(): React.JSX.Element {
       {/*-----------------------------------------------------------
         Dashboard Content Area
       -----------------------------------------------------------*/}
-      <div style={{ padding: "8rem" }}>
+      <div style={{ padding: '8rem' }}>
         {/* Page Title */}
         <h1>Instructor Dashboard Page</h1>
 
@@ -54,12 +54,12 @@ function InstructorDashboard(): React.JSX.Element {
         {/*-----------------------------------------------------------
           Navigation controls
         -----------------------------------------------------------*/}
-          <div style={{ marginTop: "8rem" }}>
-              {/* Return to Home page */}
-              <button onClick={() => navigate("/")} style={{ marginLeft: "1rem" }}>
-                  Go to home
-              </button>
-          </div>
+        <div style={{ marginTop: '8rem' }}>
+          {/* Return to Home page */}
+          <button onClick={() => navigate('/')} style={{ marginLeft: '1rem' }}>
+            Go to home
+          </button>
+        </div>
       </div>
 
       {/*-----------------------------------------------------------

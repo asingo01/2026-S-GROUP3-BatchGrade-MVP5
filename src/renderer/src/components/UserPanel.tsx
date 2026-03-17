@@ -142,7 +142,11 @@ export function UserPanel(): React.JSX.Element {
           ...(trimmedPassword ? { password: trimmedPassword } : {})
         })
       } else {
-        await window.api.users.create({ email: trimmedEmail, password: trimmedPassword, role: form.role })
+        await window.api.users.create({
+          email: trimmedEmail,
+          password: trimmedPassword,
+          role: form.role
+        })
       }
 
       setForm(emptyForm)
@@ -201,7 +205,9 @@ export function UserPanel(): React.JSX.Element {
         />
         <select
           value={form.role}
-          onChange={(e) => setForm((f) => ({ ...f, role: e.target.value as 'student' | 'instructor' }))}
+          onChange={(e) =>
+            setForm((f) => ({ ...f, role: e.target.value as 'student' | 'instructor' }))
+          }
           className="panel-input"
         >
           <option value="student">student</option>
@@ -232,7 +238,8 @@ export function UserPanel(): React.JSX.Element {
               <div className="flex flex-col gap-0.5 flex-1 min-w-0">
                 <span className="font-medium truncate">{user.email}</span>
                 <span className="text-xs opacity-35">
-                  {user.role} · {new Date(user.createdAt * 1000).toLocaleString()} · {user.uuid.slice(0, 8)}…
+                  {user.role} · {new Date(user.createdAt * 1000).toLocaleString()} ·{' '}
+                  {user.uuid.slice(0, 8)}…
                 </span>
               </div>
 

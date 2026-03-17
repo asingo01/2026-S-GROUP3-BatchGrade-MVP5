@@ -1,31 +1,31 @@
 /**
  * AuthContext.tsx
- * 
+ *
  * Description:
  * This file defines the authentication context used throughout
  * the BatchGrade application. The context provides a centralized
  * mechanism for managing and accessing user authentication state.
- * 
+ *
  * The AuthContext allows any component within the applicaiton
  * to determine whether a user is currently logged in and access
  * basic user information such as email and role (student or
  * instructor).
- * 
+ *
  * The file exports:
  *  - AuthProvider
- *      a React context provider that stores and manages the 
+ *      a React context provider that stores and manages the
  *      authentication state of the application
  *  - useAuth
  *      a custom hook that allows components to access authentication
  *      data and functions without directly interacting with the
  *      underlying React context API.
- * 
+ *
  * Responsibilities:
  *  • Track login status
  *  • Store authenticated user information
  *  • Provide login and logout functionality
  *  • Make authentication state globally accessible
- * 
+ *
  * This provider must wrap the application's routing structure
  * (see App.tsx) to ensure all pages have acces to authentication
  * state.

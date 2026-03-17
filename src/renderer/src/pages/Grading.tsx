@@ -1,12 +1,12 @@
 /**
  * Grading.tsx
- * 
+ *
  * Description:
  * This component represents the grading interface within the
  * BatchGrade platform. It will serve as the primary location
  * where instructors manage assignment grading and review
  * automated grading results.
- * 
+ *
  * In its current state, the page functions as a placeholder
  * for future development. Planned functionality includes:
  *  = Viewing student submissions
@@ -20,11 +20,11 @@ import Footer from '../components/Footer'
 
 /**
  * Grading Component
- * 
+ *
  * Provides the grading interface for instructors.
  * Future implementations will integrate automated
  * grading workflows and submission management.
- * 
+ *
  * @returns Grading(): React.JSX.Element
  */
 function Grading(): React.JSX.Element {
@@ -44,7 +44,7 @@ function Grading(): React.JSX.Element {
       {/*-----------------------------------------------------------
         Grading Page Content
       -----------------------------------------------------------*/}
-      <div style={{ padding: "8rem" }}>
+      <div style={{ padding: '8rem' }}>
         {/* Page Title */}
         <h1>Grading Page</h1>
 
@@ -54,11 +54,11 @@ function Grading(): React.JSX.Element {
         {/*-----------------------------------------------------------
           Navigation Controls
         -----------------------------------------------------------*/}
-        <div style={{ marginTop: "8rem" }}>
-            {/* Return to Home page */}
-            <button onClick={() => navigate("/")} style={{ marginLeft: "1rem" }}>
-                Go to home
-            </button>
+        <div style={{ marginTop: '8rem' }}>
+          {/* Return to Home page */}
+          <button onClick={() => navigate('/')} style={{ marginLeft: '1rem' }}>
+            Go to home
+          </button>
         </div>
       </div>
 

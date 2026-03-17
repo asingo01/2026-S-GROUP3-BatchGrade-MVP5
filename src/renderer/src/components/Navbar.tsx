@@ -1,12 +1,12 @@
 /**
  * Navbar.tsx
- * 
+ *
  * Description:
  * This component implements the primary navigation bar used
  * throughout the BatchGrade application. It provides quick
  * access to login functionality and display the current
  * authentication state of the user.
- * 
+ *
  * If the user is logged in, a profile avatar is displayed
  * which currently functions as a logout trigger. If the
  * user is not logged in, a login button is shown instead.
@@ -17,10 +17,10 @@ import avatar from '../assets/electron.svg'
 
 /**
  * Navbar Component
- * 
+ *
  * Displays the application's navigation header and manages
  * authentication-related UI elements
- * 
+ *
  * @returns NavBar(): React.JSX.Element
  */
 function NavBar(): React.JSX.Element {
@@ -35,9 +35,7 @@ function NavBar(): React.JSX.Element {
   return (
     <nav className="navbar">
       {/* Application Title */}
-      <span className="navbar-title">
-        BatchGrade
-      </span>
+      <span className="navbar-title">BatchGrade</span>
 
       {/*-----------------------------------------------------------
         Authentication Controls
@@ -64,17 +62,17 @@ function NavBar(): React.JSX.Element {
         <button
           className="primary-button"
           onClick={() => navigate('/login')}
-          style={{ paddingLeft: "50vw"}}
+          style={{ paddingLeft: '50vw' }}
         >
           Login
         </button>
       )}
 
-    {/*-----------------------------------------------------------
+      {/*-----------------------------------------------------------
       Application Footer
     -----------------------------------------------------------*/}
     </nav>
-  );
+  )
 }
 
 export default NavBar
