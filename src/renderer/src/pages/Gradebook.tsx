@@ -146,7 +146,7 @@ function Gradebook(): React.JSX.Element {
 
   // ai-gen start (ChatGPT-5.3, 1)
   // Export currently displayed gradebook rows to a CSV file
-  const handleExportCSV = () => {
+  const handleExportCSV = (): void => {
     // CSV column headers
     const headers = ['Student ID', 'Student Name', 'Highest Score', 'Submission Count']
 
