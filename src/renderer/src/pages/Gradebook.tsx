@@ -12,16 +12,72 @@ import { useState } from 'react' // Import React hook used to manage component s
 // =============================================================================
 const gradebookData = {
   'Assignment 1': [
-    { id: '1001', name: 'Garen Crownguard', score: '92%' },
-    { id: '1002', name: 'Wu Kong', score: '88%' },
-    { id: '1003', name: 'Quinn Valor', score: '95%' },
-    { id: '1004', name: 'Govos Usan', score: '84%' }
+    {
+      id: '1001',
+      name: 'Garen Crownguard',
+      score: '92%',
+      submissions: 3,
+      lastSubmitted: '2026-03-10 11:42 AM',
+      status: 'Submitted'
+    },
+    {
+      id: '1002',
+      name: 'Wu Kong',
+      score: '88%',
+      submissions: 2,
+      lastSubmitted: '2026-03-10 09:15 AM',
+      status: 'Submitted'
+    },
+    {
+      id: '1003',
+      name: 'Quinn Valor',
+      score: '95%',
+      submissions: 4,
+      lastSubmitted: '2026-03-11 02:30 PM',
+      status: 'Submitted'
+    },
+    {
+      id: '1004',
+      name: 'Govos Usan',
+      score: '--',
+      submissions: 0,
+      lastSubmitted: '--',
+      status: 'Missing'
+    }
   ],
   'Assignment 2': [
-    { id: '1001', name: 'Garen Crownguard', score: '95%' },
-    { id: '1002', name: 'Wu Kong', score: '90%' },
-    { id: '1003', name: 'Quinn Valor', score: '91%' },
-    { id: '1004', name: 'Govos Usan', score: '89%' }
+    {
+      id: '1001',
+      name: 'Garen Crownguard',
+      score: '95%',
+      submissions: 4,
+      lastSubmitted: '2026-03-12 10:05 AM',
+      status: 'Submitted'
+    },
+    {
+      id: '1002',
+      name: 'Wu Kong',
+      score: '90%',
+      submissions: 3,
+      lastSubmitted: '2026-03-11 04:20 PM',
+      status: 'Submitted'
+    },
+    {
+      id: '1003',
+      name: 'Quinn Valor',
+      score: '91%',
+      submissions: 2,
+      lastSubmitted: '2026-03-12 08:45 AM',
+      status: 'Submitted'
+    },
+    {
+      id: '1004',
+      name: 'Govos Usan',
+      score: '--',
+      submissions: 0,
+      lastSubmitted: '--',
+      status: 'Missing'
+    }
   ]
 }
 
@@ -39,15 +95,22 @@ function Gradebook(): React.JSX.Element {
   // Tracks which sorting option is selected
   const [sortOption, setSortOption] = useState('name-asc')
 
+  // Tracks whether only missing submissions should be shown
+  const [showMissingOnly, setShowMissingOnly] = useState(false)
+
   // Retrieve the student list corresponding to the selected assignment
   const students = gradebookData[selectedAssignment as keyof typeof gradebookData]
 
   // Filter students by name or ID based on search input
-  const filteredStudents = students.filter(
-    (student) =>
+  const filteredStudents = students.filter((student) => {
+    const matchesSearch =
       student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.id.includes(searchTerm)
-  )
+
+    const matchesMissingFilter = showMissingOnly ? student.status === 'Missing' : true
+
+    return matchesSearch && matchesMissingFilter
+  })
 
   // Sort filtered students based on selected sort option
   const sortedStudents = [...filteredStudents].sort((a, b) => {
@@ -74,16 +137,18 @@ function Gradebook(): React.JSX.Element {
     return 0
   })
 
-  // Calculate class statistics from the sorted student list
-  const numericScores = sortedStudents.map((student) => parseInt(student.score))
+  // Keep only students with valid numeric scores for statistics
+  const validScores = students
+    .filter((student) => student.score !== '--')
+    .map((student) => parseInt(student.score))
 
   const averageScore =
-    numericScores.length > 0
-      ? Math.round(numericScores.reduce((sum, score) => sum + score, 0) / numericScores.length)
-      : 0
+    validScores.length > 0
+      ? (validScores.reduce((sum, score) => sum + score, 0) / validScores.length).toFixed(1)
+      : '--'
 
-  const highestScore = numericScores.length > 0 ? Math.max(...numericScores) : 0
-  const lowestScore = numericScores.length > 0 ? Math.min(...numericScores) : 0
+  const highestScore = validScores.length > 0 ? Math.max(...validScores) : '--'
+  const lowestScore = validScores.length > 0 ? Math.min(...validScores) : '--'
   // end class statistics calculation
 
   return (
@@ -140,9 +205,15 @@ function Gradebook(): React.JSX.Element {
 
       {/* Class statistics summary */}
       <div style={{ display: 'flex', gap: '24px', margin: '20px 0', fontWeight: 'bold' }}>
-        <div>Class Average: {averageScore}%</div>
-        <div>Highest Score: {highestScore}%</div>
-        <div>Lowest Score: {lowestScore}%</div>
+        <div>
+          <span>Class Average: {averageScore === '--' ? '--' : `${averageScore}%`}</span>
+          <span style={{ marginLeft: '24px' }}>
+            Highest Score: {highestScore === '--' ? '--' : `${highestScore}%`}
+          </span>
+          <span style={{ marginLeft: '24px' }}>
+            Lowest Score: {lowestScore === '--' ? '--' : `${lowestScore}%`}
+          </span>
+        </div>
       </div>
 
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
@@ -152,6 +223,9 @@ function Gradebook(): React.JSX.Element {
             <th style={cellStyle}>Student ID</th>
             <th style={cellStyle}>Student Name</th>
             <th style={cellStyle}>Highest Score</th>
+            <th style={cellStyle}>Submission Count</th>
+            <th style={cellStyle}>Last Submission Time</th>
+            <th style={cellStyle}>Status</th>
           </tr>
         </thead>
 
@@ -162,6 +236,9 @@ function Gradebook(): React.JSX.Element {
               <td style={cellStyle}>{student.id}</td>
               <td style={cellStyle}>{student.name}</td>
               <td style={cellStyle}>{student.score}</td>
+              <td style={cellStyle}>{student.submissions}</td>
+              <td style={cellStyle}>{student.lastSubmitted}</td>
+              <td style={cellStyle}>{student.status}</td>
             </tr>
           ))}
         </tbody>
