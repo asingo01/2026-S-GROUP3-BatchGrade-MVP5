@@ -3,7 +3,7 @@ import { sql, InferSelectModel, InferInsertModel } from 'drizzle-orm'
 
 export type User = InferSelectModel<typeof users>
 export type NewUser = InferInsertModel<typeof users>
-export type UpdateUser = Pick<User, 'uuid'> & Partial<Pick<User, 'email' | 'password'>>
+export type UpdateUser = Pick<User, 'uuid'> & Partial<Pick<User, 'email' | 'password' | 'role'>>
 
 /**
  * Users table.
