@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * AuthContext.tsx
  *
@@ -51,7 +52,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 // Custom hook used to access the authentication context.
 // This prevents components from needing to call useContext() directly.
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext)
   // safely check to ensure the hook is only used within an AuthProvider
   if (!context) {
@@ -75,13 +76,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<{ email: string; role: 'student' | 'instructor' } | null>(null)
   // handles user login by updating authentication state
   // and storing the user's identifying information
-  const login = (email: string, role: 'student' | 'instructor') => {
+  const login = (email: string, role: 'student' | 'instructor'): void => {
     setIsLoggedIn(true)
     setUser({ email, role })
   }
   // handles user logout by clearing authentication state
   // and removing stored user information
-  const logout = () => {
+  const logout = (): void => {
     setIsLoggedIn(false)
     setUser(null)
   }
