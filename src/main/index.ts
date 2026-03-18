@@ -12,10 +12,11 @@ import { selectFile, stringifyFile } from './utils/file'
 /* TEST ONLY DELETE WHEN DONE */
 
 // @ Issue 9: Implement Automated Build & Compilation
-import { detectGccInstallation } from './compiler/gccDetection'
-import type { GccInstallationInfo } from '../shared/compiler'
+import { detectGccInstallation, validateGccPath } from './compiler/gccDetection'
+import type { GccInstallationInfo, SupportedPlatform } from '../shared/compiler'
 
 let gccStatusPromise: Promise<GccInstallationInfo> | undefined
+let manualGccPath: string | null = null
 /*
   Need this helper function in case a user changes compiler settings or a compile step needs to revalidate the path
 */
@@ -76,6 +77,7 @@ app.whenReady().then(() => {
   // Detect GCC during startup
   refreshGccStatus() // For renderers (Front-end developers): Use this to query a ready-made status object.
 
+  // 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
 
@@ -87,6 +89,50 @@ app.whenReady().then(() => {
 
   // Compiler Status
   ipcMain.handle('compiler:getGccStatus', async () => gccStatusPromise ?? refreshGccStatus())
+
+  // Validate the manual compiler path from the UI and make it the current GCC selection
+  ipcMain.handle('compiler:setGccPath', async (_e, filePath: string) => {
+    if ( !(await validateGccPath(filePath)) ) {
+      return {
+        compilerId: 'gcc',
+        status: 'missing',
+        platform: process.platform,
+        message: 'The selected GCC path is invalid.',
+        installInstruction: null, // the user is prompted to install with instructions for their OS if they don't have a compiler installed
+        path: null ,
+        source: null // User can manually set the path to a GCC installation
+      }
+    }
+    else { 
+      manualGccPath = filePath
+
+      let platform : SupportedPlatform = 'unknown'
+        if (process.platform === 'win32') {
+          platform = 'win32'
+        }                                                                                                       
+        if (process.platform === 'darwin') {
+          platform = 'darwin'
+        }                                                                                                  
+        if (process.platform === 'linux') {
+          platform = 'linux'
+        }
+
+      const manualRes: GccInstallationInfo = {
+        compilerId: 'gcc',
+        status: 'ready',
+        platform,
+        message: 'Manual GCC path has been saved successfully.',
+        installInstruction: null, 
+        path: manualGccPath,
+        source: 'manual'
+      }
+
+      gccStatusPromise = Promise.resolve(manualRes)
+
+      return manualRes
+    }
+  }) 
+
 
   /* TEST ONLY DELETE WHEN DONE */
   // File selection

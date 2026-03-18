@@ -10,4 +10,5 @@ export type UsersAPI = {
 
 export type CompilerAPI = {
   getGccStatus: () => Promise<GccInstallationInfo>
+  setGccPath: (filePath: string) => Promise<GccInstallationInfo>
 }

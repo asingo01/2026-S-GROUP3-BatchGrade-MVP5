@@ -40,6 +40,27 @@ function getInstallInstruction(platform: SupportedPlatform): string {
   }
 }
 
+// We need this helper function to check if the path that the user manually inputs is valid
+async function validateGccPath(filePath: string): Promise<boolean> {
+  try {
+    const res = await execFileAsync(filePath, ['--version'], { // We have to confirm that it works
+      windowsHide: true,
+      timeout: 8000
+    })
+
+    if (res.stdout || res.stderr) {
+      return true
+    }
+    else {
+      return false
+    }
+  }
+
+  catch {
+    return false
+  }
+}
+
 async function detectGccInstallation(): Promise<GccInstallationInfo> {
   let platform : SupportedPlatform = 'unknown'
   if (process.platform === 'win32') {
@@ -52,7 +73,13 @@ async function detectGccInstallation(): Promise<GccInstallationInfo> {
     platform = 'linux'
   }
 
-  const detectCompilerCommand = (await gccCommand('g++') ?? await gccCommand('gcc'))
+  let detectCompilerCommand: string | null = null
+  if (platform === 'win32') {
+    detectCompilerCommand = (await gccCommand('g++.exe') ?? await gccCommand('gcc.exe'))
+  }
+  else {
+    detectCompilerCommand = (await gccCommand('g++') ?? await gccCommand('gcc'))
+  }
 
   if (detectCompilerCommand) {
     return {
@@ -61,7 +88,8 @@ async function detectGccInstallation(): Promise<GccInstallationInfo> {
       platform,
       path: detectCompilerCommand,
       message: "GCC found.",
-      installInstruction: null
+      installInstruction: null,
+      source: 'auto'
     }
   }
   else {
@@ -71,9 +99,10 @@ async function detectGccInstallation(): Promise<GccInstallationInfo> {
       platform,
       path: detectCompilerCommand,
       message: "No GCC found.",
-      installInstruction: getInstallInstruction(platform) // TODO: NEEDS CHECKING FIRST
+      installInstruction: getInstallInstruction(platform), // TODO: NEEDS CHECKING FIRST
+      source: null
     }
   }
 }
 
-export { detectGccInstallation }
+export { detectGccInstallation, validateGccPath }

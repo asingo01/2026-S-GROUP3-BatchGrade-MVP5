@@ -4,9 +4,9 @@ export type GccInstallationInfo = {
   compilerId: 'gcc'
   status: 'ready' | 'missing'
   platform: SupportedPlatform
-  path: string | null
   // compilationMessage: 'success' | 'failed'
-  // TODO: Revalidate the location/prompt to install
   message: string
-  installInstruction: string | null// the user is prompted to install with instructions for their OS if they don't have a compiler installed
+  installInstruction: string | null // the user is prompted to install with instructions for their OS if they don't have a compiler installed
+  path: string | null 
+  source: 'auto' | 'manual' | null // User can manually set the path to a GCC installation
 }

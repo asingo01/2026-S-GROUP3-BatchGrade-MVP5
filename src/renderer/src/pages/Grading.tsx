@@ -8,6 +8,21 @@ function Grading(): React.JSX.Element {
   const [gccStatus, setGccStatus] = useState<GccInstallationInfo | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
+  const [manualPath, setManualPath] = useState('')
+
+  function handleSetManualPath(): void {
+    window.api.compiler
+      .setGccPath(manualPath)
+      .then((result) => {
+        setGccStatus(result)
+        setErrorMessage(null)
+      })
+      .catch((error) => {
+        console.error('Error setting GCC path:', error)
+        setErrorMessage('Could not save manual GCC path.')
+      })
+  }
+
   useEffect(() => {
     window.api.compiler
       .getGccStatus()
@@ -34,7 +49,6 @@ function Grading(): React.JSX.Element {
 
         {gccStatus && (
           <div>
-            
             <p>Status: {gccStatus.status}</p>
             <p>Message: {gccStatus.message}</p>
             <p>Platform: {gccStatus.platform}</p>
@@ -42,9 +56,20 @@ function Grading(): React.JSX.Element {
             {gccStatus.status === 'missing' && gccStatus.installInstruction && (
               <p>Install Hint: {gccStatus.installInstruction}</p>
             )}
-
           </div>
         )}
+
+        <div style={{ marginTop: '1rem' }}>
+          <h3>Set GCC Path Manually</h3>
+          <input
+            type="text"
+            value={manualPath}
+            onChange={(e) => setManualPath(e.target.value)}
+            placeholder="Enter full path to gcc or g++"
+            style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
+          />
+          <button onClick={handleSetManualPath}>Save GCC Path</button>
+        </div>
       </div>
 
       <div style={{ marginTop: '2rem' }}>

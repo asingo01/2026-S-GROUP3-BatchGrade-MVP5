@@ -10,7 +10,8 @@ const usersApi: UsersAPI = {
 }
 
 const compilerApi: CompilerAPI = {
-  getGccStatus: () => ipcRenderer.invoke('compiler:getGccStatus')
+  getGccStatus: () => ipcRenderer.invoke('compiler:getGccStatus'),
+  setGccPath: (filePath: string) => ipcRenderer.invoke('compiler:setGccPath', filePath)
 }
 
 /* TEST ONLY DELETE WHEN DONE */
