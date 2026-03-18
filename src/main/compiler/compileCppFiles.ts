@@ -102,7 +102,7 @@ async function compileCppFiles(compilerPath: string, request: CompileCppRequest)
     return {
       compileSuccess: false,
       compilerPath,
-      executablePath,
+      executablePath: null,
       sourceFiles: request.sourceFiles,
       stdout: compileError.stdout ?? '',
       stderr: compileError.stderr ?? compileError.message,

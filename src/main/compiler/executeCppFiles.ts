@@ -61,6 +61,19 @@ async function executeCppFiles(request: RunCppRequest): Promise<RunCppResult> {
       })
     })
 
+    // If the executable cannot be started at all, return a clear runtime error.
+    child.on('error', (error) => {
+      clearTimeout(timeout)
+
+      resolve({
+        executionSuccess: false,
+        timedOut: programTimedOut,
+        stdout,
+        stderr: error.message,
+        message: 'Program execution failed to start.'
+      })
+    })
+
     // If there's input, send to the child process, then close stdin
     if (request.stdin.length > 0) {
       child.stdin.write(request.stdin)

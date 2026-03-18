@@ -8,7 +8,7 @@ import type { NewUser, UpdateUser } from './database/schema'
 import { getAllUsers, createUser, updateUser, deleteUser } from './database/queries'
 
 /* TEST ONLY DELETE WHEN DONE */
-import { selectFile, stringifyFile, selectCPPFiles } from './utils/file'
+import { selectFile, stringifyFile, selectCppFiles } from './utils/file'
 /* TEST ONLY DELETE WHEN DONE */
 
 // @ Issue 9: Implement Automated Build & Compilation
@@ -172,7 +172,7 @@ app.whenReady().then(() => {
   /* TEST ONLY DELETE WHEN DONE */
   // File selection
   ipcMain.handle('file:select', () => selectFile())
-  ipcMain.handle('file:selectCppFiles', () => selectCPPFiles())
+  ipcMain.handle('file:selectCppFiles', () => selectCppFiles())
   ipcMain.handle('file:stringify', (_e, filePath: string) => stringifyFile(filePath))
   /* TEST ONLY DELETE WHEN DONE */
 
@@ -188,7 +188,7 @@ app.whenReady().then(() => {
         sourceFiles: request.sourceFiles,
         stdout: '',
         stderr: '',
-        message: 'GCC/Clang is not configured yet. Configure compiler before compiling.'
+        message: 'GCC is not configured yet. Configure GCC before compiling.'
       }
     }
 

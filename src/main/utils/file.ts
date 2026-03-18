@@ -22,7 +22,7 @@ async function stringifyFile(filePath: string): Promise<string> {
 /* TEST ONLY DELETE WHEN DONE */
 
 // @ Issue 9: For compiling files
-async function selectCPPFiles(): Promise<string[]> {
+async function selectCppFiles(): Promise<string[]> {
   const { canceled, filePaths } = await dialog.showOpenDialog({
     properties: ['openFile', 'multiSelections'],
     filters: [
@@ -40,4 +40,4 @@ async function selectCPPFiles(): Promise<string[]> {
   return []
 }
 
-export { selectFile, stringifyFile, selectCPPFiles }
+export { selectFile, stringifyFile, selectCppFiles }
