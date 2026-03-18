@@ -21,6 +21,7 @@ import { getDb } from '../index'
 import { users } from '../schema'
 import type { NewUser, UpdateUser, User as DbUser } from '../schema'
 import type { User } from '../../../shared/types'
+import { STUDENT_ROLE, INSTRUCTOR_ROLE, VALID_ROLES } from '../schema/user'
 
 /**
  * toIpcUser Function
@@ -33,11 +34,14 @@ import type { User } from '../../../shared/types'
  * @returns User - The converted user object for IPC communication
  */
 function toIpcUser(user: DbUser): User {
+  if (!VALID_ROLES.includes(user.role)) {
+    throw new Error(`Invalid role`)
+  }
   return {
     uuid: user.uuid,
     email: user.email,
     password: user.password,
-    role: user.role as 'student' | 'instructor',
+    role: user.role as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE,
     createdAt: user.createdAt
   }
 }

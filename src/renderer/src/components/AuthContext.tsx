@@ -32,6 +32,7 @@
  * state.
  */
 import React, { createContext, useContext, useState, ReactNode } from 'react'
+import { STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../../main/database/schema'
 
 // Defines the structure of the authentication context.
 // This ensures all consumers of the context know exactly what data and functions exists
@@ -39,9 +40,9 @@ interface AuthContextType {
   // Indicates whether a user is currently authenticated
   isLoggedIn: boolean
   // Stores information about the logged-in user
-  user: { email: string; role: 'student' | 'instructor' } | null
+  user: { email: string; role: typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE } | null
   // Function used to authenticate a user
-  login: (email: string, role: 'student' | 'instructor') => void
+  login: (email: string, role: typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE) => void
   // Function used to terminate the user's session
   logout: () => void
 }
@@ -73,10 +74,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // tracks whether a user is currently logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   // stores the current user's email and role (or null if no user is logged in)
-  const [user, setUser] = useState<{ email: string; role: 'student' | 'instructor' } | null>(null)
+  const [user, setUser] = useState<{
+    email: string
+    role: typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE
+  } | null>(null)
   // handles user login by updating authentication state
   // and storing the user's identifying information
-  const login = (email: string, role: 'student' | 'instructor'): void => {
+  const login = (email: string, role: typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE): void => {
     setIsLoggedIn(true)
     setUser({ email, role })
   }

@@ -18,6 +18,7 @@
 
 import { useEffect, useState } from 'react'
 import type { User } from '../../../shared/types'
+import { STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../../main/database/schema'
 
 /**
  * Form State Type
@@ -28,11 +29,11 @@ import type { User } from '../../../shared/types'
 type FormState = {
   email: string
   password: string
-  role: 'student' | 'instructor'
+  role: typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE
 }
 
 /** Default empty form state */
-const emptyForm: FormState = { email: '', password: '', role: 'student' }
+const emptyForm: FormState = { email: '', password: '', role: typeof STUDENT_ROLE }
 
 /**
  * UserPanel Component
