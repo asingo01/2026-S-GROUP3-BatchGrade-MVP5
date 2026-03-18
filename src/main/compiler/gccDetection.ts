@@ -27,6 +27,19 @@ async function gccCommand(command: string): Promise<string | null> {
   }
 }
 
+function getInstallInstruction(platform: SupportedPlatform): string {
+  switch (platform) {
+    case 'win32':
+      return 'Install GCC using MinGW (e.g., via MSYS2 or mingw-w64), then restart BatchGrade.'
+    case 'darwin':
+      return 'Install Xcode Command Line Tools by running `xcode-select --install`, then restart BatchGrade.'
+    case 'linux':
+      return 'Install GCC using your package manager (e.g., `sudo apt install build-essential` or `sudo yum install gcc`), then restart BatchGrade.'
+    default:
+      return 'Install GCC for your operating system, then restart BatchGrade.'
+  }
+}
+
 async function detectGccInstallation(): Promise<GccInstallationInfo> {
   let platform : SupportedPlatform = 'unknown'
   if (process.platform === 'win32') {
@@ -40,14 +53,15 @@ async function detectGccInstallation(): Promise<GccInstallationInfo> {
   }
 
   const detectCompilerCommand = (await gccCommand('g++') ?? await gccCommand('gcc'))
-  
+
   if (detectCompilerCommand) {
     return {
       compilerId: 'gcc',
       status: 'ready',
       platform,
       path: detectCompilerCommand,
-      message: "GCC found."
+      message: "GCC found.",
+      installInstruction: null
     }
   }
   else {
@@ -56,7 +70,8 @@ async function detectGccInstallation(): Promise<GccInstallationInfo> {
       status: 'missing',
       platform,
       path: detectCompilerCommand,
-      message: "No GCC found."
+      message: "No GCC found.",
+      installInstruction: getInstallInstruction(platform) // TODO: NEEDS CHECKING FIRST
     }
   }
 }

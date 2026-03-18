@@ -34,9 +34,15 @@ function Grading(): React.JSX.Element {
 
         {gccStatus && (
           <div>
+            
             <p>Status: {gccStatus.status}</p>
             <p>Message: {gccStatus.message}</p>
             <p>Platform: {gccStatus.platform}</p>
+
+            {gccStatus.status === 'missing' && gccStatus.installInstruction && (
+              <p>Install Hint: {gccStatus.installInstruction}</p>
+            )}
+
           </div>
         )}
       </div>
