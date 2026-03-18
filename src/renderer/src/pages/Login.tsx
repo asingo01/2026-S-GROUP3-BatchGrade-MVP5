@@ -89,7 +89,14 @@ function Login(): React.JSX.Element {
     // -----------------------------------------------------------
 
     // Update global authentication state with role from database
-    login(email, foundUser.role)
+    const validRoles = ['student', 'instructor'] as const
+    type Role = (typeof validRoles)[number]
+    if (validRoles.includes(foundUser.role as Role)) {
+      login(email, foundUser.role as Role)
+    } else {
+      setError('Invalid user role')
+      return
+    }
 
     // Redirect user based on role from database
     if (foundUser.role === 'student') {

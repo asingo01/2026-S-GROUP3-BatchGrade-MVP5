@@ -19,6 +19,7 @@
 import { useEffect, useState } from 'react'
 import type { User } from '../../../shared/types'
 import { STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../../main/database/schema'
+const validRoles = [STUDENT_ROLE, INSTRUCTOR_ROLE] as const
 
 /**
  * Form State Type
@@ -33,7 +34,7 @@ type FormState = {
 }
 
 /** Default empty form state */
-const emptyForm: FormState = { email: '', password: '', role: typeof STUDENT_ROLE }
+const emptyForm: FormState = { email: '', password: '', role: STUDENT_ROLE }
 
 /**
  * UserPanel Component
@@ -95,7 +96,13 @@ export function UserPanel(): React.JSX.Element {
    */
   function startEdit(user: User): void {
     setEditingUuid(user.uuid)
-    setForm({ email: user.email, password: '', role: user.role })
+    setForm({
+      email: user.email,
+      password: '',
+      role: validRoles.includes(user.role as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE)
+        ? (user.role as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE)
+        : STUDENT_ROLE
+    })
     setError(null)
   }
 

@@ -22,7 +22,7 @@ export const users = sqliteTable('users', {
     .$defaultFn(() => crypto.randomUUID()),
   email: text('email').notNull().unique(),
   password: text('password').notNull(),
-  role: text('role').notNull().default(STUDENT_ROLE), // Role
+  role: text('role').notNull().default('student'), // Role
   createdAt: integer('created_at', { mode: 'number' })
     .notNull()
     .default(sql`(unixepoch())`)
