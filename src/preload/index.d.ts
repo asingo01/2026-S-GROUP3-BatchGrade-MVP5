@@ -9,6 +9,7 @@ declare global {
       /* TEST ONLY DELETE WHEN DONE */
       file: {
         select: () => Promise<string | undefined>
+        selectCppFiles: () => Promise<string[]>
         stringify: (filePath: string) => Promise<string>
       }
       /* TEST ONLY DELETE WHEN DONE */

@@ -8,12 +8,15 @@ import type { NewUser, UpdateUser } from './database/schema'
 import { getAllUsers, createUser, updateUser, deleteUser } from './database/queries'
 
 /* TEST ONLY DELETE WHEN DONE */
-import { selectFile, stringifyFile } from './utils/file'
+import { selectFile, stringifyFile, selectCPPFiles } from './utils/file'
 /* TEST ONLY DELETE WHEN DONE */
 
 // @ Issue 9: Implement Automated Build & Compilation
 import { detectGccInstallation, validateGccPath } from './compiler/gccDetection'
 import type { GccInstallationInfo, SupportedPlatform } from '../shared/compiler'
+
+import { compileCppFiles } from './compiler/compileCppFiles'
+import { executeCppFiles } from './compiler/executeCppFiles'
 
 let gccStatusPromise: Promise<GccInstallationInfo> | undefined
 let manualGccPath: string | null = null
@@ -23,6 +26,22 @@ let manualGccPath: string | null = null
 function refreshGccStatus(): Promise<GccInstallationInfo> {
   gccStatusPromise = detectGccInstallation()
   return gccStatusPromise
+}
+
+function getSupportedPlatform(): SupportedPlatform {
+  let platform : SupportedPlatform = 'unknown'
+
+  if (process.platform === 'win32') {
+    platform = 'win32'
+  }                                                                                                       
+  if (process.platform === 'darwin') {
+    platform = 'darwin'
+  }                                                                                                  
+  if (process.platform === 'linux') {
+    platform = 'linux'
+  }
+
+  return platform
 }
 
 function createWindow(): void {
@@ -77,7 +96,6 @@ app.whenReady().then(() => {
   // Detect GCC during startup
   refreshGccStatus() // For renderers (Front-end developers): Use this to query a ready-made status object.
 
-  // 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
 
@@ -96,7 +114,7 @@ app.whenReady().then(() => {
       return {
         compilerId: 'gcc',
         status: 'missing',
-        platform: process.platform,
+        platform: getSupportedPlatform(),
         message: 'The selected GCC path is invalid.',
         installInstruction: null, // the user is prompted to install with instructions for their OS if they don't have a compiler installed
         path: null ,
@@ -106,21 +124,10 @@ app.whenReady().then(() => {
     else { 
       manualGccPath = filePath
 
-      let platform : SupportedPlatform = 'unknown'
-        if (process.platform === 'win32') {
-          platform = 'win32'
-        }                                                                                                       
-        if (process.platform === 'darwin') {
-          platform = 'darwin'
-        }                                                                                                  
-        if (process.platform === 'linux') {
-          platform = 'linux'
-        }
-
       const manualRes: GccInstallationInfo = {
         compilerId: 'gcc',
         status: 'ready',
-        platform,
+        platform: getSupportedPlatform(),
         message: 'Manual GCC path has been saved successfully.',
         installInstruction: null, 
         path: manualGccPath,
@@ -133,12 +140,35 @@ app.whenReady().then(() => {
     }
   }) 
 
-
   /* TEST ONLY DELETE WHEN DONE */
   // File selection
   ipcMain.handle('file:select', () => selectFile())
+  ipcMain.handle('file:selectCppFiles', () => selectCPPFiles())
   ipcMain.handle('file:stringify', (_e, filePath: string) => stringifyFile(filePath))
   /* TEST ONLY DELETE WHEN DONE */
+
+  // Compilation
+  ipcMain.handle('compiler:compileCpp', async (_e, request) => {
+    const gccStatus = await (gccStatusPromise ?? refreshGccStatus())
+
+    if (gccStatus.status != 'ready' || !gccStatus.path) {
+      return {
+        compileSuccess: false,
+        compilerPath: null,
+        executablePath: null,
+        sourceFiles: request.sourceFiles,
+        stdout: '',
+        stderr: '',
+        message: 'GCC/Clang is not configured yet. Configure compiler before compiling.'
+      }
+    }
+    return compileCppFiles(gccStatus.path, request)
+  })
+
+  // Execution
+  ipcMain.handle('compiler:runCompiledProgram', (_e, request) => {
+    return executeCppFiles(request)
+  }) 
 
   createWindow()
 

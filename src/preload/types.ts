@@ -1,5 +1,5 @@
 import type { User, NewUser, UpdateUser } from '../shared/types'
-import type { GccInstallationInfo } from '../shared/compiler'
+import type { GccInstallationInfo, CompileCppRequest, CompileCppResult, RunCppRequest, RunCppResult } from '../shared/compiler'
 
 export type UsersAPI = {
   getAll: () => Promise<User[]>
@@ -11,4 +11,6 @@ export type UsersAPI = {
 export type CompilerAPI = {
   getGccStatus: () => Promise<GccInstallationInfo>
   setGccPath: (filePath: string) => Promise<GccInstallationInfo>
+  compileCpp: (request: CompileCppRequest) => Promise<CompileCppResult>
+  runCompiledProgram: (request: RunCppRequest) => Promise<RunCppResult>
 }

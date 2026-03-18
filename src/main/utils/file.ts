@@ -19,6 +19,25 @@ async function stringifyFile(filePath: string): Promise<string> {
   const fileContent = await fs.readFile(filePath, 'utf-8')
   return fileContent
 }
-
-export { selectFile, stringifyFile }
 /* TEST ONLY DELETE WHEN DONE */
+
+// @ Issue 9: For compiling files
+async function selectCPPFiles(): Promise<string[]> {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    properties: ['openFile', 'multiSelections'],
+    filters: [
+      {
+        name: 'C++ Files',
+        extensions: ['cpp', 'h', 'cc', 'cxx', 'hpp', 'cp']
+      }
+    ]
+  })
+
+  if (!canceled) {
+    return filePaths
+  }
+
+  return []
+}
+
+export { selectFile, stringifyFile, selectCPPFiles }

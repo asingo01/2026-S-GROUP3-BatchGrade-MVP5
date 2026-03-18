@@ -11,12 +11,15 @@ const usersApi: UsersAPI = {
 
 const compilerApi: CompilerAPI = {
   getGccStatus: () => ipcRenderer.invoke('compiler:getGccStatus'),
-  setGccPath: (filePath: string) => ipcRenderer.invoke('compiler:setGccPath', filePath)
+  setGccPath: (filePath: string) => ipcRenderer.invoke('compiler:setGccPath', filePath),
+  compileCpp: (request) => ipcRenderer.invoke('compiler:compileCpp', request),
+  runCompiledProgram: (request) => ipcRenderer.invoke('compiler:runCompiledProgram', request)
 }
 
 /* TEST ONLY DELETE WHEN DONE */
 const fileApi = {
   select: () => ipcRenderer.invoke('file:select'),
+  selectCppFiles: () => ipcRenderer.invoke('file:selectCppFiles'),
   stringify: (filePath: string) => ipcRenderer.invoke('file:stringify', filePath)
 }
 /* TEST ONLY DELETE WHEN DONE */
