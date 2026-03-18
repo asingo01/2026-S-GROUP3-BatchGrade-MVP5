@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -5,9 +6,23 @@ import icon from '../../resources/icon.png?asset'
 import { initDb } from './database/index'
 import type { NewUser, UpdateUser } from './database/schema'
 import { getAllUsers, createUser, updateUser, deleteUser } from './database/queries'
+
 /* TEST ONLY DELETE WHEN DONE */
 import { selectFile, stringifyFile } from './utils/file'
 /* TEST ONLY DELETE WHEN DONE */
+
+// @ Issue 9: Implement Automated Build & Compilation
+import { detectGccInstallation } from './compiler/gccDetection'
+import type { GccInstallationInfo } from '../shared/compiler'
+
+let gccStatusPromise: Promise<GccInstallationInfo> | undefined
+/*
+  Need this helper function in case a user changes compiler settings or a compile step needs to revalidate the path
+*/
+function refreshGccStatus(): Promise<GccInstallationInfo> {
+  gccStatusPromise = detectGccInstallation()
+  return gccStatusPromise
+}
 
 function createWindow(): void {
   // Create the browser window.
@@ -58,6 +73,9 @@ app.whenReady().then(() => {
   // Initialize the database
   initDb()
 
+  // Detect GCC during startup
+  refreshGccStatus() // For renderers (Front-end developers): Use this to query a ready-made status object.
+
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
 
@@ -66,6 +84,9 @@ app.whenReady().then(() => {
   ipcMain.handle('users:create', (_e, data: NewUser) => createUser(data))
   ipcMain.handle('users:update', (_e, data: UpdateUser) => updateUser(data))
   ipcMain.handle('users:delete', (_e, uuid: string) => deleteUser(uuid))
+
+  // Compiler Status
+  ipcMain.handle('compiler:getGccStatus', async () => gccStatusPromise ?? refreshGccStatus())
 
   /* TEST ONLY DELETE WHEN DONE */
   // File selection

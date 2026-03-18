@@ -1,5 +1,5 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import type { UsersAPI } from './types'
+import type { UsersAPI, CompilerAPI } from './types'
 
 declare global {
   interface Window {
@@ -12,6 +12,7 @@ declare global {
         stringify: (filePath: string) => Promise<string>
       }
       /* TEST ONLY DELETE WHEN DONE */
+      compiler: CompilerAPI
     }
   }
 }
