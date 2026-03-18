@@ -44,6 +44,35 @@ function getSupportedPlatform(): SupportedPlatform {
   return platform
 }
 
+/*
+  @ Issue 9: If compilation fails unexpectedly due to compiler not found, revalidate the location/prompt to install
+  Scenario: 
+    - GCC may be detected at startup
+    - Later on, the user uninstalls it, moves it, or the manual path is wrong
+    - Compile is attempted with path the app thought was valid
+  Why it's needed:
+    - Without revalidation, the app may only show a vague compile failure   
+    - User then cannot tell whether their code is bad or the compiler is missing  
+  Shouldn't trigger on:
+    - syntax errors
+    - linker errors
+    - missing student headers
+    - undefined references
+    - bad student code
+*/
+function isCompilerNotFoundError(stderr: string, message: string): boolean { // TODO: properly cite AI: https://chatgpt.com/share/69bb0b9d-e314-800e-8e15-cacc4b61f4e5
+  const text = `${stderr}\n${message}`.toLowerCase()
+
+  return (
+    text.includes('no such file or directory') ||
+    text.includes('cannot find the file') ||
+    text.includes('command not found') ||
+    text.includes('not recognized as an internal or external command') ||
+    text.includes('spawn') ||
+    text.includes('enoent')
+  )
+}
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -162,7 +191,34 @@ app.whenReady().then(() => {
         message: 'GCC/Clang is not configured yet. Configure compiler before compiling.'
       }
     }
-    return compileCppFiles(gccStatus.path, request)
+
+    // Revalidate Compiler
+    const compileRes = await compileCppFiles(gccStatus.path, request)
+    if (compileRes.compileSuccess) {
+      return compileRes
+    }
+    
+    // Only revalidate GCC if the failure looks like the compiler itself is missing or cannot be started
+    const isCompilerMissing = isCompilerNotFoundError(
+      compileRes.stderr,
+      compileRes.message
+    )
+    if (!isCompilerMissing) {
+      return compileRes
+    }
+
+    // If GCC is still missing, return an error so the UI can guide the user back to compiler setup or installation
+    const refreshedStatus = await refreshGccStatus()
+    if (refreshedStatus.status !== 'ready' || !refreshedStatus.path) {
+      return {
+        ...compileRes,
+        compilerPath: null,
+        executablePath: null,
+        message: 'Compiler path is no longer valid. GCC was rechecked and not found.',
+        stderr: `${compileRes.stderr}\n\nBatchGrade revalidated the compiler path and could not find GCC.`
+      }
+    }
+    return compileCppFiles(refreshedStatus.path, request)
   })
 
   // Execution
