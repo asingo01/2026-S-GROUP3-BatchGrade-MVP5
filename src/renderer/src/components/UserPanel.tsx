@@ -213,7 +213,7 @@ export function UserPanel(): React.JSX.Element {
         <select
           value={form.role}
           onChange={(e) =>
-            setForm((f) => ({ ...f, role: e.target.value as STUDENT_ROLE | INSTRUCTOR_ROLE }))
+            setForm((f) => ({ ...f, role: e.target.value as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE }))
           }
           className="panel-input"
         >

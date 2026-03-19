@@ -13,9 +13,11 @@ import { Navigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { VALID_ROLES } from '../../../main/database/schema'
 
+type ValidRoles = (typeof VALID_ROLES)[number]
+
 interface ProtectedRouteProps {
   children: ReactElement
-  requiredRoles?: VALID_ROLES[]
+  requiredRoles?: ValidRoles[]
   // Optional fallback path when access is denied
   fallbackPath?: string
 }

@@ -46,7 +46,7 @@ function Login(): React.JSX.Element {
   // Component State
   // -----------------------------------------------------------
   // Tracks which role the user selects during login
-  const [role, setRole] = useState<STUDENT_ROLE | INSTRUCTOR_ROLE | null>(null)
+  const [role, setRole] = useState< typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE | null>(null)
 
   // Stores user credential input
   const [email, setEmail] = useState('')
