@@ -27,6 +27,7 @@ import Grading from './pages/Grading'
 import StudentDashboard from './pages/StudentDashboard'
 import InstructorDashboard from './pages/InstructorDashboard'
 import ProtectedRoute from './components/ProtectedRoute'
+import StudentUploadInterface from './pages/studentUploadInterface'
 import { STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../main/database/schema'
 
 /**
@@ -98,6 +99,8 @@ function App(): React.JSX.Element {
           />
           {/* Grading Interface */}
           <Route path="/grading" element={<Grading />} />
+
+          <Route path="/studentUploadInterface" element={<StudentUploadInterface />} />
         </Routes>
       </HashRouter>
     </AuthProvider>

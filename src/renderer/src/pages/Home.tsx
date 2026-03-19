@@ -83,6 +83,10 @@ function Home(): React.JSX.Element {
             <button className="secondary-button" onClick={() => navigate('/instructordashboard')}>
               Instructor Dashboard
             </button>
+
+            <button className="secondary-button" onClick={() => navigate('/studentUploadInterface')}>
+               SUI
+            </button>
           </div>
 
           {/*-----------------------------------------------------------
