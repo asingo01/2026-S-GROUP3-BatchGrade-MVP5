@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { CompileCppResult, GccInstallationInfo, RunCppResult } from '../../../shared/compiler'
 
 function Grading(): React.JSX.Element {

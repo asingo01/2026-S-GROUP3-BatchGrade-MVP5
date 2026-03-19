@@ -1,26 +1,69 @@
+/**
+ * UserPanel.tsx
+ *
+ * Description:
+ * This component provides a complete user management interface for the
+ * BatchGrade application. It allows administrators to view, create, edit,
+ * and delete user accounts. The panel displays users in a list format with
+ * inline editing capabilities and includes form validation and error handling.
+ *
+ * Features:
+ * - Display list of all users with creation dates and UUIDs
+ * - Add new users with email and password
+ * - Edit existing users (email and optional password update)
+ * - Delete users with confirmation
+ * - Real-time form validation and error display
+ * - Responsive design with Tailwind CSS styling
+ */
+
 import { useEffect, useState } from 'react'
 import type { User } from '../../../shared/types'
+import { VALID_ROLES, STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../../shared/types'
 
+/**
+ * Form State Type
+ *
+ * Represents the state of the user creation/editing form.
+ * Contains the current values of form inputs.
+ */
 type FormState = {
   email: string
   password: string
+  role: typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE
 }
 
-const emptyForm: FormState = { email: '', password: '' }
+/** Default empty form state */
+const emptyForm: FormState = { email: '', password: '', role: STUDENT_ROLE }
 
+/**
+ * UserPanel Component
+ *
+ * Main component for user management. Handles all CRUD operations
+ * for users through the Electron API and provides a clean UI for
+ * administrators to manage the user base.
+ *
+ * @returns UserPanel(): React.JSX.Element
+ */
 export function UserPanel(): React.JSX.Element {
+  // State management for users list, form data, and UI states
   const [users, setUsers] = useState<User[]>([])
   const [form, setForm] = useState<FormState>(emptyForm)
   const [editingUuid, setEditingUuid] = useState<string | null>(null)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
+  /**
+   * Load Users Function
+   *
+   * Fetches all users from the database via the Electron API
+   * and updates the local state. Used after create, update, or delete operations.
+   */
   const loadUsers = async (): Promise<void> => {
     const result = await window.api.users.getAll()
     setUsers(result)
   }
 
-  // Load users on mount.
+  // Load users on component mount with cleanup to prevent state updates on unmounted component
   useEffect(() => {
     let isMounted = true
 
@@ -42,18 +85,45 @@ export function UserPanel(): React.JSX.Element {
     }
   }, [])
 
+  /**
+   * Start Edit Function
+   *
+   * Initiates editing mode for a specific user. Populates the form
+   * with the user's current email, role, and clears any existing errors.
+   *
+   * @param user - The user object to edit
+   */
   function startEdit(user: User): void {
     setEditingUuid(user.uuid)
-    setForm({ email: user.email, password: '' })
+    setForm({
+      email: user.email,
+      password: '',
+      role: VALID_ROLES.includes(user.role as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE)
+        ? (user.role as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE)
+        : STUDENT_ROLE
+    })
     setError(null)
   }
 
+  /**
+   * Cancel Edit Function
+   *
+   * Exits editing mode, resets the form to empty state,
+   * and clears any errors.
+   */
   function cancelEdit(): void {
     setEditingUuid(null)
     setForm(emptyForm)
     setError(null)
   }
 
+  /**
+   * Handle Submit Function
+   *
+   * Processes form submission for both creating new users and updating
+   * existing users. Performs validation, calls the appropriate API method,
+   * and refreshes the user list on success.
+   */
   async function handleSubmit(): Promise<void> {
     const trimmedEmail = form.email.trim()
     const trimmedPassword = form.password.trim()
@@ -75,10 +145,15 @@ export function UserPanel(): React.JSX.Element {
         await window.api.users.update({
           uuid: editingUuid,
           email: trimmedEmail,
+          role: form.role,
           ...(trimmedPassword ? { password: trimmedPassword } : {})
         })
       } else {
-        await window.api.users.create({ email: trimmedEmail, password: trimmedPassword })
+        await window.api.users.create({
+          email: trimmedEmail,
+          password: trimmedPassword,
+          role: form.role
+        })
       }
 
       setForm(emptyForm)
@@ -89,6 +164,14 @@ export function UserPanel(): React.JSX.Element {
     }
   }
 
+  /**
+   * Handle Delete Function
+   *
+   * Deletes a user by UUID, clears the delete confirmation state,
+   * and refreshes the user list.
+   *
+   * @param uuid - The UUID of the user to delete
+   */
   async function handleDelete(uuid: string): Promise<void> {
     await window.api.users.delete(uuid)
     setDeleteConfirm(null)
@@ -97,6 +180,7 @@ export function UserPanel(): React.JSX.Element {
 
   return (
     <div className="w-full max-w-xl mt-6 rounded-lg overflow-hidden border border-white/10 bg-white/[0.04] text-sm">
+      {/* Header section with user count and cancel edit button */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10">
         <span className="text-xs uppercase tracking-widest opacity-50">
           users · {users.length} row{users.length !== 1 ? 's' : ''}
@@ -108,6 +192,7 @@ export function UserPanel(): React.JSX.Element {
         )}
       </div>
 
+      {/* Form section for adding/editing users */}
       <div className="flex flex-wrap gap-2 px-4 py-3 border-b border-white/10">
         <input
           type="email"
@@ -125,13 +210,25 @@ export function UserPanel(): React.JSX.Element {
           onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
           className="panel-input"
         />
+        <select
+          value={form.role}
+          onChange={(e) =>
+            setForm((f) => ({ ...f, role: e.target.value as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE }))
+          }
+          className="panel-input"
+        >
+          <option value={STUDENT_ROLE}>student</option>
+          <option value={INSTRUCTOR_ROLE}>instructor</option>
+        </select>
         <button onClick={handleSubmit} className="btn-primary text-xs whitespace-nowrap">
           {editingUuid ? 'update' : '+ add'}
         </button>
       </div>
 
+      {/* Error message display */}
       {error && <div className="px-4 py-1.5 text-xs text-red-400 bg-red-400/10">⚠ {error}</div>}
 
+      {/* Users list or empty state */}
       {users.length === 0 ? (
         <div className="px-4 py-6 text-center text-xs opacity-30">no users yet — add one above</div>
       ) : (
@@ -144,13 +241,16 @@ export function UserPanel(): React.JSX.Element {
                 ${editingUuid === user.uuid ? 'bg-sky-400/5' : 'hover:bg-white/[0.03]'}
               `}
             >
+              {/* User information display */}
               <div className="flex flex-col gap-0.5 flex-1 min-w-0">
                 <span className="font-medium truncate">{user.email}</span>
                 <span className="text-xs opacity-35">
-                  {new Date(user.createdAt * 1000).toLocaleString()} · {user.uuid.slice(0, 8)}…
+                  {user.role} · {new Date(user.createdAt * 1000).toLocaleString()} ·{' '}
+                  {user.uuid.slice(0, 8)}…
                 </span>
               </div>
 
+              {/* Action buttons for edit and delete */}
               <div className="flex gap-1.5 shrink-0">
                 <button onClick={() => startEdit(user)} className="btn-ghost text-xs">
                   edit

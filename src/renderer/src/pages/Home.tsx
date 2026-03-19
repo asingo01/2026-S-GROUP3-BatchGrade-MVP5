@@ -1,49 +1,76 @@
 import { useNavigate } from 'react-router-dom'
-import Versions from '../components/Versions'
+import Footer from '../components/Footer'
 import { IpcPing } from '../components/IpcPing'
+import NavBar from '../components/Navbar'
 import { UserPanel } from '../components/UserPanel'
-import electronLogo from '../assets/electron.svg'
 
 function Home(): React.JSX.Element {
   const navigate = useNavigate()
 
   return (
     <>
-      {/* ── Original homescreen header ── */}
-      <img alt="logo" className="logo" src={electronLogo} />
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-        &nbsp;and <span className="ts">TypeScript</span>
-      </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
+      <NavBar />
 
-      {/* ── Navigation Buttons ── */}
-      <div style={{ marginTop: '2rem' }}>
-        <button onClick={() => navigate('/login')}>Go to Login</button>
+      <div className="hero-container">
+        <div className="hero-item"></div>
 
-        <button onClick={() => navigate('/dashboard')} style={{ marginLeft: '1rem' }}>
-          Go to Dashboard
-        </button>
+        <div className="hero-item">
+          <header className="header">
+            <h1 className="title" style={{ marginLeft: '42%' }}>
+              <span className="react">BatchGrade</span>
+            </h1>
+            <p className="creator" style={{ marginLeft: '33%' }}>
+              Automated Grading System
+            </p>
+          </header>
 
-        <button onClick={() => navigate('/grading')} style={{ marginLeft: '1rem' }}>
-          Go to Grading
-        </button>
-      </div>
+          <div className="test-buttons" style={{ marginLeft: '6rem' }}>
+            <button className="secondary-button" onClick={() => navigate('/studentdashboard')}>
+              Student Dashboard
+            </button>
 
-      <div className="actions">
-        <div className="action">
-          <IpcPing />
+            <button
+              className="secondary-button"
+              onClick={() => navigate('/grading')}
+              style={{ margin: '2rem' }}
+            >
+              Grading
+            </button>
+
+            <button className="secondary-button" onClick={() => navigate('/instructordashboard')}>
+              Instructor Dashboard
+            </button>
+          </div>
+
+          <div className="actions">
+            <div className="action" style={{ marginLeft: '40%' }}>
+              <IpcPing />
+            </div>
+          </div>
+
+          <div className="p-6">
+            <UserPanel />
+          </div>
         </div>
       </div>
 
-      <div className="p-6">
-        <UserPanel />
+      <div className="about-container">
+        <h1 className="title" style={{ marginLeft: '45%' }}>
+          About
+        </h1>
+        <p className="about-blot" style={{ padding: '0 2rem 0 2rem' }}>
+          <span className="emphasis">Batchgrade</span> is a locally hosted automated grading
+          platform designed to streamline the evaluation of programming assignments in academic
+          environments. The system enables instructors to compile, test, and manage submissions
+          through an integrated gradebook interface, while students receive consistent and
+          structured feedback. Built with a modular web-based architechture and local deployment
+          capability, BatchGrade eliminates reliance on costly cloud-based services. By reducing
+          grading time and improving assessment reliability, the platform increases instructional
+          efficiency and supports scalable computer science education.
+        </p>
       </div>
 
-      <Versions />
+      <Footer />
     </>
   )
 }
