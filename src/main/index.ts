@@ -4,16 +4,9 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { initDb } from './database/index'
 import type { NewUser, UpdateUser, NewAssignment, UpdateAssignment } from './database/schema'
-import {
-  getAllUsers,
-  createUser,
-  updateUser,
-  deleteUser,
-  getAllAssignments,
-  createAssignment,
-  updateAssignment,
-  deleteAssignment
-} from './database/queries'
+import { getAllUsers, createUser, updateUser, deleteUser } from './database/queries'
+import { getAllAssignments, createAssignment, updateAssignment } from './database/queries'
+import { deleteAssignment } from './database/queries'
 
 function createWindow(): void {
   // Create the browser window.
