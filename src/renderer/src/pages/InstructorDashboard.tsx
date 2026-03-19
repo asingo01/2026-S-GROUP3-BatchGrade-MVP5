@@ -1,37 +1,37 @@
 /**
- * Grading.tsx
+ * InstructorDashboard.tsx
  *
  * Description:
- * This component represents the grading interface within the
- * BatchGrade platform. It will serve as the primary location
- * where instructors manage assignment grading and review
- * automated grading results.
+ * This component represents the instructor-facing dashboard within
+ * the BatchGrade platform. The dashboard serves as the primary
+ * interface for instructors once they have successfully logged in.
  *
- * In its current state, the page functions as a placeholder
- * for future development. Planned functionality includes:
- *  = Viewing student submissions
- *  - Running automated grading tests
- *  - Managing grading results
- *  - Accessing gradebook information
+ * In its current state, the component functions as a placeholder
+ * view that demonstrates navigation flow and page structure.
+ * Future development will include instructor-specific tools sush as:
+ *  - Assignment management
+ *  - Automated grading controls
+ *  - Student submission review
+ *  - Gradebook access
  */
 import { useNavigate } from 'react-router-dom'
 import NavBar from '../components/Navbar'
 import Footer from '../components/Footer'
 
 /**
- * Grading Component
+ * InstructorDashboard component
  *
- * Provides the grading interface for instructors.
- * Future implementations will integrate automated
- * grading workflows and submission management.
+ * Provides the instructor interface after authentication.
+ * This page will eventually contain tools for managing
+ * assignments, grading submissions, and viewing student results
  *
- * @returns Grading(): React.JSX.Element
+ * @returns InstructorDashboard(); React.JSX.Element
  */
-function Grading(): React.JSX.Element {
+function InstructorDashboard(): React.JSX.Element {
   // -----------------------------------------------------------
   // Navigation Hook
   // -----------------------------------------------------------
-  // Enables programmatic navigation between application routes
+  // Enables programmatic navigation between routes
   const navigate = useNavigate()
 
   return (
@@ -42,17 +42,17 @@ function Grading(): React.JSX.Element {
       <NavBar />
 
       {/*-----------------------------------------------------------
-        Grading Page Content
+        Dashboard Content Area
       -----------------------------------------------------------*/}
       <div style={{ padding: '8rem' }}>
         {/* Page Title */}
-        <h1>Grading Page</h1>
+        <h1>Instructor Dashboard Page</h1>
 
         {/* Placeholder page description */}
-        <p>This is the Grading screen.</p>
+        <p>This is the Instructor Dashboard screen.</p>
 
         {/*-----------------------------------------------------------
-          Navigation Controls
+          Navigation controls
         -----------------------------------------------------------*/}
         <div style={{ marginTop: '8rem' }}>
           {/* Return to Home page */}
@@ -70,4 +70,4 @@ function Grading(): React.JSX.Element {
   )
 }
 
-export default Grading
+export default InstructorDashboard

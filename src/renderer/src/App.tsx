@@ -1,33 +1,108 @@
-import { HashRouter, Routes, Route } from "react-router-dom"
-import Home from "./pages/Home"
-import Login from "./pages/Login"
-import Dashboard from "./pages/Dashboard"
-import Grading from "./pages/Grading"
+/**
+ * App.tsx
+ *
+ * Description:
+ * This file defines the main application component and configures
+ * the routing system for the BatchGrade platform. The routing
+ * structure determines which pages component is rendered based on
+ * the current URL path.
+ *
+ * The application uses React Router to manage navigation between
+ * the following primary views:
+ *  - Home (landing page)
+ *  - Login
+ *  - Student Dashboard
+ *  - Instructor Dashboard
+ *  - Grading Interface
+ *
+ * The routing system is wrapped in an AuthProvider to allow all
+ * pages within the application to access shared authentication
+ * state (login status, user information, etc.)
+ */
+import { HashRouter, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './components/AuthContext'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Grading from './pages/Grading'
+import Gradebook from './pages/Gradebook'
+import StudentDashboard from './pages/StudentDashboard'
+import InstructorDashboard from './pages/InstructorDashboard'
+import ProtectedRoute from './components/ProtectedRoute'
+import { STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../main/database/schema'
 
-import Gradebook from "./pages/Gradebook"
-
-// Routes work functionally by iumnporting the page to the top, and then creating the route below. What this will do is give you the ability to create
-// a new .tsx inside of pages, and then you can create buttons/navigation that point from whatever page you're on to this route the route will then
-// go to the appropriate page/.tsx file.
-
-// note some things such as "/" is always home/root this is a design paradigm
-
-// As far as the routes go individually, these point to the mvps that we have currently.
-// login -> login/landing
-// dashboard -> is the student/teacher ui (these should definitely be different routes/pages)
-// grading -> is the grade book, and should also probably be separated into grading.teacher / grading.student.
+/**
+ * App Component
+ *
+ * The App component serves as the root component for the BatchGrade
+ * application. It establishes global providers and configures all
+ * application routes.
+ *
+ * Routing is implemented using React Router. Each route maps a URL
+ * path to a corresponding page component located. in the /pages
+ * directory
+ *
+ * For example:
+ *    '/'   -> Home page
+ *    '/login'    -> Login page
+ *    '/studentdashboard'   -> Student interface
+ *    '/instructordashboard'    -> Instructor interface
+ *    '/grading'    -> Grading interface
+ *
+ * Additional routes can be added by:
+ *    1. Creating a new page component inside the /page directory.
+ *    2. Importing the component at the top of this file.
+ *    3. Adding a corresponding <Route> element within the <Routes> block.
+ *
+ * @returns App(): React.JSX.Element
+ */
 
 function App(): React.JSX.Element {
   return (
-    <HashRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/grading" element={<Grading />} />
-        <Route path="/gradebook" element={<Gradebook />} />
-      </Routes>
-    </HashRouter>
+    /*-----------------------------------------------------------
+      Authentication Provider
+        Provides global authentication state to the
+        entire application
+      -----------------------------------------------------------*/
+    <AuthProvider>
+      {/*-----------------------------------------------------------
+        Router Configuration
+          HashRouter is used for routing to ensure
+          compatibility with static or local hosting
+        -----------------------------------------------------------*/}
+      <HashRouter>
+        {/*-----------------------------------------------------------
+          Application Routes
+            Each route maps a URL path to a specific page
+          -----------------------------------------------------------*/}
+        <Routes>
+          {/* Landing Home Page */}
+          <Route path="/" element={<Home />} />
+          {/* Login Page */}
+          <Route path="/login" element={<Login />} />
+          {/* Student Interface */}
+          <Route
+            path="/studentdashboard"
+            element={
+              <ProtectedRoute requiredRoles={[STUDENT_ROLE]}>
+                <StudentDashboard />
+              </ProtectedRoute>
+            }
+          />
+          {/* Instructor Interface (role-protected) */}
+          <Route
+            path="/instructordashboard"
+            element={
+              <ProtectedRoute requiredRoles={[INSTRUCTOR_ROLE]}>
+                <InstructorDashboard />
+              </ProtectedRoute>
+            }
+          />
+          {/* Grading Interface */}
+          <Route path="/grading" element={<Grading />} />
+          <Route path="/gradebook" element={<Gradebook />} />
+        </Routes>
+      </HashRouter>
+    </AuthProvider>
   )
 }
 
