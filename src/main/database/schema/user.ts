@@ -1,9 +1,14 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { sql, InferSelectModel, InferInsertModel } from 'drizzle-orm'
 
+// updated to include constant roles
+export const STUDENT_ROLE = 'student'
+export const INSTRUCTOR_ROLE = 'instructor'
+export const VALID_ROLES = [STUDENT_ROLE, INSTRUCTOR_ROLE]
+
 export type User = InferSelectModel<typeof users>
 export type NewUser = InferInsertModel<typeof users>
-export type UpdateUser = Pick<User, 'uuid'> & Partial<Pick<User, 'email' | 'password'>>
+export type UpdateUser = Pick<User, 'uuid'> & Partial<Pick<User, 'email' | 'password' | 'role'>>
 
 /**
  * Users table.
@@ -17,6 +22,7 @@ export const users = sqliteTable('users', {
     .$defaultFn(() => crypto.randomUUID()),
   email: text('email').notNull().unique(),
   password: text('password').notNull(),
+  role: text('role').notNull().default(STUDENT_ROLE), // Role
   createdAt: integer('created_at', { mode: 'number' })
     .notNull()
     .default(sql`(unixepoch())`)
