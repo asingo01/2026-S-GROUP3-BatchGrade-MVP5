@@ -1,6 +1,4 @@
-# FR9
-
-Assignment Creation Button & Display
+# FR9: Assignment Creation Button & Display
 
 This button is intended for instructors only. After clicking the button, the assignment creation template must be filled out. This information includes:
 
