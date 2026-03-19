@@ -1,4 +1,3 @@
-// Temporary!!! Frontend must change
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import type { CompileCppResult, GccInstallationInfo, RunCppResult } from '../../../shared/compiler'
@@ -108,118 +107,326 @@ function Grading(): React.JSX.Element {
   }, [])
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Grading Page</h1>
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        padding: '20px',
+        paddingBottom: '40px',
+        backgroundColor: 'transparent',
+        color: 'white'
+      }}
+    >
+      <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+        <h1 style={{ marginBottom: '6px', fontSize: '28px' }}>Grading Page</h1>
+        <p style={{ marginBottom: '12px', fontSize: '14px' }}>
+          This page is for checking gcc, compiling C++ files, and running the program.
+        </p>
 
-      {errorMessage && (
-        <div style={{ marginBottom: '1rem', color: 'red' }}>
-          <p>{errorMessage}</p>
-        </div>
-      )}
-
-      <div style={{ marginTop: '2rem', padding: '1rem', border: '1px solid #ccc' }}>
-        <h2>GCC Detection</h2>
-
-        {!gccStatus && !errorMessage && <p>Checking for GCC...</p>}
-
-        {gccStatus && (
-          <div>
-            <p>Status: {gccStatus.status}</p>
-            <p>Message: {gccStatus.message}</p>
-            <p>Platform: {gccStatus.platform}</p>
-            <p>Path: {gccStatus.path ?? 'Not set'}</p>
+        {errorMessage && (
+          <div
+            style={{
+              backgroundColor: '#5a1f1f',
+              border: '1px solid red',
+              padding: '10px',
+              marginBottom: '12px'
+            }}
+          >
+            <p>{errorMessage}</p>
           </div>
         )}
 
-        <div style={{ marginTop: '1rem' }}>
-          <h3>Set GCC Path Manually</h3>
-          <input
-            type="text"
-            value={manualPath}
-            onChange={(e) => setManualPath(e.target.value)}
-            placeholder="Enter full path to gcc or g++"
-            style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
-          />
-          <button onClick={handleSetManualPath}>Save GCC Path</button>
-        </div>
+        <div
+          style={{
+            border: '1px solid gray',
+            padding: '12px',
+            marginBottom: '12px',
+            backgroundColor: '#2b2b2b'
+          }}
+        >
+          <h2 style={{ marginBottom: '8px', fontSize: '20px' }}>GCC Detection</h2>
 
-        <div style={{ marginTop: '1rem' }}>
-          <h3>Compile C++ Files</h3>
-          <button onClick={handleSelectCppFiles}>Choose C++ Files</button>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1.1fr 1.2fr',
+              gap: '14px',
+              alignItems: 'start'
+            }}
+          >
+            <div>
+              {!gccStatus && !errorMessage && <p>Checking for GCC...</p>}
 
-          {selectedFiles.length > 0 && (
-            <div style={{ marginTop: '0.5rem' }}>
-              <p>Selected Files:</p>
-              {selectedFiles.map((file) => (
-                <p key={file}>{file}</p>
-              ))}
+              {gccStatus && (
+                <div style={{ fontSize: '14px', lineHeight: '1.5' }}>
+                  <p>Status: {gccStatus.status}</p>
+                  <p>Message: {gccStatus.message}</p>
+                  <p>Platform: {gccStatus.platform}</p>
+                  <p>Path: {gccStatus.path ?? 'Not set'}</p>
+                </div>
+              )}
             </div>
-          )}
 
-          <button
-            onClick={handleCompileCpp}
-            disabled={isCompiling || selectedFiles.length === 0}
-            style={{ marginTop: '0.5rem' }}
-          >
-            {isCompiling ? 'Compiling...' : 'Compile'}
-          </button>
+            <div>
+              <h3 style={{ marginBottom: '8px', fontSize: '16px' }}>Set GCC Path Manually</h3>
+              <input
+                type="text"
+                value={manualPath}
+                onChange={(e) => setManualPath(e.target.value)}
+                placeholder="Enter full path to gcc or g++"
+                style={{
+                  width: '100%',
+                  padding: '8px',
+                  marginBottom: '8px',
+                  backgroundColor: '#111',
+                  color: 'white',
+                  border: '1px solid #6b7280'
+                }}
+              />
+              <button
+                onClick={handleSetManualPath}
+                style={{
+                  padding: '9px 14px',
+                  backgroundColor: '#2563eb',
+                  color: 'white',
+                  border: '2px solid #93c5fd',
+                  borderRadius: '6px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer'
+                }}
+              >
+                Save GCC Path
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div style={{ marginTop: '1rem' }}>
-          <h3>Run Program</h3>
-          <textarea
-            value={stdinText}
-            onChange={(e) => setStdinText(e.target.value)}
-            placeholder="Optional program input"
-            style={{ width: '100%', minHeight: '120px', marginTop: '0.5rem', padding: '0.5rem' }}
-          />
-          <button
-            onClick={handleRunProgram}
-            disabled={isRunning || !compileResult?.compileSuccess || !compileResult.executablePath}
-            style={{ marginTop: '0.5rem' }}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '12px',
+            marginBottom: '12px'
+          }}
+        >
+          <div
+            style={{
+              border: '1px solid gray',
+              padding: '12px',
+              backgroundColor: '#2b2b2b',
+              alignSelf: 'start'
+            }}
           >
-            {isRunning ? 'Running...' : 'Run'}
-          </button>
+            <h2 style={{ marginBottom: '10px', fontSize: '20px' }}>Compile C++ Files</h2>
+
+            <button
+              onClick={handleSelectCppFiles}
+              style={{
+                padding: '9px 14px',
+                backgroundColor: '#2563eb',
+                color: 'white',
+                border: '2px solid #93c5fd',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                cursor: 'pointer'
+              }}
+            >
+              Choose C++ Files
+            </button>
+
+            {selectedFiles.length > 0 && (
+              <div style={{ marginTop: '10px', fontSize: '14px' }}>
+                <p>Selected Files:</p>
+                <ul
+                  style={{
+                    paddingLeft: '20px',
+                    marginTop: '6px',
+                    maxHeight: '100px',
+                    overflowY: 'auto'
+                  }}
+                >
+                  {selectedFiles.map((file) => (
+                    <li key={file} style={{ marginBottom: '6px', overflowWrap: 'anywhere' }}>
+                      {file}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <button
+              onClick={handleCompileCpp}
+              disabled={isCompiling || selectedFiles.length === 0}
+              style={{
+                padding: '9px 14px',
+                marginTop: '10px',
+                backgroundColor: isCompiling || selectedFiles.length === 0 ? '#4b5563' : '#f59e0b',
+                color: 'white',
+                border: '2px solid #fde68a',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                cursor: isCompiling || selectedFiles.length === 0 ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {isCompiling ? 'Compiling...' : 'Compile'}
+            </button>
+
+            {compileResult && (
+              <div style={{ marginTop: '12px', borderTop: '1px solid gray', paddingTop: '10px' }}>
+                <h3 style={{ fontSize: '17px' }}>Compile Result</h3>
+                <div style={{ fontSize: '14px', lineHeight: '1.45' }}>
+                  <p>Message: {compileResult.message}</p>
+                  <p>Compile Success: {compileResult.compileSuccess ? 'Yes' : 'No'}</p>
+                  <p>Compiler: {compileResult.compilerPath ?? 'Not available'}</p>
+                  <p>Executable: {compileResult.executablePath ?? 'Not created'}</p>
+                </div>
+
+                <h4 style={{ marginTop: '10px', fontSize: '15px' }}>Compile Standard Output</h4>
+                <pre
+                  style={{
+                    whiteSpace: 'pre-wrap',
+                    overflowWrap: 'anywhere',
+                    backgroundColor: '#111',
+                    padding: '8px',
+                    border: '1px solid gray',
+                    marginTop: '6px',
+                    maxHeight: '120px',
+                    overflowY: 'auto',
+                    fontSize: '12px'
+                  }}
+                >
+                  {compileResult.stdout || 'No stdout output.'}
+                </pre>
+
+                <h4 style={{ marginTop: '10px', fontSize: '15px' }}>Compile Standard Error</h4>
+                <pre
+                  style={{
+                    whiteSpace: 'pre-wrap',
+                    overflowWrap: 'anywhere',
+                    backgroundColor: '#111',
+                    padding: '8px',
+                    border: '1px solid gray',
+                    marginTop: '6px',
+                    maxHeight: '120px',
+                    overflowY: 'auto',
+                    fontSize: '12px'
+                  }}
+                >
+                  {compileResult.stderr || 'No stderr output.'}
+                </pre>
+              </div>
+            )}
+          </div>
+
+          <div
+            style={{
+              border: '1px solid gray',
+              padding: '12px',
+              backgroundColor: '#2b2b2b',
+              alignSelf: 'start'
+            }}
+          >
+            <h2 style={{ marginBottom: '10px', fontSize: '20px' }}>Run Program</h2>
+
+            <textarea
+              value={stdinText}
+              onChange={(e) => setStdinText(e.target.value)}
+              placeholder="Optional program input"
+              style={{
+                width: '100%',
+                minHeight: '100px',
+                padding: '8px',
+                backgroundColor: '#111',
+                color: 'white',
+                border: '1px solid #6b7280',
+                fontSize: '13px'
+              }}
+            />
+
+            <button
+              onClick={handleRunProgram}
+              disabled={isRunning || !compileResult?.compileSuccess || !compileResult.executablePath}
+              style={{
+                padding: '9px 14px',
+                marginTop: '10px',
+                backgroundColor:
+                  isRunning || !compileResult?.compileSuccess || !compileResult.executablePath
+                    ? '#4b5563'
+                    : '#16a34a',
+                color: 'white',
+                border: '2px solid #86efac',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                cursor:
+                  isRunning || !compileResult?.compileSuccess || !compileResult.executablePath
+                    ? 'not-allowed'
+                    : 'pointer'
+              }}
+            >
+              {isRunning ? 'Running...' : 'Run'}
+            </button>
+
+            {runResult && (
+              <div style={{ marginTop: '12px', borderTop: '1px solid gray', paddingTop: '10px' }}>
+                <h3 style={{ fontSize: '17px' }}>Run Result</h3>
+                <div style={{ fontSize: '14px', lineHeight: '1.45' }}>
+                  <p>Message: {runResult.message}</p>
+                  <p>Execution Success: {runResult.executionSuccess ? 'Yes' : 'No'}</p>
+                  <p>Timed Out: {runResult.timedOut ? 'Yes' : 'No'}</p>
+                </div>
+
+                <h4 style={{ marginTop: '10px', fontSize: '15px' }}>Program Standard Output</h4>
+                <pre
+                  style={{
+                    whiteSpace: 'pre-wrap',
+                    overflowWrap: 'anywhere',
+                    backgroundColor: '#111',
+                    padding: '8px',
+                    border: '1px solid gray',
+                    marginTop: '6px',
+                    maxHeight: '120px',
+                    overflowY: 'auto',
+                    fontSize: '12px'
+                  }}
+                >
+                  {runResult.stdout || 'No stdout output.'}
+                </pre>
+
+                <h4 style={{ marginTop: '10px', fontSize: '15px' }}>Program Standard Error</h4>
+                <pre
+                  style={{
+                    whiteSpace: 'pre-wrap',
+                    overflowWrap: 'anywhere',
+                    backgroundColor: '#111',
+                    padding: '8px',
+                    border: '1px solid gray',
+                    marginTop: '6px',
+                    maxHeight: '120px',
+                    overflowY: 'auto',
+                    fontSize: '12px'
+                  }}
+                >
+                  {runResult.stderr || 'No stderr output.'}
+                </pre>
+              </div>
+            )}
+          </div>
         </div>
 
-        {compileResult && (
-          <div style={{ marginTop: '1rem', borderTop: '1px solid #ccc', paddingTop: '1rem' }}>
-            <h3>Compile Result</h3>
-            <p>Message: {compileResult.message}</p>
-            <p>Compile Success: {compileResult.compileSuccess ? 'Yes' : 'No'}</p>
-            <p>Compiler: {compileResult.compilerPath ?? 'Not available'}</p>
-            <p>Executable: {compileResult.executablePath ?? 'Not created'}</p>
-
-            <h4>Compile Standard Output</h4>
-            <pre style={{ whiteSpace: 'pre-wrap' }}>
-              {compileResult.stdout || 'No stdout output.'}
-            </pre>
-
-            <h4>Compile Standard Error</h4>
-            <pre style={{ whiteSpace: 'pre-wrap' }}>
-              {compileResult.stderr || 'No stderr output.'}
-            </pre>
-          </div>
-        )}
-
-        {runResult && (
-          <div style={{ marginTop: '1rem', borderTop: '1px solid #ccc', paddingTop: '1rem' }}>
-            <h3>Run Result</h3>
-            <p>Message: {runResult.message}</p>
-            <p>Execution Success: {runResult.executionSuccess ? 'Yes' : 'No'}</p>
-            <p>Timed Out: {runResult.timedOut ? 'Yes' : 'No'}</p>
-
-            <h4>Program Standard Output</h4>
-            <pre style={{ whiteSpace: 'pre-wrap' }}>{runResult.stdout || 'No stdout output.'}</pre>
-
-            <h4>Program Standard Error</h4>
-            <pre style={{ whiteSpace: 'pre-wrap' }}>{runResult.stderr || 'No stderr output.'}</pre>
-          </div>
-        )}
-      </div>
-
-      <div style={{ marginTop: '2rem' }}>
-        <button onClick={() => navigate('/')} style={{ marginLeft: '1rem' }}>
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            padding: '9px 14px',
+            backgroundColor: '#2563eb',
+            color: 'white',
+            border: '2px solid #93c5fd',
+            borderRadius: '6px',
+            fontWeight: 'bold',
+            cursor: 'pointer'
+          }}
+        >
           Go to home
         </button>
       </div>

@@ -1,5 +1,5 @@
 /* TEST ONLY DELETE WHEN DONE */
-import { useState } from 'react'
+// import { useState } from 'react'
 /* TEST ONLY DELETE WHEN DONE */
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
@@ -20,42 +20,42 @@ import Grading from './pages/Grading'
 
 function App(): React.JSX.Element {
   /* TEST ONLY DELETE WHEN DONE */
-  const [filePath, setFilePath] = useState<string | undefined>(undefined)
-  const [fileContent, setFileContent] = useState<string | undefined>(undefined)
-  const handleFileSelect = (): void => {
-    window.api.file
-      .select()
-      .then((filePath) => {
-        if (filePath) {
-          setFilePath(filePath)
-          console.log('Selected file:', filePath)
-        } else {
-          console.log('File selection was canceled.')
-          setFilePath('Cancelled')
-        }
-      })
-      .catch((error) => {
-        console.error('Error selecting file:', error)
-        setFilePath('Error')
-      })
-  }
+  // const [filePath, setFilePath] = useState<string | undefined>(undefined)
+  // const [fileContent, setFileContent] = useState<string | undefined>(undefined)
+  // const handleFileSelect = (): void => {
+  //   window.api.file
+  //     .select()
+  //     .then((filePath) => {
+  //       if (filePath) {
+  //         setFilePath(filePath)
+  //         console.log('Selected file:', filePath)
+  //       } else {
+  //         console.log('File selection was canceled.')
+  //         setFilePath('Cancelled')
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error selecting file:', error)
+  //       setFilePath('Error')
+  //     })
+  // }
 
-  const handleFileStringify = (): void => {
-    if (!filePath) {
-      console.warn('No file selected to stringify.')
-      return
-    }
-    window.api.file
-      .stringify(filePath)
-      .then((content) => {
-        setFileContent(content)
-        console.log('File content:', content)
-      })
-      .catch((error) => {
-        console.error('Error reading file:', error)
-        setFileContent('Error')
-      })
-  }
+  // const handleFileStringify = (): void => {
+  //   if (!filePath) {
+  //     console.warn('No file selected to stringify.')
+  //     return
+  //   }
+  //   window.api.file
+  //     .stringify(filePath)
+  //     .then((content) => {
+  //       setFileContent(content)
+  //       console.log('File content:', content)
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error reading file:', error)
+  //       setFileContent('Error')
+  //     })
+  // }
 
   /* TEST ONLY DELETE WHEN DONE */
   return (
@@ -66,7 +66,7 @@ function App(): React.JSX.Element {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/grading" element={<Grading />} />
       </Routes>
-      {/* TEST ONLY DELETE WHEN DONE */}
+      {/* TEST ONLY DELETE WHEN DONE
       <button
         onClick={handleFileSelect}
         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
@@ -88,7 +88,7 @@ function App(): React.JSX.Element {
       >
         Stringify File
       </button>
-      {/* TEST ONLY DELETE WHEN DONE */}
+      */}
     </HashRouter>
   )
 }
