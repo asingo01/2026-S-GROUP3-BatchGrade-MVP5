@@ -18,8 +18,8 @@
 
 import { useEffect, useState } from 'react'
 import type { User } from '../../../shared/types'
-import { STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../../main/database/schema'
-const validRoles = [STUDENT_ROLE, INSTRUCTOR_ROLE] as const
+import { VALID_ROLES, STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../../shared/types'
+
 
 /**
  * Form State Type
@@ -99,7 +99,7 @@ export function UserPanel(): React.JSX.Element {
     setForm({
       email: user.email,
       password: '',
-      role: validRoles.includes(user.role as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE)
+      role: VALID_ROLES.includes(user.role as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE)
         ? (user.role as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE)
         : STUDENT_ROLE
     })
@@ -214,12 +214,12 @@ export function UserPanel(): React.JSX.Element {
         <select
           value={form.role}
           onChange={(e) =>
-            setForm((f) => ({ ...f, role: e.target.value as 'student' | 'instructor' }))
+            setForm((f) => ({ ...f, role: e.target.value as STUDENT_ROLE | INSTRUCTOR_ROLE }))
           }
           className="panel-input"
         >
-          <option value="student">student</option>
-          <option value="instructor">instructor</option>
+          <option value={STUDENT_ROLE}>student</option>
+          <option value={INSTRUCTOR_ROLE}>instructor</option>
         </select>
         <button onClick={handleSubmit} className="btn-primary text-xs whitespace-nowrap">
           {editingUuid ? 'update' : '+ add'}

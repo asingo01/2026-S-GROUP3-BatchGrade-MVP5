@@ -27,6 +27,7 @@ import Grading from './pages/Grading'
 import StudentDashboard from './pages/StudentDashboard'
 import InstructorDashboard from './pages/InstructorDashboard'
 import ProtectedRoute from './components/ProtectedRoute'
+import { STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../main/database/schema'
 
 /**
  * App Component
@@ -81,7 +82,7 @@ function App(): React.JSX.Element {
           <Route
             path="/studentdashboard"
             element={
-              <ProtectedRoute requiredRoles={['student']}>
+              <ProtectedRoute requiredRoles={[STUDENT_ROLE]}>
                 <StudentDashboard />
               </ProtectedRoute>
             }
@@ -90,7 +91,7 @@ function App(): React.JSX.Element {
           <Route
             path="/instructordashboard"
             element={
-              <ProtectedRoute requiredRoles={['instructor']}>
+              <ProtectedRoute requiredRoles={[INSTRUCTOR_ROLE]}>
                 <InstructorDashboard />
               </ProtectedRoute>
             }

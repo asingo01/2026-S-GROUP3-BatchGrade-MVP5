@@ -11,10 +11,11 @@
 import { ReactElement } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
+import { VALID_ROLES, STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../../main/database/schema'
 
 interface ProtectedRouteProps {
   children: ReactElement
-  requiredRoles?: Array<'student' | 'instructor'>
+  requiredRoles?: VALID_ROLES[]
   // Optional fallback path when access is denied
   fallbackPath?: string
 }
