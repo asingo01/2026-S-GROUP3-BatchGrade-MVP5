@@ -144,7 +144,7 @@ app.whenReady().then(() => {
         compilerId: 'gcc',
         status: 'missing',
         platform: getSupportedPlatform(),
-        message: 'The selected GCC path is invalid.',
+        message: 'The selected path is invalid. Use a C++ compiler such as g++, c++, or clang++.',
         installInstruction: null, // the user is prompted to install with instructions for their OS if they don't have a compiler installed
         path: null ,
         source: null // User can manually set the path to a GCC installation

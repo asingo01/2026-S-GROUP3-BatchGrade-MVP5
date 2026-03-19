@@ -2,6 +2,7 @@
 // Compiler Detection Service
 
 import { execFile } from 'node:child_process'
+import { basename } from 'node:path'
 import { promisify } from 'node:util'
 
 import type { GccInstallationInfo, SupportedPlatform } from '../../shared/compiler'
@@ -27,6 +28,21 @@ async function gccCommand(command: string): Promise<string | null> {
   }
 }
 
+function isCppCompilerCommand(command: string): boolean {
+  const name = basename(command).toLowerCase()
+
+  return (
+    name === 'g++' ||
+    name === 'g++.exe' ||
+    name === 'c++' ||
+    name === 'c++.exe' ||
+    name === 'clang++' ||
+    name === 'clang++.exe' ||
+    /^g\+\+-[\d.]+$/.test(name) ||
+    /^clang\+\+-[\d.]+$/.test(name)
+  )
+}
+
 function getInstallInstruction(platform: SupportedPlatform): string {
   switch (platform) {
     case 'win32':
@@ -42,6 +58,10 @@ function getInstallInstruction(platform: SupportedPlatform): string {
 
 // We need this helper function to check if the path that the user manually inputs is valid
 async function validateGccPath(filePath: string): Promise<boolean> {
+  if (!isCppCompilerCommand(filePath)) {
+    return false
+  }
+
   try {
     const res = await execFileAsync(filePath, ['--version'], { // We have to confirm that it works
       windowsHide: true,
@@ -75,10 +95,11 @@ async function detectGccInstallation(): Promise<GccInstallationInfo> {
 
   let detectCompilerCommand: string | null = null
   if (platform === 'win32') {
-    detectCompilerCommand = (await gccCommand('g++.exe') ?? await gccCommand('gcc.exe'))
+    detectCompilerCommand = await gccCommand('g++.exe')
   }
   else {
-    detectCompilerCommand = (await gccCommand('g++') ?? await gccCommand('gcc'))
+    detectCompilerCommand =
+      (await gccCommand('g++')) ?? (await gccCommand('c++')) ?? (await gccCommand('clang++'))
   }
 
   if (detectCompilerCommand) {
@@ -87,7 +108,7 @@ async function detectGccInstallation(): Promise<GccInstallationInfo> {
       status: 'ready',
       platform,
       path: detectCompilerCommand,
-      message: "GCC found.",
+      message: 'C++ compiler found.',
       installInstruction: null,
       source: 'auto'
     }
@@ -98,7 +119,7 @@ async function detectGccInstallation(): Promise<GccInstallationInfo> {
       status: 'missing',
       platform,
       path: detectCompilerCommand,
-      message: "No GCC found.",
+      message: 'No C++ compiler found.',
       installInstruction: getInstallInstruction(platform), // TODO: NEEDS CHECKING FIRST
       source: null
     }
