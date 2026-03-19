@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { Interface_Button } from "../assets/ui/Interface_Button";
  
-const submitFileConfirmation = () => {
+
+export function StudentUploadInterface(): React.JSX.Element {
+    const navigate = useNavigate()
+
+    const submitFileConfirmation = (): void => {
     // This should check to see if the file has been submitted, and verified
     // will return 0 for failure, 1 for true
     alert("You have submitted the file")
-}
-
-
-function studentUploadInterface(): React.JSX.Element {
-    const navigate = useNavigate()
+    }
 
     return(
         <>
@@ -25,7 +25,7 @@ function studentUploadInterface(): React.JSX.Element {
                 </div>
 
                 
-                <Interface_Button onClick={() => alert("Submited")}>
+                <Interface_Button onClick={submitFileConfirmation}>
                     Submit Code
                 </Interface_Button>
 
@@ -38,4 +38,4 @@ function studentUploadInterface(): React.JSX.Element {
 
 }
 
-export default studentUploadInterface
+export default StudentUploadInterface

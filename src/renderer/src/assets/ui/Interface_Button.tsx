@@ -3,7 +3,7 @@ type ButtonProps = {
     onClick?: () => void
 }
 
-export function Interface_Button({children, onClick }: ButtonProps) {
+export function Interface_Button({children, onClick }: ButtonProps): React.JSX.Element {
     return (
         <button 
             onClick={onClick}
