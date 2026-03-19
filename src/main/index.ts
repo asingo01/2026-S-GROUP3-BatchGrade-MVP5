@@ -3,12 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { initDb } from './database/index'
-import type {
-  NewUser,
-  UpdateUser,
-  NewAssignment,
-  UpdateAssignment
-} from './database/schema'
+import type { NewUser, UpdateUser, NewAssignment, UpdateAssignment } from './database/schema'
 import {
   getAllUsers,
   createUser,
@@ -80,15 +75,9 @@ app.whenReady().then(() => {
 
   // Assignments CRUD
   ipcMain.handle('assignments:getAll', () => getAllAssignments())
-  ipcMain.handle('assignments:create', (_event, data: NewAssignment) =>
-    createAssignment(data)
-  )
-  ipcMain.handle('assignments:update', (_event, data: UpdateAssignment) =>
-    updateAssignment(data)
-  )
-  ipcMain.handle('assignments:delete', (_event, uuid: string) =>
-    deleteAssignment(uuid)
-  )
+  ipcMain.handle('assignments:create', (_event, data: NewAssignment) => createAssignment(data))
+  ipcMain.handle('assignments:update', (_event, data: UpdateAssignment) => updateAssignment(data))
+  ipcMain.handle('assignments:delete', (_event, uuid: string) => deleteAssignment(uuid))
 
   createWindow()
 
