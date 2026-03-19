@@ -20,7 +20,6 @@ import { useEffect, useState } from 'react'
 import type { User } from '../../../shared/types'
 import { VALID_ROLES, STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../../shared/types'
 
-
 /**
  * Form State Type
  *

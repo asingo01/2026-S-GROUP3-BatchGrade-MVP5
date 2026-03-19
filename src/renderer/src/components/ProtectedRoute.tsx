@@ -11,7 +11,7 @@
 import { ReactElement } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
-import { VALID_ROLES, STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../../main/database/schema'
+import { VALID_ROLES } from '../../../main/database/schema'
 
 interface ProtectedRouteProps {
   children: ReactElement
