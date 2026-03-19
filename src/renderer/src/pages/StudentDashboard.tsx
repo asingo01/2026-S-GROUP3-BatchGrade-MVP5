@@ -1,37 +1,36 @@
 /**
- * Grading.tsx
+ * StudentDashboard.tsx
  *
  * Description:
- * This component represents the grading interface within the
- * BatchGrade platform. It will serve as the primary location
- * where instructors manage assignment grading and review
- * automated grading results.
+ * This component represents the student-facing dashboard for the
+ * BatchGrade platform. After authentication, students are directed
+ * to this page where they will eventually be able to interact with
+ * assignments and view grading results.
  *
- * In its current state, the page functions as a placeholder
- * for future development. Planned functionality includes:
- *  = Viewing student submissions
- *  - Running automated grading tests
- *  - Managing grading results
- *  - Accessing gradebook information
+ * Planned functionality for this dashboard includes:
+ *  - Viewing assigned programming exercises
+ *  - Submitting code solutions
+ *  - Viewing automated grading feedback
+ *  - Accessing submission history
  */
 import { useNavigate } from 'react-router-dom'
 import NavBar from '../components/Navbar'
 import Footer from '../components/Footer'
 
 /**
- * Grading Component
+ * StudentDashboard Component
  *
- * Provides the grading interface for instructors.
- * Future implementations will integrate automated
- * grading workflows and submission management.
+ * Provides the primary interface for students after loggin in.
+ * This page will eventually allow students to access assignments,
+ * submit solutions, and review grading results.
  *
- * @returns Grading(): React.JSX.Element
+ * @returns StudentDashboard(): React.JSX.Element
  */
-function Grading(): React.JSX.Element {
+function StudentDashboard(): React.JSX.Element {
   // -----------------------------------------------------------
   // Navigation Hook
   // -----------------------------------------------------------
-  // Enables programmatic navigation between application routes
+  // Allows the component to redirect users between pages
   const navigate = useNavigate()
 
   return (
@@ -42,18 +41,18 @@ function Grading(): React.JSX.Element {
       <NavBar />
 
       {/*-----------------------------------------------------------
-        Grading Page Content
+        Dashboard Content Area
       -----------------------------------------------------------*/}
       <div style={{ padding: '8rem' }}>
         {/* Page Title */}
-        <h1>Grading Page</h1>
+        <h1>Student Dashboard Page</h1>
 
         {/* Placeholder page description */}
-        <p>This is the Grading screen.</p>
+        <p>This is the Student Dashboard screen.</p>
 
         {/*-----------------------------------------------------------
-          Navigation Controls
-        -----------------------------------------------------------*/}
+            Navigation Controls
+          -----------------------------------------------------------*/}
         <div style={{ marginTop: '8rem' }}>
           {/* Return to Home page */}
           <button onClick={() => navigate('/')} style={{ marginLeft: '1rem' }}>
@@ -70,4 +69,4 @@ function Grading(): React.JSX.Element {
   )
 }
 
-export default Grading
+export default StudentDashboard
