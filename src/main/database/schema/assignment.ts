@@ -1,8 +1,8 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { sql, InferSelectModel, InferInsertModel } from 'drizzle-orm'
 
-export type Assignment = InferSelectModel<typeof assignments>
-export type NewAssignment = InferInsertModel<typeof assignments>
+export type Assignment = InferSelectModel<typeof assignmentsInstrc>
+export type NewAssignment = InferInsertModel<typeof assignmentsInstrc>
 export type UpdateAssignment = Pick<Assignment, 'uuid'> & Partial<NewAssignment>
 
 /**
@@ -10,7 +10,7 @@ export type UpdateAssignment = Pick<Assignment, 'uuid'> & Partial<NewAssignment>
  *
  * Stores assignments configurations for MVP-5
  */
-export const assignments = sqliteTable('assignments', {
+export const assignmentsInstrc = sqliteTable('assignments', {
   uuid: text('uuid')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),

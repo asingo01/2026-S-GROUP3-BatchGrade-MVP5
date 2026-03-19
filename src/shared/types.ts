@@ -18,5 +18,5 @@ export type {
  * - User: Represents a user entity with authentication and role information
  * - NewUser, UpdateUser: Database operation types for user management
  */
-export type { User, NewUser, UpdateUser } from '../main/database/schema'
+// export type { User, NewUser, UpdateUser } from '../main/database/schema'
 export { VALID_ROLES, STUDENT_ROLE, INSTRUCTOR_ROLE } from '../main/database/schema'

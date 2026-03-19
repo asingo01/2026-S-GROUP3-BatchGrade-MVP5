@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { getDb } from '../index'
-import { assignments } from '../schema'
+import { assignmentsInstrc } from '../schema'
 import type { Assignment as DbAssignment, NewAssignment, UpdateAssignment } from '../schema'
 import type { Assignment } from '../../../shared/types'
 
@@ -23,7 +23,7 @@ function toIpcAssignment(assignment: DbAssignment): Assignment {
 // @brief get all assignments from database
 // @returns array of all assignments in database
 export function getAllAssignments(): Assignment[] {
-  return getDb().select().from(assignments).all().map(toIpcAssignment)
+  return getDb().select().from(assignmentsInstrc).all().map(toIpcAssignment)
 }
 
 // @brief create new assignment in database
@@ -31,7 +31,7 @@ export function getAllAssignments(): Assignment[] {
 // @returns the created assignment
 export function createAssignment(data: NewAssignment): Assignment {
   // insert new assignment into database and return the created assignment
-  const created = getDb().insert(assignments).values(data).returning().get()
+  const created = getDb().insert(assignmentsInstrc).values(data).returning().get()
 
   // check if create was successful, else throw error
   if (!created) {
@@ -97,9 +97,9 @@ export function updateAssignment(data: UpdateAssignment): Assignment {
 
   // update assignments in database
   const updated = getDb()
-    .update(assignments)
+    .update(assignmentsInstrc)
     .set(changes)
-    .where(eq(assignments.uuid, data.uuid))
+    .where(eq(assignmentsInstrc.uuid, data.uuid))
     .returning()
     .get()
 
@@ -116,7 +116,7 @@ export function updateAssignment(data: UpdateAssignment): Assignment {
 // @returns the deleted assignment
 export function deleteAssignment(uuid: string): Assignment {
   // delete the assignment form the database
-  const deleted = getDb().delete(assignments).where(eq(assignments.uuid, uuid)).returning().get()
+  const deleted = getDb().delete(assignmentsInstrc).where(eq(assignmentsInstrc.uuid, uuid)).returning().get()
 
   // if not successful, throw error - not found with uuid
   if (!deleted) {
