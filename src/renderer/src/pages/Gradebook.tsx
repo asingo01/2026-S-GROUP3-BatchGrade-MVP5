@@ -119,12 +119,16 @@ function Gradebook(): React.JSX.Element {
 
     // score ascending
     if (sortOption === 'score-asc') {
-      return parseInt(a.score) - parseInt(b.score)
+      const scoreA = a.score === '--' ? -1 : parseInt(a.score)
+      const scoreB = b.score === '--' ? -1 : parseInt(b.score)
+      return scoreA - scoreB
     }
 
     // score descending
     if (sortOption === 'score-desc') {
-      return parseInt(b.score) - parseInt(a.score)
+      const scoreA = a.score === '--' ? -1 : parseInt(a.score)
+      const scoreB = b.score === '--' ? -1 : parseInt(b.score)
+      return scoreB - scoreA
     }
 
     return 0
