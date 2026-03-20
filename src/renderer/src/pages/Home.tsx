@@ -1,7 +1,7 @@
 import Footer from '../components/Footer'
 import { IpcPing } from '../components/IpcPing'
 import NavBar from '../components/Navbar'
-import Footer from '../components/Footer'
+import { UserPanel } from '../components/UserPanel'
 import { useNavigate } from 'react-router-dom'
 
 function Home(): React.JSX.Element {
