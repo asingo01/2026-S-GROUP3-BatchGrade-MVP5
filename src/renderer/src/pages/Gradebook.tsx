@@ -209,6 +209,19 @@ function Gradebook(): React.JSX.Element {
         </select>
       </div>
 
+      {/* Class statistics summary */}
+      <div style={{ display: 'flex', gap: '24px', margin: '20px 0', fontWeight: 'bold' }}>
+        <div>
+          <span>Class Average: {averageScore === '--' ? '--' : `${averageScore}%`}</span>
+          <span style={{ marginLeft: '24px' }}>
+            Highest Score: {highestScore === '--' ? '--' : `${highestScore}%`}
+          </span>
+          <span style={{ marginLeft: '24px' }}>
+            Lowest Score: {lowestScore === '--' ? '--' : `${lowestScore}%`}
+          </span>
+        </div>
+      </div>
+
       {/* Student search input */}
       <div style={{ margin: '16px 0' }}>
         <label htmlFor="student-search">Search Student: </label>
@@ -236,19 +249,6 @@ function Gradebook(): React.JSX.Element {
           <option value="score-asc">Highest Score (Low to High)</option>
           <option value="score-desc">Highest Score (High to Low)</option>
         </select>
-      </div>
-
-      {/* Class statistics summary */}
-      <div style={{ display: 'flex', gap: '24px', margin: '20px 0', fontWeight: 'bold' }}>
-        <div>
-          <span>Class Average: {averageScore === '--' ? '--' : `${averageScore}%`}</span>
-          <span style={{ marginLeft: '24px' }}>
-            Highest Score: {highestScore === '--' ? '--' : `${highestScore}%`}
-          </span>
-          <span style={{ marginLeft: '24px' }}>
-            Lowest Score: {lowestScore === '--' ? '--' : `${lowestScore}%`}
-          </span>
-        </div>
       </div>
 
       {/* Table displaying students and their highest scores */}
