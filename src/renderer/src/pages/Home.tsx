@@ -17,6 +17,7 @@ import { IpcPing } from '../components/IpcPing'
 import { UserPanel } from '../components/UserPanel'
 import NavBar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { useNavigate } from 'react-router-dom'
 
 /**
  * Home Component
@@ -27,6 +28,7 @@ import Footer from '../components/Footer'
  * @returns Home(): React.JSX.Element
  */
 function Home(): React.JSX.Element {
+  const navigate = useNavigate();
   return (
     <>
       {/*-----------------------------------------------------------

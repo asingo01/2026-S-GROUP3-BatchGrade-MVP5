@@ -83,7 +83,7 @@ function App(): React.JSX.Element {
           <Route
             path="/studentdashboard"
             element={
-              <ProtectedRoute requiredRoles={['student']}>
+              <ProtectedRoute requiredRoles={[STUDENT_ROLE]}>
                 <StudentDashboard />
               </ProtectedRoute>
             }
@@ -92,7 +92,7 @@ function App(): React.JSX.Element {
           <Route
             path="/instructordashboard"
             element={
-              <ProtectedRoute requiredRoles={['instructor']}>
+              <ProtectedRoute requiredRoles={[INSTRUCTOR_ROLE]}>
                 <InstructorDashboard />
               </ProtectedRoute>
             }
@@ -100,7 +100,14 @@ function App(): React.JSX.Element {
           {/* Grading Interface */}
           <Route path="/grading" element={<Grading />} />
 
-          <Route path="/studentUploadInterface" element={<StudentUploadInterface />} />
+          <Route 
+            path="/studentUploadInterface" 
+            element={
+            <ProtectedRoute requiredRoles={[STUDENT_ROLE]}>
+              <StudentUploadInterface /> 
+            </ProtectedRoute>
+            }
+            />
         </Routes>
       </HashRouter>
     </AuthProvider>

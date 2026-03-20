@@ -23,6 +23,7 @@ body {
   align-items: center;
   justify-items: center;
   user-select: none;
+  overflow: hidden;
 }
 
 code {
