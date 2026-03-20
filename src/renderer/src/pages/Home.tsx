@@ -1,49 +1,17 @@
-/**
- * Homes.tsx
- *
- * Description:
- * This component serves as the main landing page for BatchGrade.
- * It provides navigation to the major system interfaces (Student Dashboard,
- * Instructor Dashboard, and Grading) while also presenting a brief overview
- * of the platform
- *
- * The page layout consists of:
- *  - A navigation bar
- *  - A hero section containing navigation buttons and system actions
- *  - An informational 'About' section describing the project
- *  - A footer
- */
+import Footer from '../components/Footer'
 import { IpcPing } from '../components/IpcPing'
-import { UserPanel } from '../components/UserPanel'
 import NavBar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { useNavigate } from 'react-router-dom'
 
-/**
- * Home Component
- *
- * The Home component renders the primary landing page interface
- * and provides navigation to key areas of the BatchGrade system
- *
- * @returns Home(): React.JSX.Element
- */
 function Home(): React.JSX.Element {
   const navigate = useNavigate();
   return (
     <>
-      {/*-----------------------------------------------------------
-        Navigation Bar
-        -----------------------------------------------------------*/}
       <NavBar />
 
-      {/*-----------------------------------------------------------
-        Hero Section
-          Main landing content and navigation controls
-        -----------------------------------------------------------*/}
       <div className="hero-container">
-        {/* Spacer element used for layout alignment */}
         <div className="hero-item">
-          {/* Application Title */}
           <header className="header">
             <h1 className="title">
               <span className="react">BatchGrade</span>
@@ -86,30 +54,18 @@ function Home(): React.JSX.Element {
             <p>Register & Connect with BatchGrade.</p>
           </header>
 
-          {/*-----------------------------------------------------------
-            System Actions
-              Used for development/testing utilities
-            -----------------------------------------------------------*/}
           <div className="actions">
             <div className="action">
               <IpcPing />
             </div>
           </div>
 
-          {/*-----------------------------------------------------------
-            User Information Panel
-              Displays current authenticated user data
-            -----------------------------------------------------------*/}
           <div className="p-6">
             <UserPanel />
           </div>
         </div>
       </div>
 
-      {/*-----------------------------------------------------------
-        About Section
-          Overview of the BatchGrade platform
-        -----------------------------------------------------------*/}
       <div className="about-container">
         <h1 className="title about">About</h1>
         <p className="about-blot">
@@ -124,9 +80,6 @@ function Home(): React.JSX.Element {
         </p>
       </div>
 
-      {/*-----------------------------------------------------------
-        Page Footer
-        -----------------------------------------------------------*/}
       <Footer />
     </>
   )
