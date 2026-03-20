@@ -6,7 +6,6 @@ import Grading from './pages/Grading'
 import Home from './pages/Home'
 import InstructorDashboard from './pages/InstructorDashboard'
 import Login from './pages/Login'
-import Grading from './pages/Grading'
 import Gradebook from './pages/Gradebook'
 import StudentDashboard from './pages/StudentDashboard'
 
