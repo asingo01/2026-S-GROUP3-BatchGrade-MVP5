@@ -37,7 +37,11 @@ function Login(): React.JSX.Element {
       return
     }
 
-    login(email, foundUser.role as Role)
+    login({
+      uuid: foundUser.uuid,
+      email: foundUser.email,
+      role: foundUser.role as Role
+    })
 
     if (foundUser.role === STUDENT_ROLE) {
       navigate('/studentdashboard')

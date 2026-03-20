@@ -19,6 +19,7 @@ import type { GccInstallationInfo, SupportedPlatform } from '../shared/compiler'
 
 import { compileCppFiles } from './compiler/compileCppFiles'
 import { executeCppFiles } from './compiler/executeCppFiles'
+import { submitCppSubmission } from './submissions/submitCppSubmission'
 
 let gccStatusPromise: Promise<GccInstallationInfo> | undefined
 let manualGccPath: string | null = null
@@ -232,7 +233,11 @@ app.whenReady().then(() => {
   // Execution
   ipcMain.handle('compiler:runCompiledProgram', (_e, request) => {
     return executeCppFiles(request)
-  }) 
+  })
+
+  ipcMain.handle('submissions:submitCpp', (_e, request) => {
+    return submitCppSubmission(request)
+  })
 
   createWindow()
 

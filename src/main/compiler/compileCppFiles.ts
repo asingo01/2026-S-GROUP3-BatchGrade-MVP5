@@ -10,49 +10,16 @@
 import { execFile } from 'child_process'
 import { mkdtemp } from 'fs/promises'
 import { tmpdir } from 'os'
-import { dirname, extname, join } from 'path'
+import { join } from 'path'
 import { promisify } from 'util'
 
 import type { CompileCppRequest, CompileCppResult } from '../../shared/compiler'
+import { getCommonWorkingDirectory, getCppImplementationFiles } from '../utils/sourceFiles'
 
 const execFileAsync = promisify(execFile)
 
-/* 
-  Finds the common parent directory for a list of source files.
-  If no files are provided, returns the current working directory.
-*/
-function getCommonWorkingDirectory(sourceFiles: string[]): string {
-  if (sourceFiles.length == 0) { // If sourceFiles is empty -> go back to current working directory
-    return process.cwd()
-  }
-
-  // Start with first files' directory as the initial prefix
-  let currentPrefix = dirname(sourceFiles[0])
-
-  // Iterate over remaining files
-  for (const sourceFile of sourceFiles.slice(1)) {
-    const nextDirectory = dirname(sourceFile)
-
-    // Keep shortening prefix until it becomes empty or next directory starts with the current directory
-    while (currentPrefix.length > 0 && !nextDirectory.toLowerCase().startsWith(currentPrefix.toLowerCase())) {
-      currentPrefix = dirname(currentPrefix)
-    }
-  }
-
-  return currentPrefix
-}
-
-// Filters a list of file paths and returns only C++ implementation files
-function getCppFiles(sourceFiles: string[]): string[] {
-  return sourceFiles.filter((filePath) => {
-    const ext = extname(filePath).toLowerCase()
-
-    return ext === '.cpp' || ext === '.cc' || ext === '.cxx' || ext === '.cp'
-  })
-}
-
 async function compileCppFiles(compilerPath: string, request: CompileCppRequest): Promise<CompileCppResult> {
-  const cppFiles = getCppFiles(request.sourceFiles)
+  const cppFiles = getCppImplementationFiles(request.sourceFiles)
 
   if (cppFiles.length == 0) {
     return {

@@ -1,5 +1,6 @@
 import type { User, NewUser, UpdateUser } from '../shared/types'
 import type { GccInstallationInfo, CompileCppRequest, CompileCppResult, RunCppRequest, RunCppResult } from '../shared/compiler'
+import type { SubmitCppRequest, SubmitCppResult } from '../shared/submission'
 import type {
   Assignment,
   NewAssignment,
@@ -54,9 +55,14 @@ export type FileAPI = {
   stringify: (filePath: string) => Promise<string>
 }
 
+export type SubmissionsAPI = {
+  submitCpp: (request: SubmitCppRequest) => Promise<SubmitCppResult>
+}
+
 export type AppAPI = {
   users: UsersAPI
   assignments: AssignmentsAPI
   file: FileAPI
   compiler: CompilerAPI
+  submissions: SubmissionsAPI
 }

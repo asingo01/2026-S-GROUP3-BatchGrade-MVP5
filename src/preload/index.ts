@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import type { AppAPI, AssignmentsAPI, CompilerAPI, FileAPI, UsersAPI } from './types'
+import type { AppAPI, AssignmentsAPI, CompilerAPI, FileAPI, SubmissionsAPI, UsersAPI } from './types'
 
 const usersApi: UsersAPI = {
   getAll: () => ipcRenderer.invoke('users:getAll'),
@@ -22,6 +22,10 @@ const fileApi: FileAPI = {
   stringify: (filePath: string) => ipcRenderer.invoke('file:stringify', filePath)
 }
 
+const submissionsApi: SubmissionsAPI = {
+  submitCpp: (request) => ipcRenderer.invoke('submissions:submitCpp', request)
+}
+
 const assignmentsApi: AssignmentsAPI = {
   getAll: () => ipcRenderer.invoke('assignments:getAll'),
   create: (data) => ipcRenderer.invoke('assignments:create', data),
@@ -34,7 +38,8 @@ const api: AppAPI = {
   users: usersApi,
   assignments: assignmentsApi,
   file: fileApi,
-  compiler: compilerApi
+  compiler: compilerApi,
+  submissions: submissionsApi
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
