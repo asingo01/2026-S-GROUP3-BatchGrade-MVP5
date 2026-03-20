@@ -142,8 +142,8 @@ function StudentDashboard(): React.JSX.Element {
 
         <CppWorkflowPanel
           title="Student Compilation Workspace"
-          description="Choose the files you want to submit, compile them, and review compiler output before submitting."
-          allowExecution={false}
+          description="Choose the files you want to submit, compile them, optionally run them with input, and review the output before submitting."
+          allowExecution={true}
           onSelectionChange={(files) => {
             setSelectedFiles(files)
             setSubmitResult(null)
