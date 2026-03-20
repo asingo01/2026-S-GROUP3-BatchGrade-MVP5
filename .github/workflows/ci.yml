@@ -30,11 +30,41 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+  lint:
+    needs: build
+    strategy:
+      fail-fast: false  # See all OS results 
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    runs-on: ${{ matrix.os }} # Run jobs across the multiple OS in parallel
+
+    steps:
       - name: Lint
         run: npm run lint
 
+  check:
+    needs: build
+    strategy:
+      fail-fast: false  # See all OS results 
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    runs-on: ${{ matrix.os }} # Run jobs across the multiple OS in parallel
+
+    steps:
       - name: Typecheck
         run: npm run typecheck
 
+  test:
+    needs: build
+    strategy:
+      fail-fast: false  # See all OS results 
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    runs-on: ${{ matrix.os }} # Run jobs across the multiple OS in parallel
+
+    steps:
       - name: Test
         run: npm test
