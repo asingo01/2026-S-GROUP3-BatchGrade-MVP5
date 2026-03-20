@@ -4,8 +4,10 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { initDb } from './database/index'
-import type { NewUser, UpdateUser } from './database/schema'
+import type { NewUser, UpdateUser, NewAssignment, UpdateAssignment } from './database/schema'
 import { getAllUsers, createUser, updateUser, deleteUser } from './database/queries'
+import { getAllAssignments, createAssignment, updateAssignment } from './database/queries'
+import { deleteAssignment } from './database/queries'
 
 /* TEST ONLY DELETE WHEN DONE */
 import { selectFile, stringifyFile, selectCppFiles } from './utils/file'
@@ -133,6 +135,12 @@ app.whenReady().then(() => {
   ipcMain.handle('users:create', (_e, data: NewUser) => createUser(data))
   ipcMain.handle('users:update', (_e, data: UpdateUser) => updateUser(data))
   ipcMain.handle('users:delete', (_e, uuid: string) => deleteUser(uuid))
+
+  // Assignments CRUD
+  ipcMain.handle('assignments:getAll', () => getAllAssignments())
+  ipcMain.handle('assignments:create', (_event, data: NewAssignment) => createAssignment(data))
+  ipcMain.handle('assignments:update', (_event, data: UpdateAssignment) => updateAssignment(data))
+  ipcMain.handle('assignments:delete', (_event, uuid: string) => deleteAssignment(uuid))
 
   // Compiler Status
   ipcMain.handle('compiler:getGccStatus', async () => gccStatusPromise ?? refreshGccStatus())

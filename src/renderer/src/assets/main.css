@@ -1,12 +1,27 @@
+/* ==========================================================
+  Imports
+========================================================== */
 @import './base.css';
 
-body {
+/* ==========================================================
+  Global Layout / Base Elements
+    Applies to core HTML elements and root layouts
+========================================================== */
+
+#root {
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  min-height: 100vh;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background-image: url('./wavy-lines.svg');
-  background-size: cover;
+  justify-items: center;
   user-select: none;
 }
 
@@ -14,7 +29,7 @@ code {
   font-weight: 600;
   padding: 3px 5px;
   border-radius: 2px;
-  background-color: var(--color-background-mute);
+  background-color: var(--ev-c-white);
   font-family:
     ui-monospace,
     SFMono-Regular,
@@ -26,33 +41,97 @@ code {
   font-size: 85%;
 }
 
-#root {
+header {
+  margin-top: 2vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
-  margin-bottom: 80px;
+  justify-content: center;
+  font-size: 18px;
 }
 
-.logo {
-  margin-bottom: 20px;
-  -webkit-user-drag: none;
-  height: 128px;
-  width: 128px;
-  will-change: filter;
-  transition: filter 300ms;
+footer {
+  align-items: center;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 1.2em #6988e6aa);
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-background);
+  color: var(--ev-c-gray-1);
+  box-shadow: 0 -1px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
 }
+
+.versions {
+  position: absolute;
+  bottom: 30px;
+  margin: 0 auto;
+  padding: 15px 0;
+  font-family: 'Menlo', 'Lucida Console', monospace;
+  display: inline-flex;
+  overflow: hidden;
+  align-items: center;
+  border-radius: 22px;
+  background-color: var(--color-background);
+  backdrop-filter: blur(24px);
+}
+
+.versions li {
+  display: block;
+  float: left;
+  border-right: 1px solid var(--ev-c-gray-1);
+  padding: 0 20px;
+  font-size: 14px;
+  line-height: 14px;
+  opacity: 0.8;
+  &:last-child {
+    border: none;
+  }
+}
+
+
+/* ==========================================================
+  Typography
+========================================================== */
 
 .creator {
-  font-size: 14px;
+  font-size: 30px;
   line-height: 16px;
-  color: var(--ev-c-text-2);
+  color: var(--ev-c-text-1);
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-top: 1rem;
+  margin-bottom: 2vh;
+}
+
+.emphasis {
+  color: var(--ev-c-blue-2);
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.react {
+  background: -webkit-linear-gradient(270deg,#3a7ca5,#81c3d7);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+.title {
+  font-size: 60px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+}
+
+.title.signup {
+  color: var(--ev-c-white);
 }
 
 .text {
@@ -72,28 +151,238 @@ code {
   font-weight: 600;
 }
 
-.react {
-  background: -webkit-linear-gradient(315deg, #087ea4 55%, #7c93ee);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
+/* ==========================================================
+  Buttons
+========================================================== */
+
+.cancel-button {
+  padding:10px 18px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--ev-c-blue-4);
+  color: var(--ev-c-white);
+  cursor: pointer;
 }
 
-.ts {
-  background: -webkit-linear-gradient(315deg, #3178c6 45%, #f0dc4e);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
+.cancel-button:hover {
+  background-color: var(--ev-c-blue-1);
 }
 
-.actions {
+.home-buttons {
   display: flex;
-  padding-top: 32px;
-  margin: -6px;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+  flex-direction: column;
+  gap: 4vh;
+}
+
+.menu-button {
+  background: none;
+  font-size: 24px;
+  color: var(--ev-c-gray-1);
+  cursor: pointer;
+  padding: 8px;
+  margin-right: 1rem;
+}
+
+.primary-button {
+  padding: 12px 30px;
+  font-size: 16px;
+  background-color: var(--ev-c-blue-3);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.primary-button:hover {
+  background-color: var(--ev-c-blue-1);
+  transform: scale(1.05);
+}
+
+.role-buttons {
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+  color: var(--ev-c-white);
+}
+
+.role-buttons.instructor {
+  background-color: var(--ev-c-blue-2);
+}
+
+.role-buttons.student {
+  background-color: var(--ev-c-blue-3);
+}
+
+.role-buttons:hover {
+  background-color: var(--ev-c-blue-1);
+  transform: scale(1.05);
+}
+
+.secondary-button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 14px;
+  color: var(--ev-c-gray-1);
+  background-color: var(--ev-c-white);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.secondary-button:hover {
+  transform: scale(1.05);
+  background-color: var(--ev-c-white-mute);
+}
+
+.submit-button {
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--ev-c-blue-2);
+  color: var(--ev-c-white);
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: var(--ev-c-blue-1);
+}
+
+.test-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+/* ==========================================================
+  Navigation Bar Components
+========================================================== */
+
+.navbar {
+  position: fixed;
+  min-height: 10vh;
+  padding: 0 2rem;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--ev-c-white);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+  color: var(--ev-c-gray-1);
+}
+
+.navbar-container {
+  position: relative;
+  width: 100vw;
+}
+
+.navbar-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar .primary-button {
+  margin: 0;
+}
+
+.navbar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: var(--ev-c-gray-1);
+  transition: color 0.2s;
+}
+
+.menu-button:hover {
+  color: var(--ev-c-blue-1);
+}
+
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  object-fit: fill;
+  border: 2px solid #ddd;
+  transition: border-color 0.3s;
+}
+
+.profile-image:hover {
+  border-color: var(--ev-c-blue-2);
+}
+
+/* ==========================================================
+  Dropdown Menu Components
+========================================================== */
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--ev-c-white);
+  border: 1px solid #ddd;
+  border-top: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  margin-top: 4rem;
+}
+
+.dropdown-item {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--ev-c-gray-1);
+  transition: background-color 0.2s;
+  border: none;
+  width: 100%;
+}
+
+.dropdown-item:hover {
+  background-color: var(--ev-c-gray-6);
+  color: var(--ev-c-blue-1);
+}
+
+/* ==========================================================
+  Home Components
+========================================================== */
+
+.about-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--ev-c-white);
+  color: var(--ev-c-gray-1);
+  box-sizing: border-box;
+}
+
+.about-blot {
+  text-align: justify;
+  text-align-last: center;
+  justify-content: center;
+  margin:5rem 10rem;
+  font-size: 20px;
 }
 
 .action {
@@ -113,42 +402,67 @@ code {
   padding: 0 20px;
   line-height: 38px;
   font-size: 14px;
-  border-color: var(--ev-button-alt-border);
+  border-color: transparent;
   color: var(--ev-button-alt-text);
-  background-color: var(--ev-button-alt-bg);
+  background-color: var(--ev-c-blue-3);
+  transition: 0.25s;
 }
 
 .action a:hover {
-  border-color: var(--ev-button-alt-hover-border);
-  color: var(--ev-button-alt-hover-text);
-  background-color: var(--ev-button-alt-hover-bg);
+  background-color: var(--ev-c-blue-2);
+  transform: scale(1.05);
 }
 
-.versions {
-  position: absolute;
-  bottom: 30px;
-  margin: 0 auto;
-  padding: 15px 0;
-  font-family: 'Menlo', 'Lucida Console', monospace;
-  display: inline-flex;
-  overflow: hidden;
+.actions {
+  display: flex;
+  padding-top: 32px;
+  margin: -6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.hero-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  border-radius: 22px;
-  background-color: #202127;
-  backdrop-filter: blur(24px);
 }
 
-.versions li {
-  display: block;
-  float: left;
-  border-right: 1px solid var(--ev-c-gray-1);
-  padding: 0 20px;
-  font-size: 14px;
-  line-height: 14px;
-  opacity: 0.8;
-  &:last-child {
-    border: none;
-  }
+.hero-item:first-child {
+  background:
+    linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)),
+    url('./blue.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.hero-item:nth-child(2) {
+  background-color: var(--ev-c-gray-2);
+}
+
+.home-header {
+  margin-top: 6vh;
+}
+
+.logo {
+  margin-bottom: 20px;
+  -webkit-user-drag: none;
+  height: 128px;
+  width: 128px;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 1.2em #6988e6aa);
 }
 
 .panel-input {
@@ -169,7 +483,109 @@ code {
          hover:opacity-100;
 }
 
+/* ==========================================================
+  Login Components
+========================================================== */
+
+.login-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top:  1vh;
+}
+
+.login-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+  text-align: center;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.2)),
+    url('./oooscillate.svg');
+  background-size: cover;
+  background-position: center;
+}
+
+.login-item {
+  height: 100vh;
+  display: flex;
+  margin-top: 4rem;
+  flex-direction: column;
+}
+
+.login-error {
+  color: red;
+  font-size: 14px;
+  margin-top: 1rem;
+}
+
+.login-form {
+  background: var(--ev-c-white);
+  color: var(--ev-c-gray-1);
+  padding: 4vh;
+  border-radius: 10px;
+  width: 32vw;
+  display:flex;
+  flex-direction: column;
+  gap: 2vh;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.login-input {
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: var(--ev-c-blue-2);
+}
+
+.login-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ==========================================================
+  Responsive Design
+========================================================== */
+@media (max-width: 990px) {
+  header {
+    padding-top: 2rem;
+  }
+  .about-blot {
+    margin: 5rem;
+    font-size: 14px;
+  }
+  .creator {
+    font-size: 24px;
+  }
+  .emphasis {
+    font-size: 24px;
+  }
+  .title {
+    font-size: 45px;
+  }
+}
 @media (max-width: 720px) {
+  .hero-container {
+    flex-direction: column;
+  }
+  .test-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
   .text {
     font-size: 20px;
   }

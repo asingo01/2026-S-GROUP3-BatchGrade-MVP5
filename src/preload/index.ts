@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import type { UsersAPI, CompilerAPI } from './types'
+import type { AppAPI, AssignmentsAPI, CompilerAPI, FileAPI, UsersAPI } from './types'
 
 const usersApi: UsersAPI = {
   getAll: () => ipcRenderer.invoke('users:getAll'),
@@ -16,20 +16,24 @@ const compilerApi: CompilerAPI = {
   runCompiledProgram: (request) => ipcRenderer.invoke('compiler:runCompiledProgram', request)
 }
 
-/* TEST ONLY DELETE WHEN DONE */
-const fileApi = {
+const fileApi: FileAPI = {
   select: () => ipcRenderer.invoke('file:select'),
   selectCppFiles: () => ipcRenderer.invoke('file:selectCppFiles'),
   stringify: (filePath: string) => ipcRenderer.invoke('file:stringify', filePath)
 }
-/* TEST ONLY DELETE WHEN DONE */
+
+const assignmentsApi: AssignmentsAPI = {
+  getAll: () => ipcRenderer.invoke('assignments:getAll'),
+  create: (data) => ipcRenderer.invoke('assignments:create', data),
+  update: (data) => ipcRenderer.invoke('assignments:update', data),
+  delete: (uuid) => ipcRenderer.invoke('assignments:delete', uuid)
+}
 
 // Custom APIs for renderer
-const api = {
+const api: AppAPI = {
   users: usersApi,
-  /* TEST ONLY DELETE WHEN DONE */
+  assignments: assignmentsApi,
   file: fileApi,
-  /* TEST ONLY DELETE WHEN DONE */
   compiler: compilerApi
 }
 

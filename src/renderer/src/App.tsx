@@ -1,5 +1,5 @@
 import { HashRouter, Route, Routes } from 'react-router-dom'
-import { INSTRUCTOR_ROLE, STUDENT_ROLE } from '../../main/database/schema'
+import { INSTRUCTOR_ROLE, STUDENT_ROLE } from '../../shared/types'
 import { AuthProvider } from './components/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Grading from './pages/Grading'

@@ -51,13 +51,9 @@ function Login(): React.JSX.Element {
       <div className="login-title">
         <header className="header">
           <h1 className="title">
-            <span className="react" style={{ marginLeft: '48%' }}>
-              Login
-            </span>
+            <span className="react">Login</span>
           </h1>
-          <p className="creator" style={{ marginLeft: '25%' }}>
-            Please select approriate role:
-          </p>
+          <p className="creator">Please select approriate role:</p>
         </header>
       </div>
 
@@ -69,11 +65,7 @@ function Login(): React.JSX.Element {
                 Student Login
               </button>
 
-              <button
-                className="role-buttons instructor"
-                onClick={() => setRole(INSTRUCTOR_ROLE)}
-                style={{ padding: '2rem' }}
-              >
+              <button className="role-buttons instructor" onClick={() => setRole(INSTRUCTOR_ROLE)}>
                 Instructor Login
               </button>
 
@@ -108,11 +100,7 @@ function Login(): React.JSX.Element {
               {error && <div className="login-error">{error}</div>}
 
               <div className="login-actions">
-                <button
-                  className="submit-button"
-                  onClick={handleLogin}
-                  style={{ paddingRight: '2rem' }}
-                >
+                <button className="submit-button" onClick={handleLogin}>
                   Login
                 </button>
 

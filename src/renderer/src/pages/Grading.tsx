@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { CompileCppResult, GccInstallationInfo, RunCppResult } from '../../../shared/compiler'
+import Footer from '../components/Footer'
+import NavBar from '../components/Navbar'
 
 function Grading(): React.JSX.Element {
   const navigate = useNavigate()
@@ -107,23 +109,12 @@ function Grading(): React.JSX.Element {
   }, [])
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        overflowY: 'auto',
-        overflowX: 'hidden',
-        padding: '20px',
-        paddingBottom: '40px',
-        backgroundColor: 'transparent',
-        color: 'white'
-      }}
-    >
-      <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
-        <h1 style={{ marginBottom: '6px', fontSize: '28px' }}>Grading Page</h1>
-        <p style={{ marginBottom: '12px', fontSize: '14px' }}>
-          This page is for checking gcc, compiling C++ files, and running the program.
-        </p>
+    <>
+      <NavBar />
+
+      <div style={{ padding: '8rem', paddingTop: '10rem' }}>
+        <h1>Grading Page</h1>
+        <p>This page is for checking gcc, compiling C++ files, and running the program.</p>
 
         {errorMessage && (
           <div
@@ -131,7 +122,8 @@ function Grading(): React.JSX.Element {
               backgroundColor: '#5a1f1f',
               border: '1px solid red',
               padding: '10px',
-              marginBottom: '12px'
+              marginTop: '1.5rem',
+              marginBottom: '1.5rem'
             }}
           >
             <p>{errorMessage}</p>
@@ -139,10 +131,11 @@ function Grading(): React.JSX.Element {
         )}
 
         <div
-          style={{
-            border: '1px solid gray',
-            padding: '12px',
-            marginBottom: '12px',
+            style={{
+              marginTop: '2rem',
+              border: '1px solid gray',
+              padding: '12px',
+              marginBottom: '12px',
             backgroundColor: '#2b2b2b'
           }}
         >
@@ -204,13 +197,13 @@ function Grading(): React.JSX.Element {
         </div>
 
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '12px',
-            marginBottom: '12px'
-          }}
-        >
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '12px',
+              marginBottom: '12px'
+            }}
+          >
           <div
             style={{
               border: '1px solid gray',
@@ -430,7 +423,9 @@ function Grading(): React.JSX.Element {
           Go to home
         </button>
       </div>
-    </div>
+
+      <Footer />
+    </>
   )
 }
 
