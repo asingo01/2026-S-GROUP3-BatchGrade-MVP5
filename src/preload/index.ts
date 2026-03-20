@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import type { UsersAPI, AssignmentsAPI } from './types'
+import type { AppAPI, AssignmentsAPI, CompilerAPI, FileAPI, SubmissionsAPI, UsersAPI } from './types'
 
 const usersApi: UsersAPI = {
   getAll: () => ipcRenderer.invoke('users:getAll'),
@@ -9,9 +9,23 @@ const usersApi: UsersAPI = {
   delete: (uuid) => ipcRenderer.invoke('users:delete', uuid)
 }
 
-/**
- * @brief Preload API for assignment CRUD operations.
- */
+const compilerApi: CompilerAPI = {
+  getGccStatus: () => ipcRenderer.invoke('compiler:getGccStatus'),
+  setGccPath: (filePath: string) => ipcRenderer.invoke('compiler:setGccPath', filePath),
+  compileCpp: (request) => ipcRenderer.invoke('compiler:compileCpp', request),
+  runCompiledProgram: (request) => ipcRenderer.invoke('compiler:runCompiledProgram', request)
+}
+
+const fileApi: FileAPI = {
+  select: () => ipcRenderer.invoke('file:select'),
+  selectCppFiles: () => ipcRenderer.invoke('file:selectCppFiles'),
+  stringify: (filePath: string) => ipcRenderer.invoke('file:stringify', filePath)
+}
+
+const submissionsApi: SubmissionsAPI = {
+  submitCpp: (request) => ipcRenderer.invoke('submissions:submitCpp', request)
+}
+
 const assignmentsApi: AssignmentsAPI = {
   getAll: () => ipcRenderer.invoke('assignments:getAll'),
   create: (data) => ipcRenderer.invoke('assignments:create', data),
@@ -19,11 +33,13 @@ const assignmentsApi: AssignmentsAPI = {
   delete: (uuid) => ipcRenderer.invoke('assignments:delete', uuid)
 }
 
-
 // Custom APIs for renderer
-const api = {
+const api: AppAPI = {
   users: usersApi,
-  assignments: assignmentsApi
+  assignments: assignmentsApi,
+  file: fileApi,
+  compiler: compilerApi,
+  submissions: submissionsApi
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

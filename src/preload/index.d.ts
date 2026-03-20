@@ -1,12 +1,9 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import type { UsersAPI, AssignmentsAPI } from './types'
+import type { AppAPI } from './types'
 
 declare global {
   interface Window {
     electron: ElectronAPI
-    api: {
-      users: UsersAPI,
-      assignments: AssignmentsAPI
-    }
+    api: AppAPI
   }
 }

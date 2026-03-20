@@ -1,70 +1,44 @@
-/**
- * Grading.tsx
- *
- * Description:
- * This component represents the grading interface within the
- * BatchGrade platform. It will serve as the primary location
- * where instructors manage assignment grading and review
- * automated grading results.
- *
- * In its current state, the page functions as a placeholder
- * for future development. Planned functionality includes:
- *  = Viewing student submissions
- *  - Running automated grading tests
- *  - Managing grading results
- *  - Accessing gradebook information
- */
 import { useNavigate } from 'react-router-dom'
-import NavBar from '../components/Navbar'
 import Footer from '../components/Footer'
+import NavBar from '../components/Navbar'
+import { CppWorkflowPanel } from '../components/CppWorkflowPanel'
 
-/**
- * Grading Component
- *
- * Provides the grading interface for instructors.
- * Future implementations will integrate automated
- * grading workflows and submission management.
- *
- * @returns Grading(): React.JSX.Element
- */
 function Grading(): React.JSX.Element {
-  // -----------------------------------------------------------
-  // Navigation Hook
-  // -----------------------------------------------------------
-  // Enables programmatic navigation between application routes
   const navigate = useNavigate()
 
   return (
     <>
-      {/*-----------------------------------------------------------
-        Application Navigation Bar
-      -----------------------------------------------------------*/}
       <NavBar />
 
-      {/*-----------------------------------------------------------
-        Grading Page Content
-      -----------------------------------------------------------*/}
-      <div style={{ padding: '8rem' }}>
-        {/* Page Title */}
+      <div style={{ padding: '8rem', paddingTop: '10rem' }}>
         <h1>Grading Page</h1>
+        <p>
+          Instructor workflow for compiling and running submissions. Execution remains a separate
+          step so it can move behind a sandbox boundary later.
+        </p>
 
-        {/* Placeholder page description */}
-        <p>This is the Grading screen.</p>
+        <CppWorkflowPanel
+          title="Instructor Compilation Workspace"
+          description="Compile selected C++ files and optionally run the compiled program for grading checks."
+          allowExecution={true}
+        />
 
-        {/*-----------------------------------------------------------
-          Navigation Controls
-        -----------------------------------------------------------*/}
-        <div style={{ marginTop: '8rem' }}>
-          {/* Return to Home page */}
-          <button onClick={() => navigate('/')} style={{ marginLeft: '1rem' }}>
-            Go to home
-          </button>
-        </div>
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            padding: '9px 14px',
+            backgroundColor: '#2563eb',
+            color: 'white',
+            border: '2px solid #93c5fd',
+            borderRadius: '6px',
+            fontWeight: 'bold',
+            cursor: 'pointer'
+          }}
+        >
+          Go to home
+        </button>
       </div>
 
-      {/*-----------------------------------------------------------
-        Application Footer
-      -----------------------------------------------------------*/}
       <Footer />
     </>
   )

@@ -1,7 +1,7 @@
+import type { User, NewUser, UpdateUser } from '../shared/types'
+import type { GccInstallationInfo, CompileCppRequest, CompileCppResult, RunCppRequest, RunCppResult } from '../shared/compiler'
+import type { SubmitCppRequest, SubmitCppResult } from '../shared/submission'
 import type {
-  User,
-  NewUser,
-  UpdateUser,
   Assignment,
   NewAssignment,
   UpdateAssignment
@@ -12,6 +12,13 @@ export type UsersAPI = {
   create: (data: NewUser) => Promise<User>
   update: (data: UpdateUser) => Promise<User>
   delete: (uuid: string) => Promise<User>
+}
+
+export type CompilerAPI = {
+  getGccStatus: () => Promise<GccInstallationInfo>
+  setGccPath: (filePath: string) => Promise<GccInstallationInfo>
+  compileCpp: (request: CompileCppRequest) => Promise<CompileCppResult>
+  runCompiledProgram: (request: RunCppRequest) => Promise<RunCppResult>
 }
 
 export type AssignmentsAPI = {
@@ -42,10 +49,20 @@ export type AssignmentsAPI = {
   delete: (uuid: string) => Promise<Assignment>
 }
 
-/**
- * @brief Aggregate preload API exposed on window.api.
- */
+export type FileAPI = {
+  select: () => Promise<string | undefined>
+  selectCppFiles: () => Promise<string[]>
+  stringify: (filePath: string) => Promise<string>
+}
+
+export type SubmissionsAPI = {
+  submitCpp: (request: SubmitCppRequest) => Promise<SubmitCppResult>
+}
+
 export type AppAPI = {
   users: UsersAPI
   assignments: AssignmentsAPI
+  file: FileAPI
+  compiler: CompilerAPI
+  submissions: SubmissionsAPI
 }
