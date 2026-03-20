@@ -13,7 +13,6 @@
  *  - An informational 'About' section describing the project
  *  - A footer
  */
-import { useNavigate } from 'react-router-dom'
 import { IpcPing } from '../components/IpcPing'
 import { UserPanel } from '../components/UserPanel'
 import NavBar from '../components/Navbar'
@@ -28,12 +27,6 @@ import Footer from '../components/Footer'
  * @returns Home(): React.JSX.Element
  */
 function Home(): React.JSX.Element {
-  // -----------------------------------------------------------
-  // Navigation Hook
-  // -----------------------------------------------------------
-  // Allows programmatic navigation between application routes
-  const navigate = useNavigate()
-
   return (
     <>
       {/*-----------------------------------------------------------
@@ -47,18 +40,15 @@ function Home(): React.JSX.Element {
         -----------------------------------------------------------*/}
       <div className="hero-container">
         {/* Spacer element used for layout alignment */}
-        <div className="hero-item"></div>
-
         <div className="hero-item">
           {/* Application Title */}
           <header className="header">
-            <h1 className="title" style={{ marginLeft: '42%' }}>
+            <h1 className="title">
               <span className="react">BatchGrade</span>
             </h1>
-            <p className="creator" style={{ marginLeft: '33%' }}>
-              Automated Grading System
-            </p>
+            <p className="creator">Automated Grading System</p>
           </header>
+        </div>
 
           {/*-----------------------------------------------------------
             Navigation Buttons
@@ -88,13 +78,18 @@ function Home(): React.JSX.Element {
                SUI
             </button>
           </div>
+        <div className="hero-item">
+          <header className="header">
+            <h1 className="title signup">Sign Up</h1>
+            <p>Register & Connect with BatchGrade.</p>
+          </header>
 
           {/*-----------------------------------------------------------
             System Actions
               Used for development/testing utilities
             -----------------------------------------------------------*/}
           <div className="actions">
-            <div className="action" style={{ marginLeft: '40%' }}>
+            <div className="action">
               <IpcPing />
             </div>
           </div>
@@ -114,10 +109,8 @@ function Home(): React.JSX.Element {
           Overview of the BatchGrade platform
         -----------------------------------------------------------*/}
       <div className="about-container">
-        <h1 className="title" style={{ marginLeft: '45%' }}>
-          About
-        </h1>
-        <p className="about-blot" style={{ padding: '0 2rem 0 2rem' }}>
+        <h1 className="title about">About</h1>
+        <p className="about-blot">
           <span className="emphasis">Batchgrade</span> is a locally hosted automated grading
           platform designed to streamline the evaluation of programming assignments in academic
           environments. The system enables instructors to compile, test, and manage submissions

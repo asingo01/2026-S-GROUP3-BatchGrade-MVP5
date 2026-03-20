@@ -22,7 +22,6 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { User } from '../../../shared/types'
 import { useAuth } from '../components/AuthContext'
-import { STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../../shared/types'
 
 /**
  * Login Component
@@ -46,7 +45,7 @@ function Login(): React.JSX.Element {
   // Component State
   // -----------------------------------------------------------
   // Tracks which role the user selects during login
-  const [role, setRole] = useState< typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE | null>(null)
+  const [role, setRole] = useState<'student' | 'instructor' | null>(null)
 
   // Stores user credential input
   const [email, setEmail] = useState('')
@@ -90,7 +89,7 @@ function Login(): React.JSX.Element {
     // -----------------------------------------------------------
 
     // Update global authentication state with role from database
-    const validRoles = [STUDENT_ROLE, INSTRUCTOR_ROLE] as const
+    const validRoles = ['student', 'instructor'] as const
     type Role = (typeof validRoles)[number]
     if (validRoles.includes(foundUser.role as Role)) {
       login(email, foundUser.role as Role)
@@ -100,9 +99,9 @@ function Login(): React.JSX.Element {
     }
 
     // Redirect user based on role from database
-    if (foundUser.role === STUDENT_ROLE) {
+    if (foundUser.role === 'student') {
       navigate('/studentdashboard')
-    } else if (foundUser.role === INSTRUCTOR_ROLE) {
+    } else if (foundUser.role === 'instructor') {
       navigate('/instructordashboard')
     }
   }
@@ -119,13 +118,9 @@ function Login(): React.JSX.Element {
       <div className="login-title">
         <header className="header">
           <h1 className="title">
-            <span className="react" style={{ marginLeft: '48%' }}>
-              Login
-            </span>
+            <span className="react">Login</span>
           </h1>
-          <p className="creator" style={{ marginLeft: '25%' }}>
-            Please select approriate role:
-          </p>
+          <p className="creator">Please select approriate role:</p>
         </header>
       </div>
 
@@ -138,16 +133,12 @@ function Login(): React.JSX.Element {
           <main className="main">
             <div className="home-buttons">
               {/* Student login selection */}
-              <button className="role-buttons student" onClick={() => setRole(STUDENT_ROLE)}>
+              <button className="role-buttons student" onClick={() => setRole('student')}>
                 Student Login
               </button>
 
               {/* Instructor login selection */}
-              <button
-                className="role-buttons instructor"
-                onClick={() => setRole(INSTRUCTOR_ROLE)}
-                style={{ padding: '2rem' }}
-              >
+              <button className="role-buttons instructor" onClick={() => setRole('instructor')}>
                 Instructor Login
               </button>
 
@@ -167,7 +158,7 @@ function Login(): React.JSX.Element {
           <div className="login-modal">
             <div className="login-form">
               {/* Dynamic title based on selected role */}
-              <h2>{role === STUDENT_ROLE ? 'Student Login' : 'Instructor Login'}</h2>
+              <h2>{role === 'student' ? 'Student Login' : 'Instructor Login'}</h2>
 
               {/* Email input */}
               <input
@@ -195,11 +186,7 @@ function Login(): React.JSX.Element {
                 -----------------------------------------------------------*/}
               <div className="login-actions">
                 {/* Submit login reques */}
-                <button
-                  className="submit-button"
-                  onClick={handleLogin}
-                  style={{ paddingRight: '2rem' }}
-                >
+                <button className="submit-button" onClick={handleLogin}>
                   Login
                 </button>
 

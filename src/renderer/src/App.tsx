@@ -83,7 +83,7 @@ function App(): React.JSX.Element {
           <Route
             path="/studentdashboard"
             element={
-              <ProtectedRoute requiredRoles={[STUDENT_ROLE]}>
+              <ProtectedRoute requiredRoles={['student']}>
                 <StudentDashboard />
               </ProtectedRoute>
             }
@@ -92,7 +92,7 @@ function App(): React.JSX.Element {
           <Route
             path="/instructordashboard"
             element={
-              <ProtectedRoute requiredRoles={[INSTRUCTOR_ROLE]}>
+              <ProtectedRoute requiredRoles={['instructor']}>
                 <InstructorDashboard />
               </ProtectedRoute>
             }

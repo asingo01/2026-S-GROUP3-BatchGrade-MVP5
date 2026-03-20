@@ -11,9 +11,11 @@
  * which currently functions as a logout trigger. If the
  * user is not logged in, a login button is shown instead.
  */
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
-import avatar from '../assets/electron.svg'
+import DropdownMenu from './DropdownMenu'
+import avatar from '../assets/profile.png'
 
 /**
  * Navbar Component
@@ -31,47 +33,56 @@ function NavBar(): React.JSX.Element {
   const navigate = useNavigate()
   // Access authentication state and logout function
   const { isLoggedIn, logout } = useAuth()
+  // Menu state for collapsible menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <nav className="navbar">
-      {/* Application Title */}
-      <span className="navbar-title">BatchGrade</span>
+    <div className="navbar-container">
+      <nav className="navbar">
+        <div className="navbar-item">
+          <button
+            className="menu-button"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            ☰
+          </button>
+          {/* Application Title */}
+          <span className="navbar-title">BatchGrade</span>
+        </div>
+        {/*-----------------------------------------------------------
+          Authentication Controls
+        -----------------------------------------------------------*/}
+        {isLoggedIn ? (
+          /* Logged-in State:
+              Display user avater which currently triggers logout
+              when clicked. Future implementations may include
+              a dropdown profile menu */
+          <img
+            src={avatar}
+            alt="Profile"
+            className="profile-image"
+            onClick={() => {
+              // Log the user out of the application
+              logout()
+              // Redirect user to the Home page
+              navigate('/')
+            }}
+          />
+        ) : (
+          /* Logged-Out State:
+              Display login button */
+          <button className="primary-button" onClick={() => navigate('/login')}>
+            Login
+          </button>
+        )}
+      </nav>
 
       {/*-----------------------------------------------------------
-        Authentication Controls
+        Collapsible Menu
       -----------------------------------------------------------*/}
-      {isLoggedIn ? (
-        /* Logged-in State:
-            Display user avater which currently triggers logout
-            when clicked. Future implementations may include
-            a dropdown profile menu */
-        <img
-          src={avatar}
-          alt="Profile"
-          className="profile-image"
-          onClick={() => {
-            // Log the user out of the application
-            logout()
-            // Redirect user to the Home page
-            navigate('/')
-          }}
-        />
-      ) : (
-        /* Logged-Out State:
-            Display login button */
-        <button
-          className="primary-button"
-          onClick={() => navigate('/login')}
-          style={{ paddingLeft: '50vw' }}
-        >
-          Login
-        </button>
-      )}
-
-      {/*-----------------------------------------------------------
-      Application Footer
-    -----------------------------------------------------------*/}
-    </nav>
+      <DropdownMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+    </div>
   )
 }
 
