@@ -9,6 +9,12 @@
 import type { JudgeCppRequest, JudgeCppResult } from '../../shared/compiler'
 import { executeCppFiles } from './executeCppFiles'
 
+async function cleanOutput(output: string): Promise<string> {
+  // Remove extra whitespace and newlines for simplified comparison
+  return output.trim().replace(/\s+/g, ' ')
+}
+
+
 async function judgeCppFiles(request: JudgeCppRequest): Promise<JudgeCppResult> {
   const executionResult = await executeCppFiles({
     executablePath: request.executablePath,
@@ -16,7 +22,7 @@ async function judgeCppFiles(request: JudgeCppRequest): Promise<JudgeCppResult> 
     timeoutMs: request.timeoutMs
   })
 
-  const outputMatches = executionResult.stdout === request.expectedOutput
+  const outputMatches = await cleanOutput(executionResult.stdout) === await cleanOutput(request.expectedOutput)
 
   return {
     passed: outputMatches,
