@@ -5,6 +5,9 @@ import icon from '../../resources/icon.png?asset'
 import { initDb } from './database/index'
 import type { NewUser, UpdateUser } from './database/schema'
 import { getAllUsers, createUser, updateUser, deleteUser } from './database/queries'
+import { createSubmission, getSubmissionById } from './database/queries/submissionService'
+import { dialog } from 'electron'
+
 
 function createWindow(): void {
   // Create the browser window.
@@ -63,6 +66,29 @@ app.whenReady().then(() => {
   ipcMain.handle('users:create', (_e, data: NewUser) => createUser(data))
   ipcMain.handle('users:update', (_e, data: UpdateUser) => updateUser(data))
   ipcMain.handle('users:delete', (_e, uuid: string) => deleteUser(uuid))
+
+  // openFile operation FR1
+  ipcMain.handle('dialog:openFile', async () => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile'],
+    // Only allows c++ files for now
+    filters: [{ name: 'Source Files', extensions: ['cpp'] }]
+  })
+  if (result.canceled) return null
+  return result.filePaths[0]
+  })
+
+  // Submissions CRUD
+  ipcMain.handle('submissions:create', (_e, data: {
+    studentId: string
+    assignmentId: string
+    fileName: string
+    filePath: string
+  }) => createSubmission(data))
+
+  ipcMain.handle('submissions:getById', (_e, submissionId: string) =>
+    getSubmissionById(submissionId)
+  )
 
   createWindow()
 
