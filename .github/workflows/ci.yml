@@ -3,10 +3,16 @@ name: CI Workflow
 on:
   push:
   pull_request:
+    branches: [ "main" ]
 
 jobs:
-  checks:
-    runs-on: ubuntu-latest
+  build:
+    strategey:
+      fail-fast: false  # See all OS results 
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    runs-on: ${{ matrix.os }} # Run job instances across the multiple OS in parallel
 
     steps:
       - name: Checkout
@@ -16,46 +22,43 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: npm  # Built-in dependency caching for npm
 
+      # Clean install dependencies from package-lock.json
+      # Automatically removes existing node_modules beforehand
+      # Better for automated environments than npm install
       - name: Install dependencies
         run: npm ci
 
-  lint:
-    needs: build
-    strategy:
-      fail-fast: false  # See all OS results 
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    
-    runs-on: ${{ matrix.os }} # Run jobs across the multiple OS in parallel
-
-    steps:
       - name: Lint
         run: npm run lint
 
-  check:
-    needs: build
-    strategy:
-      fail-fast: false  # See all OS results 
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    
-    runs-on: ${{ matrix.os }} # Run jobs across the multiple OS in parallel
-
-    steps:
       - name: Typecheck
         run: npm run typecheck
 
   test:
-    needs: build
-    strategy:
+    strategey:
       fail-fast: false  # See all OS results 
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     
-    runs-on: ${{ matrix.os }} # Run jobs across the multiple OS in parallel
+    runs-on: ${{ matrix.os }} # Run job instances across the multiple OS in parallel
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm  # Built-in dependency caching for npm
+
+      # Clean install dependencies from package-lock.json
+      # Automatically removes existing node_modules beforehand
+      # Better for automated environments than npm install
+      - name: Install dependencies
+        run: npm ci
+        
       - name: Test
         run: npm test
