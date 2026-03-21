@@ -6,7 +6,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build: # Mainly for lint & typecheck
     strategy:
       fail-fast: false  # See all OS results 
       matrix:
@@ -23,12 +23,15 @@ jobs:
         with:
           node-version: 22
           cache: npm  # Built-in dependency caching for npm
-
+        
+      # Installing typescript first should silence npm deprecated warnings
       # Clean install dependencies from package-lock.json
-      # Automatically removes existing node_modules beforehand
-      # Better for automated environments than npm install
+        # Automatically removes existing node_modules beforehand
+        # Better for automated environments than npm install
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm install typescript
+          npm ci
 
       - name: Lint
         run: npm run lint
@@ -36,7 +39,7 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-  test:
+  test: # For unit tests
     strategy:
       fail-fast: false  # See all OS results 
       matrix:
@@ -54,11 +57,12 @@ jobs:
           node-version: 22
           cache: npm  # Built-in dependency caching for npm
 
+      # Installing typescript first should silence npm deprecated warnings
       # Clean install dependencies from package-lock.json
-      # Automatically removes existing node_modules beforehand
-      # Better for automated environments than npm install
       - name: Install dependencies
-        run: npm ci
-
+        run: |
+          npm install typescript
+          npm ci
+  
       - name: Test
         run: npm test
