@@ -24,7 +24,6 @@ jobs:
           node-version: 22
           cache: npm  # Built-in dependency caching for npm
         
-      # Installing typescript first should silence npm deprecated warnings
       # Clean install dependencies from package-lock.json
         # Automatically removes existing node_modules beforehand
         # Better for automated environments than npm install
@@ -57,12 +56,9 @@ jobs:
           node-version: 22
           cache: npm  # Built-in dependency caching for npm
 
-      # Installing typescript first should silence npm deprecated warnings
       # Clean install dependencies from package-lock.json
       - name: Install dependencies
-        run: |
-          npm install typescript
-          npm ci
+        run: npm ci
   
       - name: Test
         run: npm test
