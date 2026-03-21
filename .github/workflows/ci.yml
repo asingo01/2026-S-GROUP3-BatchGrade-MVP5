@@ -28,9 +28,7 @@ jobs:
         # Automatically removes existing node_modules beforehand
         # Better for automated environments than npm install
       - name: Install dependencies
-        run: |
-          npm install typescript
-          npm ci
+        run: npm ci
 
       - name: Lint
         run: npm run lint
