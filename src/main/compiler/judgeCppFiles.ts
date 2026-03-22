@@ -23,12 +23,13 @@ async function judgeCppFiles(request: JudgeCppRequest): Promise<JudgeCppResult> 
   })
 
   const outputMatches = await cleanOutput(executionResult.stdout) === await cleanOutput(request.expectedOutput)
+  const passed = executionResult.executionSuccess && outputMatches
 
   return {
-    passed: outputMatches,
+    passed,
+    timedOut: executionResult.timedOut,
     expectedOutput: request.expectedOutput,
-    actualOutput: executionResult.stdout,
-    message: outputMatches ? 'Output matches expected output.' : 'Output does not match expected output.'
+    actualOutput: executionResult.stdout
   }
 } 
 

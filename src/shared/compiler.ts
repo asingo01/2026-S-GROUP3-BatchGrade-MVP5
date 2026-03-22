@@ -54,7 +54,7 @@ export type JudgeCppRequest = {
 
 export type JudgeCppResult = {
   passed: boolean
+  timedOut: boolean
   expectedOutput: string
   actualOutput: string
-  message: string
 }

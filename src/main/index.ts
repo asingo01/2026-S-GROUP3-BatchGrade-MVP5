@@ -19,6 +19,7 @@ import type { GccInstallationInfo, SupportedPlatform } from '../shared/compiler'
 
 import { compileCppFiles } from './compiler/compileCppFiles'
 import { executeCppFiles } from './compiler/executeCppFiles'
+import { judgeCppFiles } from './compiler/judgeCppFiles'
 import { submitCppSubmission } from './submissions/submitCppSubmission'
 
 let gccStatusPromise: Promise<GccInstallationInfo> | undefined
@@ -233,6 +234,10 @@ app.whenReady().then(() => {
   // Execution
   ipcMain.handle('compiler:runCompiledProgram', (_e, request) => {
     return executeCppFiles(request)
+  })
+
+  ipcMain.handle('compiler:judgeCpp', (_e, request) => {
+    return judgeCppFiles(request)
   })
 
   ipcMain.handle('submissions:submitCpp', (_e, request) => {

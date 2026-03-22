@@ -2,9 +2,13 @@ import { useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
 import NavBar from '../components/Navbar'
 import { CppWorkflowPanel } from '../components/CppWorkflowPanel'
+import { useState } from 'react'
+import type { CompileCppResult } from '../../../shared/compiler'
+import { CppJudgePanel } from '../components/CppJudgePanel'
 
 function Grading(): React.JSX.Element {
   const navigate = useNavigate()
+  const [compileResult, setCompileResult] = useState<CompileCppResult | null>(null)
 
   return (
     <>
@@ -21,7 +25,10 @@ function Grading(): React.JSX.Element {
           title="Instructor Compilation Workspace"
           description="Compile selected C++ files and optionally run the compiled program for grading checks."
           allowExecution={true}
+          onCompileResultChange={setCompileResult}
         />
+
+        <CppJudgePanel compileResult={compileResult} />
 
         <button
           onClick={() => navigate('/')}
