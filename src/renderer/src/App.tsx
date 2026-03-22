@@ -3,6 +3,7 @@ import { AuthProvider } from './components/AuthContext'
 import Grading from './pages/Grading'
 import Home from './pages/Home'
 import Login from './pages/Login'
+import Gradebook from './pages/Gradebook'
 import StudentDashboard from './pages/StudentDashboard'
 import InstructorDashboard from './pages/InstructorDashboard'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -68,6 +69,7 @@ function App(): React.JSX.Element {
             </ProtectedRoute>
             }
             />
+          <Route path="/gradebook" element={<Gradebook />} />
         </Routes>
       </HashRouter>
     </AuthProvider>
