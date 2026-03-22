@@ -2,8 +2,10 @@ import Footer from '../components/Footer'
 import { IpcPing } from '../components/IpcPing'
 import NavBar from '../components/Navbar'
 import { UserPanel } from '../components/UserPanel'
+import { useNavigate } from 'react-router-dom'
 
 function Home(): React.JSX.Element {
+  const navigate = useNavigate();
   return (
     <>
       <NavBar />
@@ -18,6 +20,34 @@ function Home(): React.JSX.Element {
           </header>
         </div>
 
+          {/*-----------------------------------------------------------
+            Navigation Buttons
+              Provide quick access to major system interfaces
+            -----------------------------------------------------------*/}
+          <div className="test-buttons" style={{ marginLeft: '6rem' }}>
+            {/* Test navigate to Student Dashboard */}
+            <button className="secondary-button" onClick={() => navigate('/studentdashboard')}>
+              Student Dashboard
+            </button>
+
+            {/* Test navigate to Grading Interface */}
+            <button
+              className="secondary-button"
+              onClick={() => navigate('/grading')}
+              style={{ margin: '2rem' }}
+            >
+              Grading
+            </button>
+
+            {/* Test navigate to Instructor Dashboard */}
+            <button className="secondary-button" onClick={() => navigate('/instructordashboard')}>
+              Instructor Dashboard
+            </button>
+
+            <button className="secondary-button" onClick={() => navigate('/studentUploadInterface')}>
+               SUI
+            </button>
+          </div>
         <div className="hero-item">
           <header className="header">
             <h1 className="title signup">Sign Up</h1>
