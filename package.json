@@ -12,7 +12,7 @@
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
-    "dev": "electron-vite dev",
+    "dev": "npm run typecheck && npm run lint && electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
@@ -74,6 +74,6 @@
     "vitest": "^4.0.18"
   },
   "overrides": {
-  "esbuild": ">=0.25.0"
+    "esbuild": ">=0.25.0"
   }
 }

@@ -17,7 +17,7 @@ export const studentActionLogs = sqliteTable('action_logs', {
   createdAt: integer('created_at').default(sql`(unixepoch())`)
 })
 
-// Compile Logs: Tracking student code execution
+// Compile Logs table: Tracking student code compilation and execution
 export const compileLogs = sqliteTable('compile_logs', {
   uuid: text('uuid')
     .primaryKey()
