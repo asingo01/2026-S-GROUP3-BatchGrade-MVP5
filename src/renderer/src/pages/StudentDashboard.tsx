@@ -124,7 +124,8 @@ function StudentDashboard(): React.JSX.Element {
         <h1>Student Submission Page</h1>
         <p>
           Compile your C++ source files locally, then submit the source bundle for later grading.
-          The submission artifact stores source files and compile logs instead of a host-specific executable.
+          The submission artifact stores source files and compile logs instead of a host-specific
+          executable.
         </p>
 
         {errorMessage && (
@@ -164,7 +165,8 @@ function StudentDashboard(): React.JSX.Element {
         >
           <h2 style={{ marginBottom: '0.5rem' }}>Submit for Grading</h2>
           <p style={{ marginBottom: '1rem' }}>
-            Submission saves a source snapshot and compile log that can be passed into a sandboxed grading workflow later.
+            Submission saves a source snapshot and compile log that can be passed into a sandboxed
+            grading workflow later.
           </p>
 
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>Assignment</label>

@@ -40,12 +40,16 @@ export function getCppImplementationFiles(sourceFiles: string[]): string[] {
   return sourceFiles.filter((filePath) => {
     const extension = extname(filePath).toLowerCase()
 
-    return extension === '.cpp' || extension === '.cc' || extension === '.cxx' || extension === '.cp'
+    return (
+      extension === '.cpp' || extension === '.cc' || extension === '.cxx' || extension === '.cp'
+    )
   })
 }
 
 export function getSubmissionRelativePath(rootDirectory: string, filePath: string): string {
   const relativePath = relative(rootDirectory, filePath)
 
-  return relativePath && !relativePath.startsWith('..') ? relativePath : filePath.split(sep).pop() ?? filePath
+  return relativePath && !relativePath.startsWith('..')
+    ? relativePath
+    : (filePath.split(sep).pop() ?? filePath)
 }

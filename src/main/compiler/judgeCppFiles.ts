@@ -14,7 +14,6 @@ async function cleanOutput(output: string): Promise<string> {
   return output.trim().replace(/\s+/g, ' ')
 }
 
-
 async function judgeCppFiles(request: JudgeCppRequest): Promise<JudgeCppResult> {
   const executionResult = await executeCppFiles({
     executablePath: request.executablePath,
@@ -22,7 +21,8 @@ async function judgeCppFiles(request: JudgeCppRequest): Promise<JudgeCppResult> 
     timeoutMs: request.timeoutMs
   })
 
-  const outputMatches = await cleanOutput(executionResult.stdout) === await cleanOutput(request.expectedOutput)
+  const outputMatches =
+    (await cleanOutput(executionResult.stdout)) === (await cleanOutput(request.expectedOutput))
   const passed = executionResult.executionSuccess && outputMatches
 
   return {
@@ -31,6 +31,6 @@ async function judgeCppFiles(request: JudgeCppRequest): Promise<JudgeCppResult> 
     expectedOutput: request.expectedOutput,
     actualOutput: executionResult.stdout
   }
-} 
+}
 
 export { judgeCppFiles }

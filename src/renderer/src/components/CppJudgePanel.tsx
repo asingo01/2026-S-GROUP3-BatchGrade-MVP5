@@ -107,7 +107,9 @@ export function CppJudgePanel({ compileResult }: CppJudgePanelProps): React.JSX.
       const stdinValues =
         selectedInputFiles.length === 0
           ? selectedOutputFiles.map(() => '')
-          : await Promise.all(selectedInputFiles.map((filePath) => window.api.file.stringify(filePath)))
+          : await Promise.all(
+              selectedInputFiles.map((filePath) => window.api.file.stringify(filePath))
+            )
 
       const nextResults: JudgeCaseResult[] = []
 
@@ -179,7 +181,10 @@ export function CppJudgePanel({ compileResult }: CppJudgePanelProps): React.JSX.
           {selectedInputFiles.length > 0 && (
             <ul className="mt-2.5 grid max-h-40 gap-1.5 overflow-y-auto text-[13px]">
               {selectedInputFiles.map((filePath) => (
-                <li key={filePath} className="border border-slate-700 bg-[#111] p-2 [overflow-wrap:anywhere]">
+                <li
+                  key={filePath}
+                  className="border border-slate-700 bg-[#111] p-2 [overflow-wrap:anywhere]"
+                >
                   {getFileName(filePath)}
                 </li>
               ))}
@@ -213,7 +218,10 @@ export function CppJudgePanel({ compileResult }: CppJudgePanelProps): React.JSX.
           {selectedOutputFiles.length > 0 && (
             <ul className="mt-2.5 grid max-h-40 gap-1.5 overflow-y-auto text-[13px]">
               {selectedOutputFiles.map((filePath) => (
-                <li key={filePath} className="border border-slate-700 bg-[#111] p-2 [overflow-wrap:anywhere]">
+                <li
+                  key={filePath}
+                  className="border border-slate-700 bg-[#111] p-2 [overflow-wrap:anywhere]"
+                >
                   {getFileName(filePath)}
                 </li>
               ))}
@@ -263,7 +271,9 @@ export function CppJudgePanel({ compileResult }: CppJudgePanelProps): React.JSX.
                 {test.label}: {test.result.passed ? 'Pass' : 'Fail'}
               </h3>
               <p className="text-sm [overflow-wrap:anywhere]">Output File: {test.outputFile}</p>
-              <p className="text-sm [overflow-wrap:anywhere]">Input File: {test.inputFile ?? 'No input file'}</p>
+              <p className="text-sm [overflow-wrap:anywhere]">
+                Input File: {test.inputFile ?? 'No input file'}
+              </p>
               <p className="text-sm">Timed Out: {test.result.timedOut ? 'Yes' : 'No'}</p>
 
               <div className="mt-3 grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">

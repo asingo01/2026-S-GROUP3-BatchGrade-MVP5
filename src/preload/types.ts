@@ -9,11 +9,7 @@ import type {
   JudgeCppResult
 } from '../shared/compiler'
 import type { SubmitCppRequest, SubmitCppResult } from '../shared/submission'
-import type {
-  Assignment,
-  NewAssignment,
-  UpdateAssignment
-} from '../shared/types'
+import type { Assignment, NewAssignment, UpdateAssignment } from '../shared/types'
 
 export type UsersAPI = {
   getAll: () => Promise<User[]>
