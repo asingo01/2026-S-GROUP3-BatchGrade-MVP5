@@ -15,16 +15,18 @@ async function cleanOutput(output: string): Promise<string> {
 }
 
 async function judgeCppFiles(request: JudgeCppRequest): Promise<JudgeCppResult> {
+  // Execute the target program and store its output
   const executionResult = await executeCppFiles({
     executablePath: request.executablePath,
     stdin: request.stdin,
     timeoutMs: request.timeoutMs
   })
 
-  const outputMatches =
-    (await cleanOutput(executionResult.stdout)) === (await cleanOutput(request.expectedOutput))
+  const outputMatches = (await cleanOutput(executionResult.stdout)) === (await cleanOutput(request.expectedOutput))
+  // Check that the program executed successfully
   const passed = executionResult.executionSuccess && outputMatches
 
+  // Return a JudgeCppResult from src/shared/compiler.ts
   return {
     passed,
     timedOut: executionResult.timedOut,
