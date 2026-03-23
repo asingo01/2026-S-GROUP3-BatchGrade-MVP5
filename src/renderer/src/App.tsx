@@ -1,8 +1,30 @@
-import { HashRouter, Route, Routes } from 'react-router-dom'
+/**
+ * App.tsx
+ *
+ * Description:
+ * This file defines the main application component and configures
+ * the routing system for the BatchGrade platform. The routing
+ * structure determines which pages component is rendered based on
+ * the current URL path.
+ *
+ * The application uses React Router to manage navigation between
+ * the following primary views:
+ *  - Home (landing page)
+ *  - Login
+ *  - Student Dashboard
+ *  - Instructor Dashboard
+ *  - Grading Interface
+ *
+ * The routing system is wrapped in an AuthProvider to allow all
+ * pages within the application to access shared authentication
+ * state (login status, user information, etc.)
+ */
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './components/AuthContext'
-import Grading from './pages/Grading'
 import Home from './pages/Home'
+import About from './pages/About'
 import Login from './pages/Login'
+import Grading from './pages/Grading'
 import Gradebook from './pages/Gradebook'
 import StudentDashboard from './pages/StudentDashboard'
 import InstructorDashboard from './pages/InstructorDashboard'
@@ -38,11 +60,30 @@ import { STUDENT_ROLE, INSTRUCTOR_ROLE } from '../../main/database/schema'
 
 function App(): React.JSX.Element {
   return (
+    /*-----------------------------------------------------------
+      Authentication Provider
+        Provides global authentication state to the
+        entire application
+      -----------------------------------------------------------*/
     <AuthProvider>
+      {/*-----------------------------------------------------------
+        Router Configuration
+          HashRouter is used for routing to ensure
+          compatibility with static or local hosting
+        -----------------------------------------------------------*/}
       <HashRouter>
+        {/*-----------------------------------------------------------
+          Application Routes
+            Each route maps a URL path to a specific page
+          -----------------------------------------------------------*/}
         <Routes>
+          {/* Landing Home Page */}
           <Route path="/" element={<Home />} />
+          {/* About Page */}
+          <Route path="/about" element={<About />} />
+          {/* Login Page */}
           <Route path="/login" element={<Login />} />
+          {/* Student Interface */}
           <Route
             path="/studentdashboard"
             element={
@@ -51,6 +92,7 @@ function App(): React.JSX.Element {
               </ProtectedRoute>
             }
           />
+          {/* Instructor Interface (role-protected) */}
           <Route
             path="/instructordashboard"
             element={
@@ -59,17 +101,33 @@ function App(): React.JSX.Element {
               </ProtectedRoute>
             }
           />
-          <Route path="/grading" element={<Grading />} />
-
+          {/* Student Upload Interface (role-protected) */}
           <Route 
-            path="/studentUploadInterface" 
+            path="/studentuploadinterface" 
             element={
             <ProtectedRoute requiredRoles={[STUDENT_ROLE]}>
               <StudentUploadInterface /> 
             </ProtectedRoute>
             }
-            />
-          <Route path="/gradebook" element={<Gradebook />} />
+          />
+          {/* Gradebook Interface (role-protected) */}
+          <Route 
+            path="/gradebook" 
+            element={
+            <ProtectedRoute requiredRoles={[INSTRUCTOR_ROLE]}>
+              <Gradebook /> 
+            </ProtectedRoute>
+            }
+          />
+          {/* Grading Interface */}
+          <Route 
+            path="/grading" 
+            element={
+            <ProtectedRoute requiredRoles={[INSTRUCTOR_ROLE]}>
+              <Grading /> 
+            </ProtectedRoute>
+            }
+          />
         </Routes>
       </HashRouter>
     </AuthProvider>

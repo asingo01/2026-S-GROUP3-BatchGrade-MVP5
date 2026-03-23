@@ -1,10 +1,25 @@
 /**
- * Gradebook Page
+ * Gradebook.tsx
+ *
+ * Description:
+ * This component implements the Gradebook interface for instructors
+ * within the BatchGrade platform. The Gradebook allows instructors to
+ * view the highest score achieved by each student for a selected assignment,
+ * along with submission details and class statistics.
+ *
+ * Key features include:
+ *  - Assignment selection dropdown to switch between different assignments
+ *  - Search functionality to filter students by name or ID
+ *  - Sorting options to organize students by name or score
+ *  - Class statistics summary showing average, highest, and lowest scores
+ *  - Export functionality to download the currently displayed gradebook as a CSV file
  * MVP-4 Frontend Implementation
  * Displays the highest score each student achieved for a selected assignment.
  */
 
 import { useState } from 'react' // Import React hook used to manage component state
+import NavBar from '../components/Navbar' // Import the navigation bar component
+import Footer from '../components/Footer' // Import the footer component
 
 // =============================================================================
 // Mock data representing gradebook records for each assignment.
@@ -190,7 +205,8 @@ function Gradebook(): React.JSX.Element {
 
   return (
     // Main page container
-    <div style={{ padding: '32px', color: 'white' }}>
+    <div style={{ color: 'var(--ev-c-gray-1)' }}>
+      <NavBar />
       {/* Page title */}
       <h1>Assignment Gradebook</h1>
 
@@ -294,6 +310,7 @@ function Gradebook(): React.JSX.Element {
           Export CSV
         </button>
       </div>
+      <Footer />
     </div>
   )
 }
