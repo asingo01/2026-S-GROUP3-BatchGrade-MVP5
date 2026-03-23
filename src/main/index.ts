@@ -6,6 +6,9 @@ import icon from '../../resources/icon.png?asset'
 import { initDb } from './database/index'
 import type { NewUser, UpdateUser, NewAssignment, UpdateAssignment } from './database/schema'
 import { getAllUsers, createUser, updateUser, deleteUser } from './database/queries'
+import { createSubmission, getSubmissionById } from './database/queries/submissionServices'
+import { dialog } from 'electron'
+
 import { getAllAssignments, createAssignment, updateAssignment } from './database/queries'
 import { deleteAssignment } from './database/queries'
 
@@ -137,6 +140,28 @@ app.whenReady().then(() => {
   ipcMain.handle('users:update', (_e, data: UpdateUser) => updateUser(data))
   ipcMain.handle('users:delete', (_e, uuid: string) => deleteUser(uuid))
 
+  // openFile operation FR1
+  ipcMain.handle('dialog:openFile', async () => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile'],
+    // Only allows c++ files for now
+    filters: [{ name: 'Source Files', extensions: ['cpp'] }]
+  })
+  if (result.canceled) return null
+  return result.filePaths[0]
+  })
+
+  // Submissions CRUD
+  ipcMain.handle('submissions:create', (_e, data: {
+    studentId: string
+    assignmentId: string
+    fileName: string
+    filePath: string
+  }) => createSubmission(data))
+
+  ipcMain.handle('submissions:getById', (_e, submissionId: string) =>
+    getSubmissionById(submissionId)
+  )
   // Assignments CRUD
   ipcMain.handle('assignments:getAll', () => getAllAssignments())
   ipcMain.handle('assignments:create', (_event, data: NewAssignment) => createAssignment(data))
