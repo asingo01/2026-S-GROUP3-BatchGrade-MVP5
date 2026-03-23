@@ -77,7 +77,7 @@ function Login(): React.JSX.Element {
       setError('User does not exist')
       return
     }
-    
+
     // Basic password validation
     // (actual password verification assumed to occur on backend)
     if (password.length === 0) {
@@ -125,9 +125,7 @@ function Login(): React.JSX.Element {
       -----------------------------------------------------------*/}
       <div className="login-title">
         <header className="header">
-          <h1 className="title">
-            BatchGrade
-          </h1>
+          <h1 className="title">BatchGrade</h1>
         </header>
       </div>
 
@@ -175,8 +173,8 @@ function Login(): React.JSX.Element {
               Cancel
             </button>
           </div>
-        {/* Display login error message if present */}
-        {error && <div className="error">⚠ {error}</div>}
+          {/* Display login error message if present */}
+          {error && <div className="error">⚠ {error}</div>}
         </div>
       </div>
     </div>

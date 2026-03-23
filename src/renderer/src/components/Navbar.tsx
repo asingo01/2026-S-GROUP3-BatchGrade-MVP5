@@ -49,10 +49,7 @@ function NavBar(): React.JSX.Element {
           </button>
           {/* Application Title */}
           <div className="hover-underline">
-            <button 
-              className="navbar-title" 
-              onClick={() => navigate('/')}
-            >
+            <button className="navbar-title" onClick={() => navigate('/')}>
               BatchGrade
             </button>
           </div>

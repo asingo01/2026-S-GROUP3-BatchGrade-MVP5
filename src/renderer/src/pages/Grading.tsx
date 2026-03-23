@@ -1,15 +1,15 @@
 /**
  * Grading.tsx
- * 
+ *
  * Description:
  * This component implements the grading interface for instructors within the BatchGrade application.
  * It provides tools for compiling and running student submissions as part of the grading workflow.
- * 
+ *
  * The interface includes:
  *  - A navigation bar for consistent access to other system areas
  *  - A main content area with a CppWorkflowPanel for compilation and execution tasks
  *  - A footer displaying build and version information
- * 
+ *
  * This page is protected and only accessible to users with the instructor role.
  */
 import { useNavigate } from 'react-router-dom'
@@ -32,7 +32,7 @@ function Grading(): React.JSX.Element {
     <>
       <NavBar />
 
-      <div style={{ padding: '6rem'}}>
+      <div style={{ padding: '6rem' }}>
         <h1>Grading Page</h1>
         <p>
           Instructor workflow for compiling and running submissions. Execution remains a separate

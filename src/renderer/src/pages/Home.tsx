@@ -43,9 +43,7 @@ function Home(): React.JSX.Element {
         <div className="hero-item">
           {/* Application Title */}
           <header className="header">
-            <h1 className="title">
-              BatchGrade
-            </h1>
+            <h1 className="title">BatchGrade</h1>
             <p className="subtitle">Automated Grading System</p>
           </header>
 

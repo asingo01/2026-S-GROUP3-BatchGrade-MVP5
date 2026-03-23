@@ -102,30 +102,30 @@ function App(): React.JSX.Element {
             }
           />
           {/* Student Upload Interface (role-protected) */}
-          <Route 
-            path="/studentuploadinterface" 
+          <Route
+            path="/studentuploadinterface"
             element={
-            <ProtectedRoute requiredRoles={[STUDENT_ROLE]}>
-              <StudentUploadInterface /> 
-            </ProtectedRoute>
+              <ProtectedRoute requiredRoles={[STUDENT_ROLE]}>
+                <StudentUploadInterface />
+              </ProtectedRoute>
             }
           />
           {/* Gradebook Interface (role-protected) */}
-          <Route 
-            path="/gradebook" 
+          <Route
+            path="/gradebook"
             element={
-            <ProtectedRoute requiredRoles={[INSTRUCTOR_ROLE]}>
-              <Gradebook /> 
-            </ProtectedRoute>
+              <ProtectedRoute requiredRoles={[INSTRUCTOR_ROLE]}>
+                <Gradebook />
+              </ProtectedRoute>
             }
           />
           {/* Grading Interface */}
-          <Route 
-            path="/grading" 
+          <Route
+            path="/grading"
             element={
-            <ProtectedRoute requiredRoles={[INSTRUCTOR_ROLE]}>
-              <Grading /> 
-            </ProtectedRoute>
+              <ProtectedRoute requiredRoles={[INSTRUCTOR_ROLE]}>
+                <Grading />
+              </ProtectedRoute>
             }
           />
         </Routes>

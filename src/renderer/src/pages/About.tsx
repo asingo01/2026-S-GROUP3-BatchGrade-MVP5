@@ -38,11 +38,11 @@ function About(): React.JSX.Element {
       <div className="about-container">
         <h1 className="title about">About</h1>
         <p className="about-blot">
-          <span className="emphasis hover-underline">Batchgrade</span> is a locally hosted automated grading
-          platform designed to streamline the evaluation of programming assignments in academic
-          environments. The system enables instructors to compile, test, and manage submissions
-          through an integrated gradebook interface, while students receive consistent and
-          structured feedback. Built with a modular web-based architechture and local deployment
+          <span className="emphasis hover-underline">Batchgrade</span> is a locally hosted automated
+          grading platform designed to streamline the evaluation of programming assignments in
+          academic environments. The system enables instructors to compile, test, and manage
+          submissions through an integrated gradebook interface, while students receive consistent
+          and structured feedback. Built with a modular web-based architechture and local deployment
           capability, BatchGrade eliminates reliance on costly cloud-based services. By reducing
           grading time and improving assessment reliability, the platform increases instructional
           efficiency and supports scalable computer science education.

@@ -1,6 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import type { AppAPI, AssignmentsAPI, CompilerAPI, FileAPI, SubmissionsAPI, UsersAPI } from './types'
+import type {
+  AppAPI,
+  AssignmentsAPI,
+  CompilerAPI,
+  FileAPI,
+  SubmissionsAPI,
+  UsersAPI
+} from './types'
 
 const usersApi: UsersAPI = {
   getAll: () => ipcRenderer.invoke('users:getAll'),

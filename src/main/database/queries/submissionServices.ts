@@ -14,7 +14,7 @@ export type NewSubmission = typeof submissions.$inferInsert
  * the submission is retrievable regardless of original file location.
  * Input: studentId, assignmentId, fileName, and the filePath on disk.
  * Output: The newly created Submission record.
-*/
+ */
 
 export function createSubmission(input: {
   studentId: string
@@ -31,7 +31,7 @@ export function createSubmission(input: {
   } catch {
     throw new Error(`Could not read file "${input.fileName}". Make sure the path is valid.`)
   }
-  
+
   const fileSize = fileBuffer.byteLength
   const fileContent = fileBuffer.toString('base64')
 
@@ -44,27 +44,25 @@ export function createSubmission(input: {
   if (fileSize > MAX_FILE_SIZE) {
     throw new Error(
       `File "${input.fileName}" exceeds the maximum allowed size of 500 KB. ` +
-      `Submitted file size: ${(fileSize / 1024).toFixed(1)} KB.`
-       )
+        `Submitted file size: ${(fileSize / 1024).toFixed(1)} KB.`
+    )
   }
   // Assign unique id to submission
   const submissionId = crypto.randomUUID()
 
-  db.insert(submissions).values({
-    uuid: submissionId,
-    studentId: input.studentId,
-    assignmentId: input.assignmentId,
-    fileName: input.fileName,
-    fileContent: fileContent,
-    fileSize: fileSize,
-    status: 'pending',
-  }).run()
+  db.insert(submissions)
+    .values({
+      uuid: submissionId,
+      studentId: input.studentId,
+      assignmentId: input.assignmentId,
+      fileName: input.fileName,
+      fileContent: fileContent,
+      fileSize: fileSize,
+      status: 'pending'
+    })
+    .run()
 
-  const created = db
-    .select()
-    .from(submissions)
-    .where(eq(submissions.uuid, submissionId))
-    .get()
+  const created = db.select().from(submissions).where(eq(submissions.uuid, submissionId)).get()
 
   if (!created) throw new Error('Failed to create submission record.')
   return created
@@ -77,9 +75,5 @@ export function createSubmission(input: {
  */
 export function getSubmissionById(uuid: string): Submission | undefined {
   const db = getDb()
-  return db
-    .select()
-    .from(submissions)
-    .where(eq(submissions.uuid, uuid))
-    .get()
+  return db.select().from(submissions).where(eq(submissions.uuid, uuid)).get()
 }

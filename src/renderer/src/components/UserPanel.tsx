@@ -96,7 +96,7 @@ export function UserPanel(): React.JSX.Element {
    */
   function startEdit(user: User): void {
     // Hide the user list modal
-    setShowUsers(false);
+    setShowUsers(false)
     setEditingUuid(user.uuid)
     setForm({
       email: user.email,
@@ -207,8 +207,8 @@ export function UserPanel(): React.JSX.Element {
           value={form.role}
           onChange={(e) =>
             setForm((f) => ({
-              ...f, 
-              role: e.target.value as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE 
+              ...f,
+              role: e.target.value as typeof STUDENT_ROLE | typeof INSTRUCTOR_ROLE
             }))
           }
           className="userpanel-input"
@@ -217,16 +217,14 @@ export function UserPanel(): React.JSX.Element {
           <option value={INSTRUCTOR_ROLE}>instructor</option>
         </select>
         <div className="userpanel-buttons">
-          <button 
-            onClick={handleSubmit} 
-            className="primary-button"
-          >
+          <button onClick={handleSubmit} className="primary-button">
             {editingUuid ? 'Update' : '+ Add'}
           </button>
 
-          <button 
-            className="secondary-button" 
-            onClick={editingUuid ? cancelEdit : () => setShowUsers(true)}>
+          <button
+            className="secondary-button"
+            onClick={editingUuid ? cancelEdit : () => setShowUsers(true)}
+          >
             {editingUuid ? 'Cancel Edit' : 'Show Users'}
           </button>
         </div>
@@ -238,7 +236,7 @@ export function UserPanel(): React.JSX.Element {
       {/* Users list or empty state, toggled by showUsers */}
       {showUsers && (
         <div className="userpanel-modal-overlay" onClick={() => setShowUsers(false)}>
-          <div className="userpanel-modal-content" onClick={e => e.stopPropagation()}>
+          <div className="userpanel-modal-content" onClick={(e) => e.stopPropagation()}>
             <span className="text-xs uppercase tracking-widest opacity-50">
               users · {users.length} row{users.length !== 1 ? 's' : ''}
             </span>
@@ -277,7 +275,10 @@ export function UserPanel(): React.JSX.Element {
                           confirm?
                         </button>
                       ) : (
-                        <button onClick={() => setDeleteConfirm(user.uuid)} className="btn-ghost text-xs">
+                        <button
+                          onClick={() => setDeleteConfirm(user.uuid)}
+                          className="btn-ghost text-xs"
+                        >
                           delete
                         </button>
                       )}
