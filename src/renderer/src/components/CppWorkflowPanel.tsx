@@ -247,7 +247,9 @@ export function CppWorkflowPanel({
             <button
               onClick={handleCompileCpp}
               disabled={isCompiling || selectedFiles.length === 0}
-              className={isCompiling || selectedFiles.length === 0 ? 'cancel-button' : 'secondary-button'}
+              className={
+                isCompiling || selectedFiles.length === 0 ? 'cancel-button' : 'secondary-button'
+              }
               style={{ marginTop: '10px' }}
             >
               {isCompiling ? 'Compiling...' : 'Compile'}
@@ -260,7 +262,9 @@ export function CppWorkflowPanel({
                   <p>Message: {compileResult.message}</p>
                   <p>Compile Success: {compileResult.compileSuccess ? 'Yes' : 'No'}</p>
                   <p>Compiler: {compileResult.compilerPath ?? 'Not available'}</p>
-                  {compileResult.executablePath && <p>Executable: {compileResult.executablePath}</p>}
+                  {compileResult.executablePath && (
+                    <p>Executable: {compileResult.executablePath}</p>
+                  )}
                 </div>
 
                 <h5 style={{ marginTop: '10px', fontSize: '15px' }}>Compiler Output</h5>
@@ -310,7 +314,9 @@ export function CppWorkflowPanel({
 
               <button
                 onClick={handleRunProgram}
-                disabled={isRunning || !compileResult?.compileSuccess || !compileResult.executablePath}
+                disabled={
+                  isRunning || !compileResult?.compileSuccess || !compileResult.executablePath
+                }
                 className={
                   isRunning || !compileResult?.compileSuccess || !compileResult.executablePath
                     ? 'cancel-button'

@@ -1,11 +1,13 @@
 import type { User, NewUser, UpdateUser } from '../shared/types'
-import type { GccInstallationInfo, CompileCppRequest, CompileCppResult, RunCppRequest, RunCppResult } from '../shared/compiler'
-import type { SubmitCppRequest, SubmitCppResult } from '../shared/submission'
 import type {
-  Assignment,
-  NewAssignment,
-  UpdateAssignment
-} from '../shared/types'
+  GccInstallationInfo,
+  CompileCppRequest,
+  CompileCppResult,
+  RunCppRequest,
+  RunCppResult
+} from '../shared/compiler'
+import type { SubmitCppRequest, SubmitCppResult } from '../shared/submission'
+import type { Assignment, NewAssignment, UpdateAssignment } from '../shared/types'
 
 export type UsersAPI = {
   getAll: () => Promise<User[]>

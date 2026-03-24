@@ -52,8 +52,8 @@ ul {
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--ev-c-gray-2);
+  color: var(--ev-c-gray-1);
+  background: var(--ev-c-white-mute);
   line-height: 1.6;
   font-family:
     Inter,

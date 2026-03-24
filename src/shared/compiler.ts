@@ -7,7 +7,7 @@ export type GccInstallationInfo = {
   platform: SupportedPlatform
   message: string
   installInstruction: string | null // the user is prompted to install with instructions for their OS if they don't have a compiler installed
-  path: string | null 
+  path: string | null
   source: 'auto' | 'manual' | null // User can manually set the path to a GCC installation
 }
 

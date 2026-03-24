@@ -48,7 +48,11 @@ function NavBar(): React.JSX.Element {
             ☰
           </button>
           {/* Application Title */}
-          <span className="navbar-title">BatchGrade</span>
+          <div className="hover-underline">
+            <button className="navbar-title" onClick={() => navigate('/')}>
+              BatchGrade
+            </button>
+          </div>
         </div>
         {/*-----------------------------------------------------------
           Authentication Controls

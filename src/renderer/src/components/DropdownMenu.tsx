@@ -41,13 +41,25 @@ function DropdownMenu({ isOpen, onClose }: DropdownMenuProps): React.JSX.Element
       <button className="dropdown-item" onClick={() => handleNavigation('/studentdashboard')}>
         Student Dashboard
       </button>
+      {/* Test navigate to Instructor Dashboard */}
+      <button className="dropdown-item" onClick={() => handleNavigation('/instructordashboard')}>
+        Instructor Dashboard
+      </button>
+      {/* Test navigate to Student Upload Interface */}
+      <button className="dropdown-item" onClick={() => handleNavigation('/studentuploadinterface')}>
+        Student Upload Interface
+      </button>
+      {/* Test navigate to Gradebook */}
+      <button className="dropdown-item" onClick={() => handleNavigation('/gradebook')}>
+        Gradebook
+      </button>
       {/* Test navigate to Grading Interface */}
       <button className="dropdown-item" onClick={() => handleNavigation('/grading')}>
         Grading
       </button>
-      {/* Test navigate to Instructor Dashboard */}
-      <button className="dropdown-item" onClick={() => handleNavigation('/instructordashboard')}>
-        Instructor Dashboard
+      {/* Test navigate to About Page */}
+      <button className="dropdown-item" onClick={() => handleNavigation('/about')}>
+        About
       </button>
     </div>
   )
