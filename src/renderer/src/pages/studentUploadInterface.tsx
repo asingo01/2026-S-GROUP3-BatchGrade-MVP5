@@ -15,6 +15,8 @@
  */
 import { useNavigate } from 'react-router-dom'
 import { Interface_Button } from '../assets/ui/Interface_Button'
+import NavBar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 /**
  * StudentUploadInterface Component
@@ -35,6 +37,7 @@ export function StudentUploadInterface(): React.JSX.Element {
 
   return (
     <>
+      <NavBar />
       <div style={{ padding: '8rem' }}>
         <h1>Student Upload Interface Page</h1>
 
@@ -52,6 +55,7 @@ export function StudentUploadInterface(): React.JSX.Element {
           Go to Home
         </button>
       </div>
+      <Footer />
     </>
   )
 }
