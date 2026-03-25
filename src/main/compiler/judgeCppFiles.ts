@@ -11,7 +11,7 @@ import { executeCppFiles } from './executeCppFiles'
 
 async function cleanOutput(output: string): Promise<string> {
   // Remove extra whitespace and newlines for simplified comparison
-  return output.trim().replace(/\s+/g, ' ')
+ return output.trim().replace(/\r\n/g, '\n').replace(/\r/g, '\n').replace(/\n+$/, '')
 }
 
 async function judgeCppFiles(request: JudgeCppRequest): Promise<JudgeCppResult> {
