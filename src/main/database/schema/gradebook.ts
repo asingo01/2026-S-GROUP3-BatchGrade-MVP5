@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, blob } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { sql } from 'drizzle-orm'
 import { sections } from './academic'
 import { users } from './user'
@@ -24,8 +24,9 @@ export const submissions = sqliteTable('submissions', {
   studentId: text('student_id')
     .notNull()
     .references(() => users.uuid),
-  fileContent: blob('file_content'),
+  fileContent: text('file_content'),
   fileName: text('file_name').notNull().default('N/A'),
+  fileSize: integer('file_size').notNull().default(0),
   status: text('status').notNull().default('not submitted'), // "submittted", "pending", "not submitted", "graded"
   submittedAt: integer('submitted_at').default(sql`(unixepoch())`)
 })

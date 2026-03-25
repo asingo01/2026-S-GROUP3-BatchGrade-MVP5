@@ -120,7 +120,7 @@ function StudentDashboard(): React.JSX.Element {
     <>
       <NavBar />
 
-      <div style={{ padding: '8rem', paddingTop: '10rem' }}>
+      <div style={{ height: '100vh', padding: '8rem' }}>
         <h1>Student Submission Page</h1>
         <p>
           Compile your C++ source files locally, then submit the source bundle for later grading.
