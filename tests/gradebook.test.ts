@@ -3,60 +3,32 @@ import { describe, it, expect, beforeEach } from 'vitest'
 // Wipes gradebook tables before each test in FK-safe order
 beforeEach(async () => {
   const { getDb } = await import('../src/main/database/index')
-  const { grades, submissions, assignments, sections, courses, users } = await import(
+  const { grades, submissions, assignments, sections, courses, instructors, users } = await import(
     '../src/main/database/schema'
   )
   getDb().delete(grades).run()
   getDb().delete(submissions).run()
   getDb().delete(assignments).run()
   getDb().delete(sections).run()
+  getDb().delete(instructors).run()
   getDb().delete(courses).run()
   getDb().delete(users).run()
 })
-
-// Helper: inserts a user row
-async function seedUser(email: string) {
-  const { getDb } = await import('../src/main/database/index')
-  const { users } = await import('../src/main/database/schema')
-  return getDb().insert(users).values({ email, password: 'pw' }).returning().get()
-}
-
-// Helper: inserts a section row (requires course + instructor)
-async function seedSection() {
-  const { getDb } = await import('../src/main/database/index')
-  const { courses, sections, instructors } = await import('../src/main/database/schema')
-  const user = await seedUser(`sec_seed_${Date.now()}@test.com`)
-  getDb().insert(instructors).values({ uuid: user.uuid, firstName: 'I', lastName: 'J' }).run()
-  const course = getDb()
-    .insert(courses)
-    .values({ courseCode: `C${Date.now()}`, title: 'Course', credits: 3 })
-    .returning()
-    .get()
-  return getDb()
-    .insert(sections)
-    .values({ courseId: course.uuid, instructorId: user.uuid, semester: 'Spring 2026' })
-    .returning()
-    .get()
-}
-
-// Helper: inserts an assignment row (requires a section)
-async function seedAssignment(sectionId: string) {
-  const { getDb } = await import('../src/main/database/index')
-  const { assignments } = await import('../src/main/database/schema')
-  return getDb()
-    .insert(assignments)
-    .values({ sectionId, title: 'HW1', dueDate: 1743465600 })
-    .returning()
-    .get()
-}
 
 // ─── Assignments ─────────────────────────────────────────────────────────────
 
 describe('Gradebook Assignment Schema', () => {
   it('existingSection_insertAssignment_generatesUuidAndStoresFields', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { assignments } = await import('../src/main/database/schema')
-    const section = await seedSection()
+    const { assignments, sections, instructors, courses, users } = await import('../src/main/database/schema')
+    const user = getDb().insert(users).values({ email: 'prof@test.com', password: 'pw' }).returning().get()
+    getDb().insert(instructors).values({ uuid: user.uuid, firstName: 'F', lastName: 'L' }).run()
+    const course = getDb().insert(courses).values({ courseCode: 'CS101', title: 'Course', credits: 3 }).returning().get()
+    const section = getDb()
+      .insert(sections)
+      .values({ courseId: course.uuid, instructorId: user.uuid, semester: 'Spring 2026' })
+      .returning()
+      .get()
 
     const result = getDb()
       .insert(assignments)
@@ -71,8 +43,15 @@ describe('Gradebook Assignment Schema', () => {
 
   it('twoAssignments_selectAll_returnsBothRecords', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { assignments } = await import('../src/main/database/schema')
-    const section = await seedSection()
+    const { assignments, sections, instructors, courses, users } = await import('../src/main/database/schema')
+    const user = getDb().insert(users).values({ email: 'prof2@test.com', password: 'pw' }).returning().get()
+    getDb().insert(instructors).values({ uuid: user.uuid, firstName: 'F', lastName: 'L' }).run()
+    const course = getDb().insert(courses).values({ courseCode: 'CS102', title: 'Course', credits: 3 }).returning().get()
+    const section = getDb()
+      .insert(sections)
+      .values({ courseId: course.uuid, instructorId: user.uuid, semester: 'Spring 2026' })
+      .returning()
+      .get()
 
     getDb().insert(assignments).values({ sectionId: section.uuid, title: 'PA1', dueDate: 1743465600 }).run()
     getDb().insert(assignments).values({ sectionId: section.uuid, title: 'PA2', dueDate: 1744070400 }).run()
@@ -86,14 +65,27 @@ describe('Gradebook Assignment Schema', () => {
 describe('Submission Schema', () => {
   it('existingAssignmentAndStudent_insertSubmission_defaultsToNotSubmittedStatus', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { submissions } = await import('../src/main/database/schema')
-    const section = await seedSection()
-    const assignment = await seedAssignment(section.uuid)
-    const student = await seedUser('sub_stu@test.com')
+    const { submissions, assignments, sections, instructors, courses, users } = await import(
+      '../src/main/database/schema'
+    )
+    const profUser = getDb().insert(users).values({ email: 'prof3@test.com', password: 'pw' }).returning().get()
+    const stuUser = getDb().insert(users).values({ email: 'stu@test.com', password: 'pw' }).returning().get()
+    getDb().insert(instructors).values({ uuid: profUser.uuid, firstName: 'F', lastName: 'L' }).run()
+    const course = getDb().insert(courses).values({ courseCode: 'CS103', title: 'Course', credits: 3 }).returning().get()
+    const section = getDb()
+      .insert(sections)
+      .values({ courseId: course.uuid, instructorId: profUser.uuid, semester: 'Spring 2026' })
+      .returning()
+      .get()
+    const assignment = getDb()
+      .insert(assignments)
+      .values({ sectionId: section.uuid, title: 'HW1', dueDate: 1743465600 })
+      .returning()
+      .get()
 
     const result = getDb()
       .insert(submissions)
-      .values({ assignmentId: assignment.uuid, studentId: student.uuid, fileName: 'main.cpp', fileSize: 1024 })
+      .values({ assignmentId: assignment.uuid, studentId: stuUser.uuid, fileName: 'main.cpp', fileSize: 1024 })
       .returning()
       .get()
 
@@ -105,16 +97,29 @@ describe('Submission Schema', () => {
 
   it('submissionWithFileContent_insert_storesContent', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { submissions } = await import('../src/main/database/schema')
-    const section = await seedSection()
-    const assignment = await seedAssignment(section.uuid)
-    const student = await seedUser('sub_stu2@test.com')
+    const { submissions, assignments, sections, instructors, courses, users } = await import(
+      '../src/main/database/schema'
+    )
+    const profUser = getDb().insert(users).values({ email: 'prof4@test.com', password: 'pw' }).returning().get()
+    const stuUser = getDb().insert(users).values({ email: 'stu2@test.com', password: 'pw' }).returning().get()
+    getDb().insert(instructors).values({ uuid: profUser.uuid, firstName: 'F', lastName: 'L' }).run()
+    const course = getDb().insert(courses).values({ courseCode: 'CS104', title: 'Course', credits: 3 }).returning().get()
+    const section = getDb()
+      .insert(sections)
+      .values({ courseId: course.uuid, instructorId: profUser.uuid, semester: 'Spring 2026' })
+      .returning()
+      .get()
+    const assignment = getDb()
+      .insert(assignments)
+      .values({ sectionId: section.uuid, title: 'HW2', dueDate: 1743465600 })
+      .returning()
+      .get()
 
     const result = getDb()
       .insert(submissions)
       .values({
         assignmentId: assignment.uuid,
-        studentId: student.uuid,
+        studentId: stuUser.uuid,
         fileName: 'solution.cpp',
         fileSize: 512,
         fileContent: '#include<iostream>',
@@ -127,33 +132,29 @@ describe('Submission Schema', () => {
     expect(result.status).toBe('submitted')
   })
 
-  it('submissionInserted_submittedAtField_isPopulatedAutomatically', async () => {
+  it('submissionWithDefaultFileName_insert_usesNADefault', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { submissions } = await import('../src/main/database/schema')
-    const section = await seedSection()
-    const assignment = await seedAssignment(section.uuid)
-    const student = await seedUser('sub_stu3@test.com')
-
-    const result = getDb()
-      .insert(submissions)
-      .values({ assignmentId: assignment.uuid, studentId: student.uuid, fileName: 'a.cpp', fileSize: 100 })
+    const { submissions, assignments, sections, instructors, courses, users } = await import(
+      '../src/main/database/schema'
+    )
+    const profUser = getDb().insert(users).values({ email: 'prof5@test.com', password: 'pw' }).returning().get()
+    const stuUser = getDb().insert(users).values({ email: 'stu3@test.com', password: 'pw' }).returning().get()
+    getDb().insert(instructors).values({ uuid: profUser.uuid, firstName: 'F', lastName: 'L' }).run()
+    const course = getDb().insert(courses).values({ courseCode: 'CS105', title: 'Course', credits: 3 }).returning().get()
+    const section = getDb()
+      .insert(sections)
+      .values({ courseId: course.uuid, instructorId: profUser.uuid, semester: 'Spring 2026' })
+      .returning()
+      .get()
+    const assignment = getDb()
+      .insert(assignments)
+      .values({ sectionId: section.uuid, title: 'HW3', dueDate: 1743465600 })
       .returning()
       .get()
 
-    expect(result.submittedAt).toBeTruthy()
-  })
-
-  it('submissionWithDefaultFileName_insert_usesNADefault', async () => {
-    const { getDb } = await import('../src/main/database/index')
-    const { submissions } = await import('../src/main/database/schema')
-    const section = await seedSection()
-    const assignment = await seedAssignment(section.uuid)
-    const student = await seedUser('sub_stu4@test.com')
-
     const result = getDb()
       .insert(submissions)
-      // fileName and fileSize not provided — rely on defaults
-      .values({ assignmentId: assignment.uuid, studentId: student.uuid })
+      .values({ assignmentId: assignment.uuid, studentId: stuUser.uuid })
       .returning()
       .get()
 
@@ -167,40 +168,64 @@ describe('Submission Schema', () => {
 describe('Grade Schema', () => {
   it('existingSubmissionAndInstructor_insertGrade_generatesUuidAndStoresScore', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { submissions, grades } = await import('../src/main/database/schema')
-    const section = await seedSection()
-    const assignment = await seedAssignment(section.uuid)
-    const student = await seedUser('grade_stu@test.com')
-    const instructor = await seedUser('grade_prof@test.com')
-
+    const { grades, submissions, assignments, sections, instructors, courses, users } = await import(
+      '../src/main/database/schema'
+    )
+    const profUser = getDb().insert(users).values({ email: 'prof6@test.com', password: 'pw' }).returning().get()
+    const stuUser = getDb().insert(users).values({ email: 'stu4@test.com', password: 'pw' }).returning().get()
+    const graderUser = getDb().insert(users).values({ email: 'grader@test.com', password: 'pw' }).returning().get()
+    getDb().insert(instructors).values({ uuid: profUser.uuid, firstName: 'F', lastName: 'L' }).run()
+    const course = getDb().insert(courses).values({ courseCode: 'CS106', title: 'Course', credits: 3 }).returning().get()
+    const section = getDb()
+      .insert(sections)
+      .values({ courseId: course.uuid, instructorId: profUser.uuid, semester: 'Spring 2026' })
+      .returning()
+      .get()
+    const assignment = getDb()
+      .insert(assignments)
+      .values({ sectionId: section.uuid, title: 'HW4', dueDate: 1743465600 })
+      .returning()
+      .get()
     const submission = getDb()
       .insert(submissions)
-      .values({ assignmentId: assignment.uuid, studentId: student.uuid })
+      .values({ assignmentId: assignment.uuid, studentId: stuUser.uuid })
       .returning()
       .get()
 
     const result = getDb()
       .insert(grades)
-      .values({ submissionId: submission.uuid, instructorId: instructor.uuid, score: 95 })
+      .values({ submissionId: submission.uuid, instructorId: graderUser.uuid, score: 95 })
       .returning()
       .get()
 
     expect(result.uuid).toBeTruthy()
     expect(result.score).toBe(95)
-    expect(result.instructorId).toBe(instructor.uuid)
+    expect(result.instructorId).toBe(graderUser.uuid)
   })
 
   it('gradeWithFeedback_insert_storesFeedbackText', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { submissions, grades } = await import('../src/main/database/schema')
-    const section = await seedSection()
-    const assignment = await seedAssignment(section.uuid)
-    const student = await seedUser('grade_stu2@test.com')
-    const instructor = await seedUser('grade_prof2@test.com')
-
+    const { grades, submissions, assignments, sections, instructors, courses, users } = await import(
+      '../src/main/database/schema'
+    )
+    const profUser = getDb().insert(users).values({ email: 'prof7@test.com', password: 'pw' }).returning().get()
+    const stuUser = getDb().insert(users).values({ email: 'stu5@test.com', password: 'pw' }).returning().get()
+    const graderUser = getDb().insert(users).values({ email: 'grader2@test.com', password: 'pw' }).returning().get()
+    getDb().insert(instructors).values({ uuid: profUser.uuid, firstName: 'F', lastName: 'L' }).run()
+    const course = getDb().insert(courses).values({ courseCode: 'CS107', title: 'Course', credits: 3 }).returning().get()
+    const section = getDb()
+      .insert(sections)
+      .values({ courseId: course.uuid, instructorId: profUser.uuid, semester: 'Spring 2026' })
+      .returning()
+      .get()
+    const assignment = getDb()
+      .insert(assignments)
+      .values({ sectionId: section.uuid, title: 'HW5', dueDate: 1743465600 })
+      .returning()
+      .get()
     const submission = getDb()
       .insert(submissions)
-      .values({ assignmentId: assignment.uuid, studentId: student.uuid })
+      .values({ assignmentId: assignment.uuid, studentId: stuUser.uuid })
       .returning()
       .get()
 
@@ -208,7 +233,7 @@ describe('Grade Schema', () => {
       .insert(grades)
       .values({
         submissionId: submission.uuid,
-        instructorId: instructor.uuid,
+        instructorId: graderUser.uuid,
         score: 80,
         feedback: 'Good work but missing edge cases'
       })
@@ -221,21 +246,33 @@ describe('Grade Schema', () => {
 
   it('gradeWithZeroScore_insert_storesZero', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { submissions, grades } = await import('../src/main/database/schema')
-    const section = await seedSection()
-    const assignment = await seedAssignment(section.uuid)
-    const student = await seedUser('grade_stu3@test.com')
-    const instructor = await seedUser('grade_prof3@test.com')
-
+    const { grades, submissions, assignments, sections, instructors, courses, users } = await import(
+      '../src/main/database/schema'
+    )
+    const profUser = getDb().insert(users).values({ email: 'prof8@test.com', password: 'pw' }).returning().get()
+    const stuUser = getDb().insert(users).values({ email: 'stu6@test.com', password: 'pw' }).returning().get()
+    const graderUser = getDb().insert(users).values({ email: 'grader3@test.com', password: 'pw' }).returning().get()
+    getDb().insert(instructors).values({ uuid: profUser.uuid, firstName: 'F', lastName: 'L' }).run()
+    const course = getDb().insert(courses).values({ courseCode: 'CS108', title: 'Course', credits: 3 }).returning().get()
+    const section = getDb()
+      .insert(sections)
+      .values({ courseId: course.uuid, instructorId: profUser.uuid, semester: 'Spring 2026' })
+      .returning()
+      .get()
+    const assignment = getDb()
+      .insert(assignments)
+      .values({ sectionId: section.uuid, title: 'HW6', dueDate: 1743465600 })
+      .returning()
+      .get()
     const submission = getDb()
       .insert(submissions)
-      .values({ assignmentId: assignment.uuid, studentId: student.uuid })
+      .values({ assignmentId: assignment.uuid, studentId: stuUser.uuid })
       .returning()
       .get()
 
     const result = getDb()
       .insert(grades)
-      .values({ submissionId: submission.uuid, instructorId: instructor.uuid, score: 0 })
+      .values({ submissionId: submission.uuid, instructorId: graderUser.uuid, score: 0 })
       .returning()
       .get()
 

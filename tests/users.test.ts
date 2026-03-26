@@ -65,8 +65,7 @@ describe('User Queries', () => {
 
 
 it('userWithInvalidRole_getAllUsers_throwsInvalidRole', async () => {
-    // Insert a row directly bypassing createUser so we can force an invalid role.
-    // This covers the `throw new Error('Invalid role')` branch in toIpcUser (line 38).
+    // Insert a row directly bypassing createUser so we can force an invalid role
     const { getDb } = await import('../src/main/database/index')
     const { users } = await import('../src/main/database/schema')
     getDb()
@@ -78,7 +77,6 @@ it('userWithInvalidRole_getAllUsers_throwsInvalidRole', async () => {
   })
  
   it('userWithValidInstructorRole_updateRole_reflectsNewRole', () => {
-    // Updating the role field covers the `changes.role = data.role` branch (line 105).
     const user = createUser({ email: 'rolechange@test.com', password: 'pw' })
     const updated = updateUser({ uuid: user.uuid, role: 'instructor' })
     expect(updated.role).toBe('instructor')

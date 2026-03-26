@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 // Wipes log tables before each test in FK-safe order
 beforeEach(async () => {
   const { getDb } = await import('../src/main/database/index')
-  const { studentActionLogs, compileLogs, assignments, sections, courses, instructors, users } =
+  const { studentActionLogs, compileLogs, assignments, sections, instructors, courses, users } =
     await import('../src/main/database/schema')
   getDb().delete(studentActionLogs).run()
   getDb().delete(compileLogs).run()
@@ -14,47 +14,13 @@ beforeEach(async () => {
   getDb().delete(users).run()
 })
 
-// Helper: inserts a user row
-async function seedUser(email: string) {
-  const { getDb } = await import('../src/main/database/index')
-  const { users } = await import('../src/main/database/schema')
-  return getDb().insert(users).values({ email, password: 'pw' }).returning().get()
-}
-
-// Helper: inserts a section (requires course + instructor)
-async function seedSection(instructorUuid: string) {
-  const { getDb } = await import('../src/main/database/index')
-  const { courses, sections } = await import('../src/main/database/schema')
-  const course = getDb()
-    .insert(courses)
-    .values({ courseCode: `LOG${Date.now()}`, title: 'Test Course', credits: 3 })
-    .returning()
-    .get()
-  return getDb()
-    .insert(sections)
-    .values({ courseId: course.uuid, instructorId: instructorUuid, semester: 'Spring 2026' })
-    .returning()
-    .get()
-}
-
-// Helper: inserts an assignment (requires section)
-async function seedAssignment(sectionId: string) {
-  const { getDb } = await import('../src/main/database/index')
-  const { assignments } = await import('../src/main/database/schema')
-  return getDb()
-    .insert(assignments)
-    .values({ sectionId, title: 'Log Test Assignment', dueDate: 1743465600 })
-    .returning()
-    .get()
-}
-
 // ─── Student Action Logs ──────────────────────────────────────────────────────
 
 describe('Student Action Log Schema', () => {
   it('existingUser_insertActionLog_generatesUuidAndStoresAction', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { studentActionLogs } = await import('../src/main/database/schema')
-    const user = await seedUser('logger@test.com')
+    const { studentActionLogs, users } = await import('../src/main/database/schema')
+    const user = getDb().insert(users).values({ email: 'logger@test.com', password: 'pw' }).returning().get()
 
     const result = getDb()
       .insert(studentActionLogs)
@@ -69,8 +35,8 @@ describe('Student Action Log Schema', () => {
 
   it('actionLogWithAllOptionalFields_insert_storesAllFields', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { studentActionLogs } = await import('../src/main/database/schema')
-    const user = await seedUser('logger2@test.com')
+    const { studentActionLogs, users } = await import('../src/main/database/schema')
+    const user = getDb().insert(users).values({ email: 'logger2@test.com', password: 'pw' }).returning().get()
 
     const result = getDb()
       .insert(studentActionLogs)
@@ -89,8 +55,8 @@ describe('Student Action Log Schema', () => {
 
   it('actionLogInserted_createdAtField_isPopulatedAutomatically', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { studentActionLogs } = await import('../src/main/database/schema')
-    const user = await seedUser('logger3@test.com')
+    const { studentActionLogs, users } = await import('../src/main/database/schema')
+    const user = getDb().insert(users).values({ email: 'logger3@test.com', password: 'pw' }).returning().get()
 
     const result = getDb()
       .insert(studentActionLogs)
@@ -103,8 +69,8 @@ describe('Student Action Log Schema', () => {
 
   it('multipleLogsForSameUser_selectAll_returnsAllLogs', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { studentActionLogs } = await import('../src/main/database/schema')
-    const user = await seedUser('logger4@test.com')
+    const { studentActionLogs, users } = await import('../src/main/database/schema')
+    const user = getDb().insert(users).values({ email: 'logger4@test.com', password: 'pw' }).returning().get()
 
     getDb().insert(studentActionLogs).values({ userId: user.uuid, action: 'login' }).run()
     getDb().insert(studentActionLogs).values({ userId: user.uuid, action: 'submit' }).run()
@@ -116,7 +82,7 @@ describe('Student Action Log Schema', () => {
   it('userDeleted_cascadeDelete_removesActionLogs', async () => {
     const { getDb } = await import('../src/main/database/index')
     const { studentActionLogs, users } = await import('../src/main/database/schema')
-    const user = await seedUser('logger5@test.com')
+    const user = getDb().insert(users).values({ email: 'logger5@test.com', password: 'pw' }).returning().get()
     getDb().insert(studentActionLogs).values({ userId: user.uuid, action: 'login' }).run()
 
     getDb().delete(users).run()
@@ -130,17 +96,28 @@ describe('Student Action Log Schema', () => {
 describe('Compile Log Schema', () => {
   it('existingStudentAndAssignment_insertSuccessCompileLog_generatesUuidAndStoresFields', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { compileLogs, instructors } = await import('../src/main/database/schema')
-    const student = await seedUser('compile_stu@test.com')
-    const instructor = await seedUser('compile_prof@test.com')
-    getDb().insert(instructors).values({ uuid: instructor.uuid, firstName: 'F', lastName: 'L' }).run()
-    const section = await seedSection(instructor.uuid)
-    const assignment = await seedAssignment(section.uuid)
+    const { compileLogs, assignments, sections, instructors, courses, users } = await import(
+      '../src/main/database/schema'
+    )
+    const profUser = getDb().insert(users).values({ email: 'compile_prof@test.com', password: 'pw' }).returning().get()
+    const stuUser = getDb().insert(users).values({ email: 'compile_stu@test.com', password: 'pw' }).returning().get()
+    getDb().insert(instructors).values({ uuid: profUser.uuid, firstName: 'F', lastName: 'L' }).run()
+    const course = getDb().insert(courses).values({ courseCode: 'CS201', title: 'Course', credits: 3 }).returning().get()
+    const section = getDb()
+      .insert(sections)
+      .values({ courseId: course.uuid, instructorId: profUser.uuid, semester: 'Spring 2026' })
+      .returning()
+      .get()
+    const assignment = getDb()
+      .insert(assignments)
+      .values({ sectionId: section.uuid, title: 'HW1', dueDate: 1743465600 })
+      .returning()
+      .get()
 
     const result = getDb()
       .insert(compileLogs)
       .values({
-        studentId: student.uuid,
+        studentId: stuUser.uuid,
         submissionId: assignment.uuid,
         status: 'success',
         exitCode: 0,
@@ -159,17 +136,28 @@ describe('Compile Log Schema', () => {
 
   it('compileLogWithError_insert_storesStderr', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { compileLogs, instructors } = await import('../src/main/database/schema')
-    const student = await seedUser('compile_stu2@test.com')
-    const instructor = await seedUser('compile_prof2@test.com')
-    getDb().insert(instructors).values({ uuid: instructor.uuid, firstName: 'F', lastName: 'L' }).run()
-    const section = await seedSection(instructor.uuid)
-    const assignment = await seedAssignment(section.uuid)
+    const { compileLogs, assignments, sections, instructors, courses, users } = await import(
+      '../src/main/database/schema'
+    )
+    const profUser = getDb().insert(users).values({ email: 'compile_prof2@test.com', password: 'pw' }).returning().get()
+    const stuUser = getDb().insert(users).values({ email: 'compile_stu2@test.com', password: 'pw' }).returning().get()
+    getDb().insert(instructors).values({ uuid: profUser.uuid, firstName: 'F', lastName: 'L' }).run()
+    const course = getDb().insert(courses).values({ courseCode: 'CS202', title: 'Course', credits: 3 }).returning().get()
+    const section = getDb()
+      .insert(sections)
+      .values({ courseId: course.uuid, instructorId: profUser.uuid, semester: 'Spring 2026' })
+      .returning()
+      .get()
+    const assignment = getDb()
+      .insert(assignments)
+      .values({ sectionId: section.uuid, title: 'HW2', dueDate: 1743465600 })
+      .returning()
+      .get()
 
     const result = getDb()
       .insert(compileLogs)
       .values({
-        studentId: student.uuid,
+        studentId: stuUser.uuid,
         submissionId: assignment.uuid,
         status: 'error',
         exitCode: 1,
@@ -186,16 +174,27 @@ describe('Compile Log Schema', () => {
 
   it('compileLogInserted_createdAtField_isPopulatedAutomatically', async () => {
     const { getDb } = await import('../src/main/database/index')
-    const { compileLogs, instructors } = await import('../src/main/database/schema')
-    const student = await seedUser('compile_stu3@test.com')
-    const instructor = await seedUser('compile_prof3@test.com')
-    getDb().insert(instructors).values({ uuid: instructor.uuid, firstName: 'F', lastName: 'L' }).run()
-    const section = await seedSection(instructor.uuid)
-    const assignment = await seedAssignment(section.uuid)
+    const { compileLogs, assignments, sections, instructors, courses, users } = await import(
+      '../src/main/database/schema'
+    )
+    const profUser = getDb().insert(users).values({ email: 'compile_prof3@test.com', password: 'pw' }).returning().get()
+    const stuUser = getDb().insert(users).values({ email: 'compile_stu3@test.com', password: 'pw' }).returning().get()
+    getDb().insert(instructors).values({ uuid: profUser.uuid, firstName: 'F', lastName: 'L' }).run()
+    const course = getDb().insert(courses).values({ courseCode: 'CS203', title: 'Course', credits: 3 }).returning().get()
+    const section = getDb()
+      .insert(sections)
+      .values({ courseId: course.uuid, instructorId: profUser.uuid, semester: 'Spring 2026' })
+      .returning()
+      .get()
+    const assignment = getDb()
+      .insert(assignments)
+      .values({ sectionId: section.uuid, title: 'HW3', dueDate: 1743465600 })
+      .returning()
+      .get()
 
     const result = getDb()
       .insert(compileLogs)
-      .values({ studentId: student.uuid, submissionId: assignment.uuid, status: 'success' })
+      .values({ studentId: stuUser.uuid, submissionId: assignment.uuid, status: 'success' })
       .returning()
       .get()
 
