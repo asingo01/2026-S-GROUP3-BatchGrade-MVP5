@@ -11,6 +11,7 @@ function toIpcAssignment(assignment: DbAssignment): Assignment {
   return {
     uuid: assignment.uuid,
     title: assignment.title,
+    sectionId: assignment.sectionId,
     dueDate: assignment.dueDate,
     gradingCriteria: assignment.gradingCriteria,
     solutionType: assignment.solutionType,
@@ -60,6 +61,11 @@ export function updateAssignment(data: UpdateAssignment): Assignment {
   // due date of the assignment
   if (data.dueDate !== undefined) {
     changes.dueDate = data.dueDate
+  }
+
+  // section ID for the assignment
+  if (data.sectionId !== undefined) {
+    changes.sectionId = data.sectionId
   }
 
   // grading criteria for the assignment (points, rubric, etc...)

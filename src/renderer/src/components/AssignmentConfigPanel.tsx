@@ -10,6 +10,7 @@ import type { Assignment } from '../../../shared/types'
  */
 type FormState = {
   title: string
+  sectionId: string
   dueDate: string
   gradingCriteria: string
   solutionType: 'file' | 'text'
@@ -23,6 +24,7 @@ type FormState = {
  */
 const emptyForm: FormState = {
   title: '',
+  sectionId: '',
   dueDate: '',
   gradingCriteria: '',
   solutionType: 'text',
@@ -111,10 +113,11 @@ export function AssignmentConfigPanel(): React.JSX.Element {
   function startEdit(assignment: Assignment): void {
     setEditingUuid(assignment.uuid)
     setForm({
-      title: assignment.title,
-      dueDate: new Date(assignment.dueDate * 1000).toISOString().split('T')[0],
-      gradingCriteria: assignment.gradingCriteria,
-      solutionType: assignment.solutionType as 'file' | 'text',
+      title: assignment.title ?? '',
+      sectionId: assignment.sectionId ?? '',
+      dueDate: new Date(assignment.dueDate * 1000).toISOString().split('T')[0] ?? '',
+      gradingCriteria: assignment.gradingCriteria ?? '',
+      solutionType: (assignment.solutionType ?? 'text') as 'file' | 'text',
       expectedOutputText: assignment.expectedOutputText ?? ''
     })
     setSelectedFile(null)
@@ -142,12 +145,18 @@ export function AssignmentConfigPanel(): React.JSX.Element {
    */
   function validateForm(): boolean {
     const trimmedTitle = form.title.trim()
+    const trimmedSectionId = form.sectionId.trim()
     const trimmedDueDate = form.dueDate.trim()
     const trimmedCriteria = form.gradingCriteria.trim()
     const trimmedExpectedOutput = form.expectedOutputText.trim()
 
     if (!trimmedTitle) {
       setError('Assignment name is required.')
+      return false
+    }
+
+    if (!trimmedSectionId) {
+      setError('Section ID is required.')
       return false
     }
 
@@ -219,17 +228,13 @@ export function AssignmentConfigPanel(): React.JSX.Element {
       } else {
         await window.api.assignments.create({
           title: trimmedTitle,
+          sectionId: form.sectionId.trim(),
           dueDate: dueDateInt,
           gradingCriteria: trimmedCriteria,
           solutionType: form.solutionType,
           solutionFileName: form.solutionType === 'file' ? (selectedFile?.name ?? null) : null,
           solutionFilePath:
-            form.solutionType === 'file' && selectedFile
-              ? // This is a placeholder path value.
-                // Update with real path from IPC once file saving
-                // is implemented. - AS
-                `pending://${selectedFile.name}`
-              : null,
+            form.solutionType === 'file' && selectedFile ? `pending://${selectedFile.name}` : null,
           expectedOutputText: form.solutionType === 'text' ? trimmedExpectedOutput : null,
           createdByUserUuid: null
         })
@@ -280,6 +285,14 @@ export function AssignmentConfigPanel(): React.JSX.Element {
           placeholder="Assignment name"
           value={form.title}
           onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+          className="panel-input"
+        />
+
+        <input
+          type="text"
+          placeholder="Section ID"
+          value={form.sectionId}
+          onChange={(e) => setForm((f) => ({ ...f, sectionId: e.target.value }))}
           className="panel-input"
         />
 

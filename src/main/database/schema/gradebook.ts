@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { sql } from 'drizzle-orm'
+import { sql, InferSelectModel, InferInsertModel  } from 'drizzle-orm'
 import { sections } from './academic'
 import { users } from './user'
 
@@ -23,6 +23,10 @@ export const assignments = sqliteTable('assignments', {
   createdByUserUuid: text('created_by_user_uuid').references(() => users.uuid),
   createdAt: integer('created_at').notNull().default(sql`(unixepoch())`)
 })
+
+export type Assignment = InferSelectModel<typeof assignments>
+export type NewAssignment = InferInsertModel<typeof assignments>
+export type UpdateAssignment = Pick<Assignment, 'uuid'> & Partial<NewAssignment>
 
 export const submissions = sqliteTable('submissions', {
   uuid: text('uuid')
