@@ -9,7 +9,7 @@ import type { Assignment } from '../../../shared/types'
  * It keeps assignment separate from the list of saved assignments.
  */
 type FormState = {
-  name: string
+  title: string
   dueDate: string
   gradingCriteria: string
   solutionType: 'file' | 'text'
@@ -22,7 +22,7 @@ type FormState = {
  * @return Default AssignmentConfigPanel form state.
  */
 const emptyForm: FormState = {
-  name: '',
+  title: '',
   dueDate: '',
   gradingCriteria: '',
   solutionType: 'text',
@@ -111,8 +111,8 @@ export function AssignmentConfigPanel(): React.JSX.Element {
   function startEdit(assignment: Assignment): void {
     setEditingUuid(assignment.uuid)
     setForm({
-      name: assignment.name,
-      dueDate: assignment.dueDate,
+      title: assignment.title,
+      dueDate: new Date(assignment.dueDate * 1000).toISOString().split('T')[0],
       gradingCriteria: assignment.gradingCriteria,
       solutionType: assignment.solutionType as 'file' | 'text',
       expectedOutputText: assignment.expectedOutputText ?? ''
@@ -141,12 +141,12 @@ export function AssignmentConfigPanel(): React.JSX.Element {
    * @return True if the form is valid; otherwise false.
    */
   function validateForm(): boolean {
-    const trimmedName = form.name.trim()
+    const trimmedTitle = form.title.trim()
     const trimmedDueDate = form.dueDate.trim()
     const trimmedCriteria = form.gradingCriteria.trim()
     const trimmedExpectedOutput = form.expectedOutputText.trim()
 
-    if (!trimmedName) {
+    if (!trimmedTitle) {
       setError('Assignment name is required.')
       return false
     }
@@ -191,17 +191,18 @@ export function AssignmentConfigPanel(): React.JSX.Element {
       return
     }
 
-    const trimmedName = form.name.trim()
-    const trimmedDueDate = form.dueDate.trim()
+    const trimmedTitle = form.title.trim()
+    // const trimmedDueDate = form.dueDate.trim()
     const trimmedCriteria = form.gradingCriteria.trim()
     const trimmedExpectedOutput = form.expectedOutputText.trim()
+    const dueDateInt = Math.floor(new Date(form.dueDate).getTime() / 1000)
 
     try {
       if (editingUuid) {
         await window.api.assignments.update({
           uuid: editingUuid,
-          name: trimmedName,
-          dueDate: trimmedDueDate,
+          title: trimmedTitle,
+          dueDate: dueDateInt,
           gradingCriteria: trimmedCriteria,
           solutionType: form.solutionType,
           solutionFileName: form.solutionType === 'file' ? selectedFile?.name : undefined,
@@ -217,8 +218,8 @@ export function AssignmentConfigPanel(): React.JSX.Element {
         })
       } else {
         await window.api.assignments.create({
-          name: trimmedName,
-          dueDate: trimmedDueDate,
+          title: trimmedTitle,
+          dueDate: dueDateInt,
           gradingCriteria: trimmedCriteria,
           solutionType: form.solutionType,
           solutionFileName: form.solutionType === 'file' ? (selectedFile?.name ?? null) : null,
@@ -277,8 +278,8 @@ export function AssignmentConfigPanel(): React.JSX.Element {
         <input
           type="text"
           placeholder="Assignment name"
-          value={form.name}
-          onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+          value={form.title}
+          onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
           className="panel-input"
         />
 
@@ -366,8 +367,8 @@ export function AssignmentConfigPanel(): React.JSX.Element {
           {assignments.map((assignment) => (
             <li key={assignment.uuid} className="panel-list-item">
               <div>
-                <strong>{assignment.name}</strong>
-                <div>due: {assignment.dueDate}</div>
+                <strong>{assignment.title}</strong>
+                <div>due: {new Date(assignment.dueDate * 1000).toLocaleDateString()}</div>
                 <div>solution type: {assignment.solutionType}</div>
 
                 {assignment.solutionType === 'text' && assignment.expectedOutputText && (

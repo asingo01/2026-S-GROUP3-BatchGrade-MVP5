@@ -1,9 +1,28 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { sql } from 'drizzle-orm'
+import { sections } from './academic'
 import { users } from './user'
-import { assignmentsInstrc } from './assignment'
 
-export const assignments = assignmentsInstrc
+export const assignments = sqliteTable('assignments', {
+  uuid: text('uuid')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+
+  sectionId: text('section_id')
+    .notNull()
+    .references(() => sections.uuid),
+
+  title: text('title').notNull(),
+  dueDate: integer('due_date').notNull(),
+
+  gradingCriteria: text('grading_criteria'),
+  solutionType: text('solution_type'),
+  solutionFileName: text('solution_file_name'),
+  solutionFilePath: text('solution_file_path'),
+  expectedOutputText: text('expected_output_text'),
+  createdByUserUuid: text('created_by_user_uuid').references(() => users.uuid),
+  createdAt: integer('created_at').notNull().default(sql`(unixepoch())`)
+})
 
 export const submissions = sqliteTable('submissions', {
   uuid: text('uuid')

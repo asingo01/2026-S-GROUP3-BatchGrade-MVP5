@@ -183,7 +183,7 @@ function StudentDashboard(): React.JSX.Element {
             {assignments.length === 0 && <option value="">No assignments available</option>}
             {assignments.map((assignment) => (
               <option key={assignment.uuid} value={assignment.uuid}>
-                {assignment.name}
+                {assignment.title}
               </option>
             ))}
           </select>

@@ -15,7 +15,7 @@ export const assignmentsInstrc = sqliteTable('assignments', {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
 
-  name: text('name').notNull(), // name of file
+  title: text('title').notNull(), // name of file
   dueDate: text('due_date').notNull(), // due date
   gradingCriteria: text('grading_criteria').notNull(), // grading criteria
 

@@ -1,14 +1,16 @@
-import { eq } from 'drizzle-orm'
+import { eq, InferSelectModel, InferInsertModel } from 'drizzle-orm'
 import { getDb } from '../index'
-import { assignmentsInstrc } from '../schema'
-import type { Assignment as DbAssignment, NewAssignment, UpdateAssignment } from '../schema'
+import { assignments  } from '../schema'
 import type { Assignment } from '../../../shared/types'
+type DbAssignment = InferSelectModel<typeof assignments>
+type NewAssignment = InferInsertModel<typeof assignments>
+type UpdateAssignment = { uuid: string } & Partial<NewAssignment>
 
 // convert DbAssignment to Assignment for IPC communications between main and renderer processes
 function toIpcAssignment(assignment: DbAssignment): Assignment {
   return {
     uuid: assignment.uuid,
-    name: assignment.name,
+    title: assignment.title,
     dueDate: assignment.dueDate,
     gradingCriteria: assignment.gradingCriteria,
     solutionType: assignment.solutionType,
@@ -23,7 +25,7 @@ function toIpcAssignment(assignment: DbAssignment): Assignment {
 // @brief get all assignments from database
 // @returns array of all assignments in database
 export function getAllAssignments(): Assignment[] {
-  return getDb().select().from(assignmentsInstrc).all().map(toIpcAssignment)
+  return getDb().select().from(assignments).all().map(toIpcAssignment)
 }
 
 // @brief create new assignment in database
@@ -31,7 +33,7 @@ export function getAllAssignments(): Assignment[] {
 // @returns the created assignment
 export function createAssignment(data: NewAssignment): Assignment {
   // insert new assignment into database and return the created assignment
-  const created = getDb().insert(assignmentsInstrc).values(data).returning().get()
+  const created = getDb().insert(assignments).values(data).returning().get()
 
   // check if create was successful, else throw error
   if (!created) {
@@ -51,8 +53,8 @@ export function updateAssignment(data: UpdateAssignment): Assignment {
   // keep existing values
 
   // name of the assignment
-  if (data.name !== undefined) {
-    changes.name = data.name
+  if (data.title !== undefined) {
+    changes.title = data.title
   }
 
   // due date of the assignment
@@ -97,9 +99,9 @@ export function updateAssignment(data: UpdateAssignment): Assignment {
 
   // update assignments in database
   const updated = getDb()
-    .update(assignmentsInstrc)
+    .update(assignments)
     .set(changes)
-    .where(eq(assignmentsInstrc.uuid, data.uuid))
+    .where(eq(assignments.uuid, data.uuid))
     .returning()
     .get()
 
@@ -117,8 +119,8 @@ export function updateAssignment(data: UpdateAssignment): Assignment {
 export function deleteAssignment(uuid: string): Assignment {
   // delete the assignment form the database
   const deleted = getDb()
-    .delete(assignmentsInstrc)
-    .where(eq(assignmentsInstrc.uuid, uuid))
+    .delete(assignments)
+    .where(eq(assignments.uuid, uuid))
     .returning()
     .get()
 
