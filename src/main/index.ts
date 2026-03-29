@@ -11,6 +11,8 @@ import { dialog } from 'electron'
 
 import { getAllAssignments, createAssignment, updateAssignment } from './database/queries'
 import { deleteAssignment } from './database/queries'
+import { createCourse, createSection, getAllCourses, getAllSections } from './database/queries/academic'
+
 
 /* TEST ONLY DELETE WHEN DONE */
 import { selectFile, stringifyFile, selectCppFiles } from './utils/file'
@@ -163,7 +165,15 @@ app.whenReady().then(() => {
   ipcMain.handle('submissions:getById', (_e, submissionId: string) =>
     getSubmissionById(submissionId)
   )
-  // Assignments CRUD
+
+  // Courses & Sections
+  ipcMain.handle('courses:create', (_event, data) => createCourse(data))
+  ipcMain.handle('sections:create', (_event, data) => createSection(data))
+
+  ipcMain.handle('courses:getAll', () => getAllCourses())
+  ipcMain.handle('sections:getAll', () => getAllSections())
+
+  // Assignments
   ipcMain.handle('assignments:getAll', () => getAllAssignments())
   ipcMain.handle('assignments:create', (_event, data: NewAssignment) => createAssignment(data))
   ipcMain.handle('assignments:update', (_event, data: UpdateAssignment) => updateAssignment(data))

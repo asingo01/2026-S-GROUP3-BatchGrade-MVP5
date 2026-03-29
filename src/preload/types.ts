@@ -10,6 +10,8 @@ import type {
 } from '../shared/compiler'
 import type { SubmitCppRequest, SubmitCppResult } from '../shared/submission'
 import type { Assignment, NewAssignment, UpdateAssignment } from '../shared/types'
+import type { Course, NewCourse, Section, NewSection } from '../main/database/schema'
+export { VALID_ROLES, STUDENT_ROLE, INSTRUCTOR_ROLE } from '../main/database/schema'
 
 export type UsersAPI = {
   getAll: () => Promise<User[]>
@@ -54,6 +56,16 @@ export type AssignmentsAPI = {
   delete: (uuid: string) => Promise<Assignment>
 }
 
+export type CoursesAPI = {
+  getAll: () => Promise<Course[]>
+  create: (data: NewCourse) => Promise<Course>
+}
+
+export type SectionsAPI = {
+  getAll: () => Promise<Section[]>
+  create: (data: NewSection) => Promise<Section>
+}
+
 export type FileAPI = {
   select: () => Promise<string | undefined>
   selectCppFiles: () => Promise<string[]>
@@ -65,8 +77,10 @@ export type SubmissionsAPI = {
 }
 
 export type AppAPI = {
+  courses: CoursesAPI
   users: UsersAPI
   assignments: AssignmentsAPI
+  sections: SectionsAPI
   file: FileAPI
   compiler: CompilerAPI
   submissions: SubmissionsAPI

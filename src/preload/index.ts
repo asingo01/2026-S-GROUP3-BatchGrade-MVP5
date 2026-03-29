@@ -4,7 +4,9 @@ import type {
   AppAPI,
   AssignmentsAPI,
   CompilerAPI,
+  CoursesAPI,
   FileAPI,
+  SectionsAPI,
   SubmissionsAPI,
   UsersAPI
 } from './types'
@@ -41,13 +43,25 @@ const assignmentsApi: AssignmentsAPI = {
   delete: (uuid) => ipcRenderer.invoke('assignments:delete', uuid)
 }
 
+const coursesApi: CoursesAPI = {
+  getAll: () => ipcRenderer.invoke('courses:getAll'),
+  create: (data) => ipcRenderer.invoke('courses:create', data)
+}
+
+const sectionsApi: SectionsAPI = {
+  getAll: () => ipcRenderer.invoke('sections:getAll'),
+  create: (data) => ipcRenderer.invoke('sections:create', data)
+}
+
 // Custom APIs for renderer
 const api: AppAPI = {
   users: usersApi,
   assignments: assignmentsApi,
   file: fileApi,
   compiler: compilerApi,
-  submissions: submissionsApi
+  submissions: submissionsApi,
+  courses: coursesApi,
+  sections: sectionsApi
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

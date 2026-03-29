@@ -1,5 +1,6 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { users } from './user'
+import { InferSelectModel, InferInsertModel } from 'drizzle-orm'
 
 /**
  * Base Profiles
@@ -74,3 +75,9 @@ export const enrollments = sqliteTable('enrollments', {
     .notNull()
     .references(() => sections.uuid)
 })
+
+export type Course = InferSelectModel<typeof courses>
+export type NewCourse = InferInsertModel<typeof courses>
+
+export type Section = InferSelectModel<typeof sections>
+export type NewSection = InferInsertModel<typeof sections>
